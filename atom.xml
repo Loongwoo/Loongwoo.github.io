@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[许龙武的技术博客]]></title>
+  <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
+  <link href="http://loongwoo.github.io/"/>
+  <updated>2015-07-03T14:47:49+08:00</updated>
+  <id>http://loongwoo.github.io/</id>
+  <author>
+    <name><![CDATA[许龙武]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[@title]]></title>
+    <link href="http://loongwoo.github.io/blog/2015/07/03/at-title/"/>
+    <updated>2015-07-03T14:46:46+08:00</updated>
+    <id>http://loongwoo.github.io/blog/2015/07/03/at-title</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+</feed>
