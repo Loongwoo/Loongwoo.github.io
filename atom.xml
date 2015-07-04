@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-03T19:58:35+08:00</updated>
+  <updated>2015-07-04T14:50:08+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -12,23 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[@second File]]></title>
-    <link href="http://loongwoo.github.io/blog/2015/07/03/at-second-file/"/>
-    <updated>2015-07-03T19:46:23+08:00</updated>
-    <id>http://loongwoo.github.io/blog/2015/07/03/at-second-file</id>
-    <content type="html"><![CDATA[<h1>What' up</h1>
-
-<h2>secion 1</h2>
-
-<p>May i borrow your a pen ?</p>
-
-<h2>secion 2</h2>
-
-<p>Yes.</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[开头一句话]]></title>
