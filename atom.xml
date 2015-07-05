@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-05T23:38:53+08:00</updated>
+  <updated>2015-07-05T23:51:43+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -27,7 +27,7 @@
 <p>英文文档 <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/EncapsulatingData/EncapsulatingData.html">《The Objective-c Programming Language》</a><br />
 中文文档 <a href="http://blog.csdn.net/column/details/object-c.html">Objective-C编程语言官方文档翻译</a></p>
 
-<h2>关于<code>@synthesize object = _object</code>的解释</h2>
+<h2>关于@synthesize object =_object的解释</h2>
 
 <pre><code>@interface MyClass:NSObject{
     MyObjecct *_object;//成员变量
@@ -39,7 +39,7 @@
 @synthesize object=_object;
 </code></pre>
 
-<p>synthesize定义了一对getter和setter方法，在这里的getter方法是object，setter方法是setObject，事实上getter和setter方法操作的是变量<code>_object</code>。属性通过点表达式(.)来访问其实是调用了getter和setter方法，其实就是操作了成员变量<code>_object</code>。故在.m文件中可以直接的使用<code>_object</code>实例变量，也可以通过属性self.object是一样的。<br /></p>
+<p>synthesize定义了一对getter和setter方法，在这里的getter方法是object，setter方法是setObject，事实上getter和setter方法操作的是变量_object。属性通过点表达式(.)来访问其实是调用了getter和setter方法，其实就是操作了成员变量_object。故在.m文件中可以直接的使用_object实例变量，也可以通过属性self.object是一样的。<strong>简单来说，属性就是定义了getter和setter方法来操作_object成员变量</strong></p>
 
 <h2>现在推荐的做法</h2>
 
@@ -48,7 +48,7 @@
 @end
 </code></pre>
 
-<p>编译器会自动生成<code>_object</code>、getter和setter方法。</p>
+<p>编译器会自动生成_object、getter和setter方法。</p>
 
 <ol>
 <li>成员变量为该类变量私有，最好声明在implementation里</li>
