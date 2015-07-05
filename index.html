@@ -9,8 +9,8 @@
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="前言 IOS开发一开始就是从项目入手，基础难免薄弱。成员变量和属性的用法比较混乱，难得有空一点点补补课。 类（Class）中的成员变量和属性 相关文档 英文文档 《The Objective-c Programming Language》
-中文文档 Objective-C编程语言官方文档翻译 关于 &hellip;">
+  <meta name="description" content="接手IOS开发开始就是从项目入手，基础很薄弱。成员变量和属性的用法一向比较混乱，难得有空补点课。 类（Class）中的成员变量和属性 相关文档 英文文档 《The Objective-c Programming Language》
+中文文档 Objective-C编程语言官方文档翻译 关于@ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -87,21 +87,16 @@
   </header>
 
 
-  <div class="entry-content"><h1>前言</h1>
-
-<p>IOS开发一开始就是从项目入手，基础难免薄弱。成员变量和属性的用法比较混乱，难得有空一点点补补课。</p>
+  <div class="entry-content"><p>接手IOS开发开始就是从项目入手，基础很薄弱。成员变量和属性的用法一向比较混乱，难得有空补点课。</p>
 
 <h1>类（Class）中的成员变量和属性</h1>
 
 <h2>相关文档</h2>
 
-<ul>
-<li>英文文档 <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/EncapsulatingData/EncapsulatingData.html">《The Objective-c Programming Language》</a></li>
-<li>中文文档 <a href="http://blog.csdn.net/column/details/object-c.html">Objective-C编程语言官方文档翻译</a></li>
-</ul>
+<p>英文文档 <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/EncapsulatingData/EncapsulatingData.html">《The Objective-c Programming Language》</a><br />
+中文文档 <a href="http://blog.csdn.net/column/details/object-c.html">Objective-C编程语言官方文档翻译</a></p>
 
-
-<h2>关于@synthesize object = _object的解释</h2>
+<h2>关于<code>@synthesize object = _object</code>的解释</h2>
 
 <pre><code>@interface MyClass:NSObject{
     MyObjecct *_object;//成员变量
@@ -113,11 +108,7 @@
 @synthesize object=_object;
 </code></pre>
 
-<ul>
-<li>synthesize定义了一对getter和setter方法，在这里的getter方法是object，setter方法是setObject，事实上getter和setter方法操作的是变量_object。</li>
-<li>属性通过点表达式(.)来访问其实是调用了getter和setter方法，其实就是操作了成员变量<em>object。故在.m文件中可以直接的使用</em>object实例变量，也可以通过属性object是一样的。</li>
-</ul>
-
+<p>synthesize定义了一对getter和setter方法，在这里的getter方法是object，setter方法是setObject，事实上getter和setter方法操作的是变量<code>_object</code>。属性通过点表达式(.)来访问其实是调用了getter和setter方法，其实就是操作了成员变量<code>_object</code>。故在.m文件中可以直接的使用<code>_object</code>实例变量，也可以通过属性self.object是一样的。<br /></p>
 
 <h2>现在推荐的做法</h2>
 
@@ -126,13 +117,13 @@
 @end
 </code></pre>
 
-<ul>
-<li>编译器会自动生成_object、getter和setter方法。</li>
-<li>一些建议:</li>
-<li><strong>成员变量为该类变量私有，最好声明在implementation里</strong></li>
-<li><strong>public的属性写在.h文件里</strong></li>
-<li><strong>如果自己内部需要setter和getter来实现一些东西，就在.m文件的类目里用property来申明</strong></li>
-</ul>
+<p>编译器会自动生成<code>_object</code>、getter和setter方法。</p>
+
+<ol>
+<li>成员变量为该类变量私有，最好声明在implementation里</li>
+<li>public的属性写在.h文件里</li>
+<li>如果自己内部需要setter和getter来实现一些东西，就在.m文件的类目里用property来申明</li>
+</ol>
 
 
 <h1>类别（Category）中得属性</h1>
@@ -146,10 +137,7 @@
 @end
 </code></pre>
 
-<ul>
-<li>这里添加的属性，不会自动生成实例变量，这里添加的属性其实是添加的getter与setter方法。</li>
-</ul>
-
+<p>这里添加的属性，不会自动生成实例变量，这里添加的属性其实是添加的getter与setter方法。</p>
 
 <h1>后记</h1>
 
@@ -157,9 +145,9 @@
 
 <p>下一篇可以梳理一下属性的nonatomic、retain、weak、strong的用法，以及类别中添加属性的方法。</p>
 
-<h2>参考文章：</h2>
+<h2>参考链接：</h2>
 
-<p><a href="http://www.cnblogs.com/ygm900/p/3660364.html">iOS中属性与成员变量的区别</a></p>
+<p><a href="http://www.cnblogs.com/ygm900/p/3660364.html">http://www.cnblogs.com/ygm900/p/3660364.html</a></p>
 </div>
   
   
