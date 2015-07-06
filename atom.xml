@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-06T09:58:13+08:00</updated>
+  <updated>2015-07-06T10:00:29+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -38,7 +38,7 @@
 
 <h2>nonatomic、atomic</h2></li>
 <li>nonatomic：不加同步，多线程并发访问会提高性能。</li>
-<li>atomic：默认值
+<li>atomic：默认值<br />
 了解<a href="http://www.parallellabs.com/2011/04/09/pthread-mutex-lock-and-thread-safety/">原子操作</a>，以及<a href="http://blog.csdn.net/cubepeng/article/details/7735962">非原子操作的效率提升</a>。</li>
 </ul>
 
