@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>许龙武的技术博客</title>
+  <title>IOS中Property的修饰字 - 许龙武的技术博客</title>
   <meta name="author" content="许龙武">
 
   
@@ -20,7 +20,7 @@ retain：对其他NSObject和其子类（用同一块内存） &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://loongwoo.github.io/">
+  <link rel="canonical" href="http://loongwoo.github.io/blog/2015/07/06/at-ioszhong-propertyde-xiu-shi-zi/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="许龙武的技术博客" type="application/atom+xml">
@@ -64,15 +64,12 @@ retain：对其他NSObject和其子类（用同一块内存） &hellip;">
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2015/07/06/at-ioszhong-propertyde-xiu-shi-zi/">IOS中Property的修饰字</a></h1>
+      <h1 class="entry-title">IOS中Property的修饰字</h1>
     
     
       <p class="meta">
@@ -88,7 +85,7 @@ retain：对其他NSObject和其子类（用同一块内存） &hellip;">
   </header>
 
 
-  <div class="entry-content"><h2>assign、copy 、retain（MRC）</h2>
+<div class="entry-content"><h2>assign、copy 、retain（MRC）</h2>
 
 <ul>
 <li>assign: 对基础数据类型 （NSInteger）和C数据类型（int, float, double, char,等）</li>
@@ -118,144 +115,67 @@ retain：对其他NSObject和其子类（用同一块内存） &hellip;">
 <p>[<a href="http://www.aichengxu.com/view/32930">http://www.aichengxu.com/view/32930</a>]<br />
 [<a href="http://www.2cto.com/kf/201205/133943.html">http://www.2cto.com/kf/201205/133943.html</a>]</p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/07/05/at-iosshu-xing-he-cheng-yuan-bian-liang/">IOS属性和成员变量</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-07-05T21:48:27+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:48 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>接手IOS开发开始就是从项目入手，基础很薄弱。成员变量和属性的用法一向比较混乱，难得有空补点课。</p>
-
-<h1>类（Class）中的成员变量和属性</h1>
-
-<h2>相关文档</h2>
-
-<p>英文文档 <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/EncapsulatingData/EncapsulatingData.html">《The Objective-c Programming Language》</a><br />
-中文文档 <a href="http://blog.csdn.net/column/details/object-c.html">Objective-C编程语言官方文档翻译</a></p>
-
-<h2>关于@synthesize object =_object的解释</h2>
-
-<pre><code>@interface MyClass:NSObject{
-    MyObjecct *_object;//成员变量
-}
-@property(nonamtic, retain) MyObjecct *object;//属性property
-@end
-
-@implementatin MyClass
-@synthesize object=_object;
-</code></pre>
-
-<p>synthesize定义了一对getter和setter方法，在这里的getter方法是object，setter方法是setObject，事实上getter和setter方法操作的是变量_object。属性通过点表达式(.)来访问其实是调用了getter和setter方法，其实就是操作了成员变量_object。故在.m文件中可以直接的使用_object实例变量，也可以通过属性self.object是一样的。<strong>简单来说，属性就是定义了getter和setter方法来操作_object成员变量</strong></p>
-
-<h2>现在推荐的做法</h2>
-
-<pre><code>@interface MyClass:NSObject
-@property(nonamtic, retain) MyObjecct *object;//属性
-@end
-</code></pre>
-
-<p>编译器会自动生成_object、getter和setter方法。</p>
-
-<ol>
-<li>成员变量为该类变量私有，最好声明在implementation里</li>
-<li>public的属性写在.h文件里</li>
-<li>如果自己内部需要setter和getter来实现一些东西，就在.m文件的类目里用property来申明</li>
-</ol>
-
-
-<h1>类别（Category）中得属性</h1>
-
-<p>类别（Category）：常常为了拓展类的功能会对类进行拓展。如</p>
-
-<pre><code>@interface UIViewController (UINavigationControllerItem)
-    @property(nonatomic,readonly,retain) UINavigationItem *navigationItem;
-    @property(nonatomic) BOOL hidesBottomBarWhenPushed;
-    @property(nonatomic,readonly,retain) UINavigationController *navigationController;
-@end
-</code></pre>
-
-<p>这里添加的属性，不会自动生成实例变量，这里添加的属性其实是添加的getter与setter方法。</p>
-
-<h1>后记</h1>
-
-<h2>下节预告</h2>
-
-<p>下一篇可以梳理一下属性的nonatomic、retain、weak、strong的用法，以及类别中添加属性的方法。</p>
-
-<h2>参考链接：</h2>
-
-<p><a href="http://www.cnblogs.com/ygm900/p/3660364.html">http://www.cnblogs.com/ygm900/p/3660364.html</a></p>
-</div>
-  
   
 
+<span class="byline author vcard">Posted by <span class="fn">许龙武</span></span>
 
-    </article>
-  
-  
-    <article>
       
-  <header>
+
+
+
+
+<time class='entry-date' datetime='2015-07-06T09:42:07+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:42 am</span></time>
+      
+
+
+      <br>原文链接：<a href="http://www.xulongwu.com/blog/2015/07/06/at-ioszhong-propertyde-xiu-shi-zi/">http://www.xulongwu.com/blog/2015/07/06/at-ioszhong-propertyde-xiu-shi-zi/</a>
+ <!-- 添加这一行代码 -->
+    </p>
     
-      <h1 class="entry-title"><a href="/blog/2015/07/05/at-qian-yan/">前言</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-07-05T20:13:43+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>8:13 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1>为什么开博客？</h1>
-
-<p>毕业几年了，刚开始做C#的时候写过一些博客，当时做的时间不久，知识点都是一知半解的。然后又做了两年Android手机，用了Jave和C语言。去年才开始做IOS开发，做智能家居的创业公司，边学边开发，也没时间总结，前后做了3个APP，往往是刚做完就又开始下一个，其实都不忍心看刚刚才开发完成的这一个。</p>
-
-<p>这一年里每每不懂了就来网上扒，也没个总结，只怕到时候还是什么都还回去了。今天弄了一个技术博客，希望自己能够坚持充电，也不断总结自己的知识点。</p>
-
-<h1>这个技术博客怎么弄的？</h1>
-
-<p>这个主要是参考了<a href="http://blog.leichunfeng.com">雷纯锋</a>和<a href="http://blog.devtang.com">唐巧</a>的几篇文章搞出来的，功能还很简单，有空了再完善一下。话说弄一个自己专属的博客可以让自己享受下DIY的乐趣，增加一些发博的动力，想起来也蛮好玩的。</p>
+      <div class="sharing">
+  
+  
+  
+  
+    <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_renren"></a>
+  <a href="http://www.jiathis.com/share?uid=2043882" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
 </div>
-  
-  
+<script type="text/javascript">var jiathis_config = {data_track_clickback:'true'};</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2043882" charset="utf-8"></script>
+<!-- JiaThis Button END -->
 
+<!--UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2043882"></script>
+<!--UY END -->
 
-    </article>
   
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
 </div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/07/05/at-iosshu-xing-he-cheng-yuan-bian-liang/" title="Previous Post: IOS属性和成员变量">&laquo; IOS属性和成员变量</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
 <aside class="sidebar">
   
     <section>
@@ -301,6 +221,7 @@ retain：对其他NSObject和其子类（用同一块内存） &hellip;">
 
   
 </aside>
+
 
     </div>
   </div>
