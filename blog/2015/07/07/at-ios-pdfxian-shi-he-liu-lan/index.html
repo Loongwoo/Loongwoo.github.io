@@ -9,7 +9,7 @@
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="利用webView -(void)loadPDF:(NSString*)fileName inWebView:(UIWebView*)webView{ NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType: &hellip;">
+  <meta name="description" content="简介 这里介绍两种方法显示PDF，第一种用UIWebView，特点是代码简单，但是没法实现翻页效果。第二中方法利用IOS系统的CGContextDrawPDFPage方法手动实现，代码复杂一些，同时需要配合UIScrollView实现缩放， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -83,7 +83,11 @@
   </header>
 
 
-<div class="entry-content"><h2>利用webView</h2>
+<div class="entry-content"><h2>简介</h2>
+
+<p>这里介绍两种方法显示PDF，第一种用UIWebView，特点是代码简单，但是没法实现翻页效果。第二中方法利用IOS系统的CGContextDrawPDFPage方法手动实现，代码复杂一些，同时需要配合UIScrollView实现缩放，以及利用UIPageViewController实现翻页的效果。</p>
+
+<h2>方法一：利用UIWebView</h2>
 
 <pre><code>-(void)loadPDF:(NSString*)fileName inWebView:(UIWebView*)webView{
     NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
@@ -99,7 +103,7 @@
 </ul>
 
 
-<h2>利用CGContextDrawPDFPage</h2>
+<h2>方法二：利用CGContextDrawPDFPage</h2>
 
 <h3>CGContextDrawPDFPage</h3>
 

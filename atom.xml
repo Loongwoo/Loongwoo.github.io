@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-07T15:05:27+08:00</updated>
+  <updated>2015-07-07T15:11:43+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -18,7 +18,11 @@
     <link href="http://loongwoo.github.io/blog/2015/07/07/at-ios-pdfxian-shi-he-liu-lan/"/>
     <updated>2015-07-07T11:04:31+08:00</updated>
     <id>http://loongwoo.github.io/blog/2015/07/07/at-ios-pdfxian-shi-he-liu-lan</id>
-    <content type="html"><![CDATA[<h2>利用webView</h2>
+    <content type="html"><![CDATA[<h2>简介</h2>
+
+<p>这里介绍两种方法显示PDF，第一种用UIWebView，特点是代码简单，但是没法实现翻页效果。第二中方法利用IOS系统的CGContextDrawPDFPage方法手动实现，代码复杂一些，同时需要配合UIScrollView实现缩放，以及利用UIPageViewController实现翻页的效果。</p>
+
+<h2>方法一：利用UIWebView</h2>
 
 <pre><code>-(void)loadPDF:(NSString*)fileName inWebView:(UIWebView*)webView{
     NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
@@ -34,7 +38,7 @@
 </ul>
 
 
-<h2>利用CGContextDrawPDFPage</h2>
+<h2>方法二：利用CGContextDrawPDFPage</h2>
 
 <h3>CGContextDrawPDFPage</h3>
 
