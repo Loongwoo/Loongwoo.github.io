@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-07T09:42:20+08:00</updated>
+  <updated>2015-07-07T10:20:58+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -108,7 +108,7 @@ self.backgroundImageView.image=[UIImage imageNamed:self.imageFile];
 }
 </code></pre>
 
-<p>前面两个方法告诉PageViewController前一页或者后一页的显示内容，后两个方法告诉页面指示器（Page Indicator）的总页数和初始位置。</p>
+<p>前面两个方法告诉PageViewController前一页或者后一页的显示内容；后两个方法告诉页面指示器（Page Indicator）的总页数和初始位置，当然只有在UIPageViewController的TransitionStyle为UIPageViewControllerTransitionStyleScroll的时候才有效。</p>
 
 <pre><code>-(PageContentViewController *)viewControllerAtIndex:(NSUInteger)index{
     if (([self.pageTitles count] == 0) || (index &gt;= [self.pageTitles count])) {

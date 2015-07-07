@@ -173,7 +173,7 @@ self.backgroundImageView.image=[UIImage imageNamed:self.imageFile];
 }
 </code></pre>
 
-<p>前面两个方法告诉PageViewController前一页或者后一页的显示内容，后两个方法告诉页面指示器（Page Indicator）的总页数和初始位置。</p>
+<p>前面两个方法告诉PageViewController前一页或者后一页的显示内容；后两个方法告诉页面指示器（Page Indicator）的总页数和初始位置，当然只有在UIPageViewController的TransitionStyle为UIPageViewControllerTransitionStyleScroll的时候才有效。</p>
 
 <pre><code>-(PageContentViewController *)viewControllerAtIndex:(NSUInteger)index{
     if (([self.pageTitles count] == 0) || (index &gt;= [self.pageTitles count])) {
