@@ -9,7 +9,7 @@
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="前言 由于之前一直都是用纯代码构建页面，一直没有学习怎么用storyboard。已经深深的感受到了纯代码写页面的繁琐了。所以这个Demo不但学习怎么用PageViewController实现启动引导的图片展示，也初步学习了怎么用storyboard构建页面。 构建storyboard &hellip;">
+  <meta name="description" content="利用webView -(void)loadPDF:(NSString*)fileName inWebView:(UIWebView*)webView{ NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType: &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -64,6 +64,91 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/07/07/at-ios-pdfxian-shi-he-liu-lan/">IOS PDF显示和浏览</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-07-07T11:04:31+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:04 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>利用webView</h2>
+
+<pre><code>-(void)loadPDF:(NSString*)fileName inWebView:(UIWebView*)webView{
+    NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
+    NSURL *url = [NSURL fileURLWithPath:path];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    [webView loadRequest:request];
+}
+</code></pre>
+
+<ul>
+<li>优点：设置<code>webView.scalesPageToFit = YES;</code>可以实现pinch放大缩小</li>
+<li>缺点：没有翻页的动画效果</li>
+</ul>
+
+
+<h2>利用CGContextDrawPDFPage和UIPageViewController</h2>
+
+<h3>CGContextDrawPDFPage</h3>
+
+<pre><code>-(void)drawInContext:(CGContextRef)context atPageNo:(int)page_no{
+    // PDF page drawing expects a Lower-Left coordinate system, so we flip the coordinate system
+    // before we start drawing.
+    CGContextTranslateCTM(context, 0.0, self.bounds.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+
+    if (pageNO == 0) {
+        pageNO = 1;
+    }    
+    CGPDFPageRef page = CGPDFDocumentGetPage(pdfDocument, pageNO);
+    CGContextSaveGState(context);
+    {
+        CGAffineTransform pdfTransform = CGPDFPageGetDrawingTransform(page, kCGPDFCropBox, self.bounds, 0, true);
+        CGContextConcatCTM(context, pdfTransform);
+        CGContextDrawPDFPage(context, page);
+    }
+    CGContextRestoreGState(context);
+}
+</code></pre>
+
+<p>需要先反转坐标，根据pageNO获取到CGPDFDocumentRef的那一页，直接CGContextDrawPDFPage。</p>
+
+<h3>UIPageViewController</h3>
+
+<p>UIPageViewController关键在于构建UIPageViewControllerDataSource中的两个方法。要注意他们返回的是UIViewController，具体实现请参考源码。</p>
+
+<h2>效果展示</h2>
+
+<p><img src="/images/pdf1.png" alt="PDF1" /> <img src="/images/pdf2.png" alt="PDF2" /></p>
+
+<h2>源码下载</h2>
+
+<p><a href="https://github.com/Loongwoo/PDFDemo">PDFDemo</a></p>
+
+<h2>参考链接</h2>
+
+<p><a href="http://blog.csdn.net/yiyaaixuexi/article/details/7645725">http://blog.csdn.net/yiyaaixuexi/article/details/7645725</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -433,6 +518,10 @@ self.backgroundImageView.image=[UIImage imageNamed:self.imageFile];
     <section>
   <h1>最新文章</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/07/07/at-ios-pdfxian-shi-he-liu-lan/">IOS PDF显示和浏览</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2015/07/07/at-ios-appqi-dong-yin-dao-jie-mian/">IOS App启动引导界面</a>

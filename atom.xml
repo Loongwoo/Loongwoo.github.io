@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-07T10:20:58+08:00</updated>
+  <updated>2015-07-07T11:42:04+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -12,6 +12,71 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[IOS PDF显示和浏览]]></title>
+    <link href="http://loongwoo.github.io/blog/2015/07/07/at-ios-pdfxian-shi-he-liu-lan/"/>
+    <updated>2015-07-07T11:04:31+08:00</updated>
+    <id>http://loongwoo.github.io/blog/2015/07/07/at-ios-pdfxian-shi-he-liu-lan</id>
+    <content type="html"><![CDATA[<h2>利用webView</h2>
+
+<pre><code>-(void)loadPDF:(NSString*)fileName inWebView:(UIWebView*)webView{
+    NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
+    NSURL *url = [NSURL fileURLWithPath:path];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    [webView loadRequest:request];
+}
+</code></pre>
+
+<ul>
+<li>优点：设置<code>webView.scalesPageToFit = YES;</code>可以实现pinch放大缩小</li>
+<li>缺点：没有翻页的动画效果</li>
+</ul>
+
+
+<h2>利用CGContextDrawPDFPage和UIPageViewController</h2>
+
+<h3>CGContextDrawPDFPage</h3>
+
+<pre><code>-(void)drawInContext:(CGContextRef)context atPageNo:(int)page_no{
+    // PDF page drawing expects a Lower-Left coordinate system, so we flip the coordinate system
+    // before we start drawing.
+    CGContextTranslateCTM(context, 0.0, self.bounds.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+
+    if (pageNO == 0) {
+        pageNO = 1;
+    }    
+    CGPDFPageRef page = CGPDFDocumentGetPage(pdfDocument, pageNO);
+    CGContextSaveGState(context);
+    {
+        CGAffineTransform pdfTransform = CGPDFPageGetDrawingTransform(page, kCGPDFCropBox, self.bounds, 0, true);
+        CGContextConcatCTM(context, pdfTransform);
+        CGContextDrawPDFPage(context, page);
+    }
+    CGContextRestoreGState(context);
+}
+</code></pre>
+
+<p>需要先反转坐标，根据pageNO获取到CGPDFDocumentRef的那一页，直接CGContextDrawPDFPage。</p>
+
+<h3>UIPageViewController</h3>
+
+<p>UIPageViewController关键在于构建UIPageViewControllerDataSource中的两个方法。要注意他们返回的是UIViewController，具体实现请参考源码。</p>
+
+<h2>效果展示</h2>
+
+<p><img src="http://loongwoo.github.io/images/pdf1.png" alt="PDF1" /> <img src="http://loongwoo.github.io/images/pdf2.png" alt="PDF2" /></p>
+
+<h2>源码下载</h2>
+
+<p><a href="https://github.com/Loongwoo/PDFDemo">PDFDemo</a></p>
+
+<h2>参考链接</h2>
+
+<p><a href="http://blog.csdn.net/yiyaaixuexi/article/details/7645725">http://blog.csdn.net/yiyaaixuexi/article/details/7645725</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[IOS App启动引导界面]]></title>
