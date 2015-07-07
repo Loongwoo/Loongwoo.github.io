@@ -99,7 +99,7 @@
 </ul>
 
 
-<h2>利用CGContextDrawPDFPage和UIPageViewController</h2>
+<h2>利用CGContextDrawPDFPage</h2>
 
 <h3>CGContextDrawPDFPage</h3>
 
@@ -125,9 +125,35 @@
 
 <p>需要先反转坐标，根据pageNO获取到CGPDFDocumentRef的那一页，直接CGContextDrawPDFPage。</p>
 
+<h3>UIScrollView</h3>
+
+<p>配合UIScrollView实现缩放，ZPDFPageController的主要代码：</p>
+
+<pre><code>-(void)viewDidLoad{
+    [super viewDidLoad];
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    scrollView.showsVerticalScrollIndicator=NO;
+    scrollView.showsHorizontalScrollIndicator=NO;
+    scrollView.minimumZoomScale=1.0f;
+    scrollView.maximumZoomScale=3.0f;
+    scrollView.delegate=self;
+    [self.view addSubview:scrollView];
+
+    pdfView = [[ZPDFView alloc] initWithFrame:scrollView.bounds atPage:(int)self.pageNO withPDFDoc:self.pdfDocument];
+    pdfView.backgroundColor=[UIColor whiteColor];
+    [scrollView addSubview:pdfView];
+
+    scrollView.contentSize=pdfView.bounds.size;
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
+    return pdfView;
+}
+</code></pre>
+
 <h3>UIPageViewController</h3>
 
-<p>UIPageViewController的TransitionStyle设置为UIPageViewControllerTransitionStylePageCurl（翻页）。其次也是构建UIPageViewControllerDataSource中的两个方法。要注意他们返回的是UIViewController，具体实现请参考源码。</p>
+<p>UIPageViewController的TransitionStyle设置为UIPageViewControllerTransitionStylePageCurl（翻页）。其次也是构建UIPageViewControllerDataSource中的两个方法（ZPDFPageModel）。要注意他们返回的是UIViewController，具体实现请参考源码。</p>
 
 <h2>效果展示</h2>
 
