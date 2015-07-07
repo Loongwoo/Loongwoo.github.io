@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-07T03:25:53+08:00</updated>
+  <updated>2015-07-07T09:42:20+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -32,9 +32,9 @@
 <li>确保勾选Use Auto Layout和Use Size Classes</li>
 <li>关于Size Classes的讲解请参考<a href="http://www.cocoachina.com/ios/20141217/10669.html">链接1</a>，此处为了适配所有的设备，故选择了默认的w Any h Any</li>
 <li>为内容VC添加一个Label和UIImageView，分别设置Constraints<br/>
-鼠标右键点击Label拖动，在提示框选择Top Space to Top Layout Cuide（IOS7中会自动向下移动20个像素）和Center Horizontally In Container（水平居中）。点击右边Edit可以设置具体的值。
-<img src="http://loongwoo.github.io/images/labelSC.png" alt="设置Label的界限" />
-如下设置上下左右界限
+鼠标右键点击Label拖动，在提示框选择Top Space to Top Layout Guide（IOS7中会自动向下移动20个像素）和Center Horizontally In Container（水平居中）。点击右边Edit可以设置具体的值。
+<img src="http://loongwoo.github.io/images/labelSC.png" alt="设置Label的约束" />
+如下设置上下左右约束，Trailing Space to: superview（右）为-16；Leading Space to: superview（左）为-16；Top Space to: Label（上）为10，Button Space to: Bottom Layout Guide（下）为0；
 <img src="http://loongwoo.github.io/images/imageviewSC.png" alt="设置imageView的界限" /></li>
 <li>为根VC添加一个Button，也设置好Constraints</li>
 </ol>
