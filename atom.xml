@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-07T11:42:04+08:00</updated>
+  <updated>2015-07-07T11:54:00+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -62,7 +62,7 @@
 
 <h3>UIPageViewController</h3>
 
-<p>UIPageViewController关键在于构建UIPageViewControllerDataSource中的两个方法。要注意他们返回的是UIViewController，具体实现请参考源码。</p>
+<p>UIPageViewController的TransitionStyle设置为UIPageViewControllerTransitionStylePageCurl（翻页）。其次也是构建UIPageViewControllerDataSource中的两个方法。要注意他们返回的是UIViewController，具体实现请参考源码。</p>
 
 <h2>效果展示</h2>
 
