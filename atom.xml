@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-07T15:11:43+08:00</updated>
+  <updated>2015-07-08T18:40:16+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -12,6 +12,151 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[IOS NSString常用Category]]></title>
+    <link href="http://loongwoo.github.io/blog/2015/07/08/at-ios-nsstringchang-yong-category/"/>
+    <updated>2015-07-08T17:34:44+08:00</updated>
+    <id>http://loongwoo.github.io/blog/2015/07/08/at-ios-nsstringchang-yong-category</id>
+    <content type="html"><![CDATA[<p>我们经常会在项目中用一些NSString的Category，可以记录下来，免得每次都要查。比如NSString的URL编码、MD5加密、自适应大小等等。</p>
+
+<h2>方法解析</h2>
+
+<h3>汉字转拼音</h3>
+
+<pre><code>-(NSString *)transformToPinyin {
+    NSMutableString *mutableString = [NSMutableString stringWithString:self];
+    CFStringTransform((CFMutableStringRef)mutableString, NULL, kCFStringTransformToLatin, false);
+    mutableString = (NSMutableString *)[mutableString stringByFoldingWithOptions:NSDiacriticInsensitiveSearch locale:[NSLocale currentLocale]];
+    return mutableString;
+}
+</code></pre>
+
+<p>尽管对汉字的排序可以用<code>- (NSArray *)sortedArrayUsingComparator:(NSComparator)cmptr</code>进行排序，但也有时候需要手动排序，这个拓展就有用了。</p>
+
+<h3>URL编码</h3>
+
+<pre><code>-(NSString *)URLEncodedString{
+    NSString *encodedString = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
+        (CFStringRef)self,
+        (CFStringRef)@"!$&amp;'()*+,-./:;=?@_~%#[]",
+        NULL,
+        kCFStringEncodingUTF8));
+    return encodedString;
+}
+</code></pre>
+
+<p>对于包含中文的URL不能整体转化为UTF-8的格式，那么就可以用<code>CFURLCreateStringByAddingPercentEscapes</code>来排除掉一些应该保留的字符。</p>
+
+<h3>Json字符串转化为Object</h3>
+
+<pre><code>-(id)JSONObject{
+    return [NSJSONSerialization JSONObjectWithData:[self dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
+}
+</code></pre>
+
+<p>网络接口很多是Json的字符串，该方法直接转化为NSArray、NSDictionary等。</p>
+
+<h3>MD5加密</h3>
+
+<pre><code>-(NSString*)md5{
+    const char *cStr = [self UTF8String];
+    unsigned char result[CC_MD5_DIGEST_LENGTH];
+    CC_MD5( cStr, (int)strlen(cStr), result );
+    return [NSString stringWithFormat: @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X", 
+        result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8], 
+        result[9], result[10], result[11], result[12], result[13], result[14], result[15]];
+}
+</code></pre>
+
+<p>MD5加密也是常用的方法，记得导入<code>#import &lt;CommonCrypto/CommonDigest.h&gt;</code>。</p>
+
+<h3>UTF16的MD5加密</h3>
+
+<pre><code>-(NSString *)md5ForUTF16{
+    NSData *temp = [self dataUsingEncoding:NSUTF16LittleEndianStringEncoding];
+    UInt8 *cStr = (UInt8 *)[temp bytes];
+    unsigned char result[CC_MD5_DIGEST_LENGTH];
+    CC_MD5(cStr, (int)[temp length], result);
+    return [NSString stringWithFormat:@"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",  
+        result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8], 
+    result[9], result[10], result[11], result[12], result[13], result[14], result[15]];
+}
+</code></pre>
+
+<p>这个加密倒不是很常用，经常有前面一个就够用了，这里统一记录一下。</p>
+
+<h3>去掉前后的空格</h3>
+
+<pre><code>-(NSString *)trim {
+    return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+</code></pre>
+
+<p>记得在写C#的时候，经常要带着trim函数走。但是IOS里面用的地方不多，记得用过的就是URL的参数，以及在要把输入内容转化为int的时候。</p>
+
+<h3>去掉行中多余空格</h3>
+
+<pre><code>-(NSString *)trimTheExtraSpaces{
+    NSCharacterSet *whitespaces = [NSCharacterSet whitespaceCharacterSet];
+    NSPredicate *noEmptyStrings = [NSPredicate predicateWithFormat:@"SELF != ''"];
+    NSArray *parts = [self componentsSeparatedByCharactersInSet:whitespaces];
+    NSArray *filteredArray = [parts filteredArrayUsingPredicate:noEmptyStrings];
+    return [filteredArray componentsJoinedByString:@" "];
+}
+</code></pre>
+
+<p>该方法会去掉string中的多余空格，有多个的话留一个。</p>
+
+<h3>是否是空字符</h3>
+
+<pre><code>-(BOOL)isEmpty {
+    NSCharacterSet *charSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    NSString *trimmed = [self stringByTrimmingCharactersInSet:charSet];
+    return [trimmed isEqualToString:@""];
+}
+</code></pre>
+
+<p>我们常常用<code>if( nil == tempStr || 0 == tempStr.lenth ){...}</code>来判断是否为空。但比如<code>NSString \*tmp4=@"   ";</code>这样一个字符串，<code>[tmp4 length]</code>求的长度为3。但是用上面的方法可以看到是空的。</p>
+
+<h3>自适应大小</h3>
+
+<pre><code>-(CGSize)sizeWithFont:(UIFont *)font
+    constrainedToSize:(CGSize)constrainedSize
+        lineBreakMode:(NSLineBreakMode)lineBreakMode {
+    if ([self respondsToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        paragraphStyle.lineBreakMode = lineBreakMode;
+        NSDictionary *attributes = @{NSFontAttributeName:font, NSParagraphStyleAttributeName:paragraphStyle};
+        CGRect boundingRect = [self boundingRectWithSize:constrainedSize 
+            options:NSStringDrawingUsesLineFragmentOrigin 
+            attributes:attributes context:nil];
+        return CGSizeMake(ceilf(boundingRect.size.width), ceilf(boundingRect.size.height));
+    }
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    return [self sizeWithFont:font constrainedToSize:constrainedSize lineBreakMode:lineBreakMode];
+#pragma clang diagnostic pop
+}
+</code></pre>
+
+<p>这个就再熟悉不过了，不过定义Category的时候要记得导入<code>#import &lt;UIKit/UIKit.h&gt;</code>，否则CGSize这些会报错。还有一个用法</p>
+
+<pre><code>#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-相关命令"
+// 你自己的代码
+#pragma clang diagnostic pop
+</code></pre>
+
+<p>#pragma我们常用来做分段注释，还有一个功能是处理编译器警告。<code>-Wdeprecated-declarations</code>表示方法弃用。</p>
+
+<h2>源码下载</h2>
+
+<p><a href="https://github.com/Loongwoo/StringExtensionDemo">https://github.com/Loongwoo/StringExtensionDemo</a></p>
+
+<p>在项目中导入NSString+Extensions.h和NSString+Extensions.m即可。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[IOS PDF显示和浏览]]></title>
