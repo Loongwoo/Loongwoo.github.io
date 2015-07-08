@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-08T18:46:35+08:00</updated>
+  <updated>2015-07-08T18:52:07+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -93,7 +93,7 @@
 }
 </code></pre>
 
-<p>记得在写C#的时候，经常要带着trim函数走。但是IOS里面用的地方不多，记得用过的就是URL的参数，以及在要把输入内容转化为int的时候。</p>
+<p>记得在写C#的时候，经常要带着trim函数走。但是IOS里面用的地方不多，记得用过的就是URL的参数，以及在要把输入内容转化为int的时候。在输入结束的时候trim一下是个应该坚持的习惯。</p>
 
 <h3>去掉行中多余空格</h3>
 
