@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-08T18:40:16+08:00</updated>
+  <updated>2015-07-08T18:46:35+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -32,7 +32,7 @@
 }
 </code></pre>
 
-<p>尽管对汉字的排序可以用<code>- (NSArray *)sortedArrayUsingComparator:(NSComparator)cmptr</code>进行排序，但也有时候需要手动排序，这个拓展就有用了。</p>
+<p>尽管对汉字的排序可以用<code>- (NSComparisonResult)localizedCompare:(NSString *)string;</code>进行排序，但也有时候需要手动排序，这个拓展就有用了。</p>
 
 <h3>URL编码</h3>
 
