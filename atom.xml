@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-09T09:16:45+08:00</updated>
+  <updated>2015-07-09T11:21:38+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -12,6 +12,25 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[IOS消息转发机制]]></title>
+    <link href="http://loongwoo.github.io/blog/2015/07/09/at-iosxiao-xi-zhuan-fa-ji-zhi/"/>
+    <updated>2015-07-09T11:14:13+08:00</updated>
+    <id>http://loongwoo.github.io/blog/2015/07/09/at-iosxiao-xi-zhuan-fa-ji-zhi</id>
+    <content type="html"><![CDATA[<h3>介绍</h3>
+
+<p>平时基本很少用的的知识点，但是知其所以然还是有好处的。以下的Demo完全参考最下面的链接的文章写的，理解起来不难。</p>
+
+<h3>源码下载</h3>
+
+<p><a href="https://github.com/Loongwoo/MsgForwardDemo">MsgForwardDemo</a></p>
+
+<h3>参考链接</h3>
+
+<p><a href="http://www.jianshu.com/p/1bde36ad9938">http://www.jianshu.com/p/1bde36ad9938</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[IOS NSString常用Category]]></title>
