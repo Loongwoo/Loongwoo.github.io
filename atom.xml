@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-09T11:21:38+08:00</updated>
+  <updated>2015-07-09T17:58:20+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -12,6 +12,195 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[IOS自定义不等高UITableViewCell]]></title>
+    <link href="http://loongwoo.github.io/blog/2015/07/09/at-ioszi-ding-yi-bu-deng-gao-uitableviewcell/"/>
+    <updated>2015-07-09T16:59:08+08:00</updated>
+    <id>http://loongwoo.github.io/blog/2015/07/09/at-ioszi-ding-yi-bu-deng-gao-uitableviewcell</id>
+    <content type="html"><![CDATA[<p>在APP中常有类似用户手册问题解答的需求，常常是一问一答的形式。这时候可能问题和答案的长度都不一样，如果用等高的Cell来显示会很难看。这时候就需要不等高的Cell，也就是希望Cell能够自适应高度。这里采用基本的MVC架构。</p>
+
+<h2>Model</h2>
+
+<h3>数据存储</h3>
+
+<p>由于考虑到多平台的通用性，选择json保存数据，这里用的Pod管理的MJExtension库,方便把json转化为Model，先创建一个questions.json的文件。内容是一个数组，每一项有3个数据：</p>
+
+<pre><code>[
+  {
+    "ID": 1,
+    "question": "我的******为什么不可以用？",
+    "answer": "1. 确保打开手机麦克风权限，IOS手机请前往‘设置-通用-隐私-麦克风’，找到******并打开；\n2. 确保手机遥控器充满电；\n3. 插入是确保能看到‘******’的信息。"
+  }
+]
+</code></pre>
+
+<p>内容是一个数组，每一项有3个数据:ID、question和answer。</p>
+
+<h3>ManualModel</h3>
+
+<pre><code>@interface ManualModel : NSObject
+
+@property (nonatomic, assign) NSInteger ID;
+@property (nonatomic, copy) NSString *question;
+@property (nonatomic, copy) NSString *answer;
+
+@end
+</code></pre>
+
+<p>ManualModel中的三项和json的一一对应，不对应的话也可以，就是要在转化的时候手动指定就可以了，具体请看<a href="https://github.com/CoderMJLee/MJExtension">MJExtension</a>的讲解。</p>
+
+<h2>View</h2>
+
+<h3>.h文件</h3>
+
+<pre><code>@class ManualModel;
+@interface UnequalHeightCell : UITableViewCell
+
+@property (nonatomic, strong)ManualModel *manual;
+
++(CGFloat)cellHeight:(ManualModel*)model;
+@end
+</code></pre>
+
+<p>创建UnequalHeightCell，添加属性manual，以及类的方法cellHeight用来计算cell 的高度。</p>
+
+<h3>.m文件</h3>
+
+<pre><code>@implementation UnequalHeightCell{
+    UIView *questionView, *answerView;
+    UILabel *questionLabel,*answerLabel;
+}
+
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        questionView=[[UIView alloc]initWithFrame:CGRectZero];
+        questionView.backgroundColor=[UIColor colorWithRed:0 green:0.75 blue:1 alpha:1];
+        [self addSubview:questionView];
+
+        questionLabel=[self labelWithFont:QFont textColor:[UIColor whiteColor]];
+        [questionView addSubview:questionLabel];
+
+        answerView=[[UIView alloc]initWithFrame:CGRectZero];
+        answerView.backgroundColor=[UIColor whiteColor];
+        [self addSubview:answerView];
+
+        answerLabel=[self labelWithFont:AFont textColor:[UIColor blackColor]];
+        [answerView addSubview:answerLabel];
+    }
+    return self;
+}
+
+-(UILabel*)labelWithFont:(UIFont*)font textColor:(UIColor*)textColor{
+    UILabel *label=[[UILabel alloc]initWithFrame:CGRectZero];
+    label.backgroundColor=[UIColor clearColor];
+    label.textColor=textColor;
+    label.font=font;
+    label.numberOfLines=0;
+    label.textAlignment=NSTextAlignmentLeft;
+    return label;
+}
+</code></pre>
+
+<p>实现初始化函数initWithStyle，放两个label分别显示问题和答案，考虑的上下左右的边缘，加个UIView放置label。frame可以放到layoutSubviews中统一处理。</p>
+
+<h3>实现manual的set函数</h3>
+
+<pre><code>-(void)setManual:(ManualModel *)manual{
+    _manual=manual;
+
+    questionLabel.text=[NSString stringWithFormat:@"Q%d: %@",(int)manual.ID,manual.question];
+    answerLabel.text=manual.answer;
+
+    [self setNeedsLayout];
+}
+
+-(void)layoutSubviews{
+    [super layoutSubviews];
+
+    //设置问题的frame
+    CGFloat height=[UnequalHeightCell height:_manual.question font:QFont];
+    questionView.frame=CGRectMake(0, 0, ScreenWidth, height);
+    questionLabel.frame=CGRectInset(questionView.bounds, LeftRightMargin, TopBottomMargin);
+
+    //设置答案的frame
+    height=[UnequalHeightCell height:_manual.answer font:AFont];
+    answerView.frame=CGRectMake(0, questionView.frame.size.height, ScreenWidth, height);
+    answerLabel.frame=CGRectInset(answerView.bounds, LeftRightMargin, TopBottomMargin);
+}
+</code></pre>
+
+<p>在调用<code>[self setNeedsLayout];</code>的时候会执行layoutSubviews，设置所有控件的frame。</p>
+
+<pre><code>//根据字体计算问题和答案View需要的高度
++(CGFloat)height:(NSString*)text font:(UIFont*)font{
+    CGSize size=[text sizeWithFont:font constrainedToSize:CGSizeMake(ScreenWidth-2*LeftRightMargin, 2000) lineBreakMode:NSLineBreakByWordWrapping];
+    return MAX(MinHeight, ceilf(size.height)+2*TopBottomMargin);
+}
+
+//Cell的总高度
++(CGFloat)cellHeight:(ManualModel*)model{
+    return [UnequalHeightCell height:model.question font:QFont] + [UnequalHeightCell height:model.answer font:AFont];
+}
+</code></pre>
+
+<p>其中sizeWithFont是<a href="http://www.xulongwu.com/blog/2015/07/08/at-ios-nsstringchang-yong-category/">IOS NSString常用Category</a>用了的。cellHeight是构造不等高的cell所必须的。他是questionView和answerView的两个高度和。如果控件更多，计算就复杂一点，意思是一样的。</p>
+
+<h2>Controller</h2>
+
+<p>ViewController继承于UITableViewController，先获取数据源</p>
+
+<pre><code>@property (nonatomic, strong)NSArray *questionAndAnswerArr;
+
+-(NSArray *)questionAndAnswerArr{
+    if(_questionAndAnswerArr==nil){
+        NSString *path=[[NSBundle mainBundle] pathForResource:@"questions" ofType:@"json"];
+        NSData *data=[NSData dataWithContentsOfFile:path];
+        NSArray *tmp=[data JSONObject];
+        _questionAndAnswerArr=[ManualModel objectArrayWithKeyValuesArray:tmp];
+    }
+    return _questionAndAnswerArr;
+}
+</code></pre>
+
+<p>objectArrayWithKeyValuesArray是MJExtension中的方法，可以把字典的数组转化为Model的数组。然后在实现UITableViewDataSource的三个方法</p>
+
+<pre><code>#pragma UITableViewDelegate &amp; UITableViewDataSource
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.questionAndAnswerArr.count;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    ManualModel *model=self.questionAndAnswerArr[indexPath.row];
+    return [UnequalHeightCell cellHeight:model];
+}
+
+-(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *identity=@"mycell";
+    UnequalHeightCell *cell=[tableView dequeueReusableCellWithIdentifier:identity];
+    if (cell==nil) {
+        cell=[[UnequalHeightCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identity];
+        cell.selectionStyle=UITableViewCellSelectionStyleNone;
+    }
+    cell.manual=self.questionAndAnswerArr[indexPath.row];
+    return cell;
+}
+#pragma UITableViewDelegate &amp; UITableViewDataSource
+</code></pre>
+
+<p>注意到heightForRowAtIndexPath中返回的不是一个固定的值了。而是根据数据源算出来的值。这就实现了不等高的Cell。</p>
+
+<h2>效果展示</h2>
+
+<p><img src="http://loongwoo.github.io/images/unequalcell.png" alt="效果图" /></p>
+
+<h2>源码下载</h2>
+
+<p><a href="https://github.com/Loongwoo/UnequalHeightDemo">UnequalHeightCellDemo</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[IOS消息转发机制]]></title>

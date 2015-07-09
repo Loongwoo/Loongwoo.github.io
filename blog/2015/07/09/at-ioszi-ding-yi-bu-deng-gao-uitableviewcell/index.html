@@ -1,0 +1,411 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>IOS自定义不等高UITableViewCell - 许龙武的技术博客</title>
+  <meta name="author" content="许龙武">
+
+  
+  <meta name="description" content="在APP中常有类似用户手册问题解答的需求，常常是一问一答的形式。这时候可能问题和答案的长度都不一样，如果用等高的Cell来显示会很难看。这时候就需要不等高的Cell，也就是希望Cell能够自适应高度。这里采用基本的MVC架构。 Model 数据存储 由于考虑到多平台的通用性，选择json保存数据， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://loongwoo.github.io/blog/2015/07/09/at-ioszi-ding-yi-bu-deng-gao-uitableviewcell/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="许龙武的技术博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://cdn.staticfile.org/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">许龙武的技术博客</a></h1>
+  
+    <h2>记录所学，快乐分享</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="loongwoo.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">所有文章</a></li>
+  <li><a href="http://weibo.com/loongwoo">我的微博</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">IOS自定义不等高UITableViewCell</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-07-09T16:59:08+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:59 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>在APP中常有类似用户手册问题解答的需求，常常是一问一答的形式。这时候可能问题和答案的长度都不一样，如果用等高的Cell来显示会很难看。这时候就需要不等高的Cell，也就是希望Cell能够自适应高度。这里采用基本的MVC架构。</p>
+
+<h2>Model</h2>
+
+<h3>数据存储</h3>
+
+<p>由于考虑到多平台的通用性，选择json保存数据，这里用的Pod管理的MJExtension库,方便把json转化为Model，先创建一个questions.json的文件。内容是一个数组，每一项有3个数据：</p>
+
+<pre><code>[
+  {
+    "ID": 1,
+    "question": "我的******为什么不可以用？",
+    "answer": "1. 确保打开手机麦克风权限，IOS手机请前往‘设置-通用-隐私-麦克风’，找到******并打开；\n2. 确保手机遥控器充满电；\n3. 插入是确保能看到‘******’的信息。"
+  }
+]
+</code></pre>
+
+<p>内容是一个数组，每一项有3个数据:ID、question和answer。</p>
+
+<h3>ManualModel</h3>
+
+<pre><code>@interface ManualModel : NSObject
+
+@property (nonatomic, assign) NSInteger ID;
+@property (nonatomic, copy) NSString *question;
+@property (nonatomic, copy) NSString *answer;
+
+@end
+</code></pre>
+
+<p>ManualModel中的三项和json的一一对应，不对应的话也可以，就是要在转化的时候手动指定就可以了，具体请看<a href="https://github.com/CoderMJLee/MJExtension">MJExtension</a>的讲解。</p>
+
+<h2>View</h2>
+
+<h3>.h文件</h3>
+
+<pre><code>@class ManualModel;
+@interface UnequalHeightCell : UITableViewCell
+
+@property (nonatomic, strong)ManualModel *manual;
+
++(CGFloat)cellHeight:(ManualModel*)model;
+@end
+</code></pre>
+
+<p>创建UnequalHeightCell，添加属性manual，以及类的方法cellHeight用来计算cell 的高度。</p>
+
+<h3>.m文件</h3>
+
+<pre><code>@implementation UnequalHeightCell{
+    UIView *questionView, *answerView;
+    UILabel *questionLabel,*answerLabel;
+}
+
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        questionView=[[UIView alloc]initWithFrame:CGRectZero];
+        questionView.backgroundColor=[UIColor colorWithRed:0 green:0.75 blue:1 alpha:1];
+        [self addSubview:questionView];
+
+        questionLabel=[self labelWithFont:QFont textColor:[UIColor whiteColor]];
+        [questionView addSubview:questionLabel];
+
+        answerView=[[UIView alloc]initWithFrame:CGRectZero];
+        answerView.backgroundColor=[UIColor whiteColor];
+        [self addSubview:answerView];
+
+        answerLabel=[self labelWithFont:AFont textColor:[UIColor blackColor]];
+        [answerView addSubview:answerLabel];
+    }
+    return self;
+}
+
+-(UILabel*)labelWithFont:(UIFont*)font textColor:(UIColor*)textColor{
+    UILabel *label=[[UILabel alloc]initWithFrame:CGRectZero];
+    label.backgroundColor=[UIColor clearColor];
+    label.textColor=textColor;
+    label.font=font;
+    label.numberOfLines=0;
+    label.textAlignment=NSTextAlignmentLeft;
+    return label;
+}
+</code></pre>
+
+<p>实现初始化函数initWithStyle，放两个label分别显示问题和答案，考虑的上下左右的边缘，加个UIView放置label。frame可以放到layoutSubviews中统一处理。</p>
+
+<h3>实现manual的set函数</h3>
+
+<pre><code>-(void)setManual:(ManualModel *)manual{
+    _manual=manual;
+
+    questionLabel.text=[NSString stringWithFormat:@"Q%d: %@",(int)manual.ID,manual.question];
+    answerLabel.text=manual.answer;
+
+    [self setNeedsLayout];
+}
+
+-(void)layoutSubviews{
+    [super layoutSubviews];
+
+    //设置问题的frame
+    CGFloat height=[UnequalHeightCell height:_manual.question font:QFont];
+    questionView.frame=CGRectMake(0, 0, ScreenWidth, height);
+    questionLabel.frame=CGRectInset(questionView.bounds, LeftRightMargin, TopBottomMargin);
+
+    //设置答案的frame
+    height=[UnequalHeightCell height:_manual.answer font:AFont];
+    answerView.frame=CGRectMake(0, questionView.frame.size.height, ScreenWidth, height);
+    answerLabel.frame=CGRectInset(answerView.bounds, LeftRightMargin, TopBottomMargin);
+}
+</code></pre>
+
+<p>在调用<code>[self setNeedsLayout];</code>的时候会执行layoutSubviews，设置所有控件的frame。</p>
+
+<pre><code>//根据字体计算问题和答案View需要的高度
++(CGFloat)height:(NSString*)text font:(UIFont*)font{
+    CGSize size=[text sizeWithFont:font constrainedToSize:CGSizeMake(ScreenWidth-2*LeftRightMargin, 2000) lineBreakMode:NSLineBreakByWordWrapping];
+    return MAX(MinHeight, ceilf(size.height)+2*TopBottomMargin);
+}
+
+//Cell的总高度
++(CGFloat)cellHeight:(ManualModel*)model{
+    return [UnequalHeightCell height:model.question font:QFont] + [UnequalHeightCell height:model.answer font:AFont];
+}
+</code></pre>
+
+<p>其中sizeWithFont是<a href="http://www.xulongwu.com/blog/2015/07/08/at-ios-nsstringchang-yong-category/">IOS NSString常用Category</a>用了的。cellHeight是构造不等高的cell所必须的。他是questionView和answerView的两个高度和。如果控件更多，计算就复杂一点，意思是一样的。</p>
+
+<h2>Controller</h2>
+
+<p>ViewController继承于UITableViewController，先获取数据源</p>
+
+<pre><code>@property (nonatomic, strong)NSArray *questionAndAnswerArr;
+
+-(NSArray *)questionAndAnswerArr{
+    if(_questionAndAnswerArr==nil){
+        NSString *path=[[NSBundle mainBundle] pathForResource:@"questions" ofType:@"json"];
+        NSData *data=[NSData dataWithContentsOfFile:path];
+        NSArray *tmp=[data JSONObject];
+        _questionAndAnswerArr=[ManualModel objectArrayWithKeyValuesArray:tmp];
+    }
+    return _questionAndAnswerArr;
+}
+</code></pre>
+
+<p>objectArrayWithKeyValuesArray是MJExtension中的方法，可以把字典的数组转化为Model的数组。然后在实现UITableViewDataSource的三个方法</p>
+
+<pre><code>#pragma UITableViewDelegate &amp; UITableViewDataSource
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.questionAndAnswerArr.count;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    ManualModel *model=self.questionAndAnswerArr[indexPath.row];
+    return [UnequalHeightCell cellHeight:model];
+}
+
+-(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *identity=@"mycell";
+    UnequalHeightCell *cell=[tableView dequeueReusableCellWithIdentifier:identity];
+    if (cell==nil) {
+        cell=[[UnequalHeightCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identity];
+        cell.selectionStyle=UITableViewCellSelectionStyleNone;
+    }
+    cell.manual=self.questionAndAnswerArr[indexPath.row];
+    return cell;
+}
+#pragma UITableViewDelegate &amp; UITableViewDataSource
+</code></pre>
+
+<p>注意到heightForRowAtIndexPath中返回的不是一个固定的值了。而是根据数据源算出来的值。这就实现了不等高的Cell。</p>
+
+<h2>效果展示</h2>
+
+<p><img src="/images/unequalcell.png" alt="效果图" /></p>
+
+<h2>源码下载</h2>
+
+<p><a href="https://github.com/Loongwoo/UnequalHeightDemo">UnequalHeightCellDemo</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">许龙武</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-07-09T16:59:08+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:59 pm</span></time>
+      
+
+
+      <br>原文链接：<a href="http://www.xulongwu.com/blog/2015/07/09/at-ioszi-ding-yi-bu-deng-gao-uitableviewcell/">http://www.xulongwu.com/blog/2015/07/09/at-ioszi-ding-yi-bu-deng-gao-uitableviewcell/</a>
+ <!-- 添加这一行代码 -->
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+    <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_renren"></a>
+  <a href="http://www.jiathis.com/share?uid=2043882" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">var jiathis_config = {data_track_clickback:'true'};</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2043882" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+<!--UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2043882"></script>
+<!--UY END -->
+
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/07/09/at-iosxiao-xi-zhuan-fa-ji-zhi/" title="Previous Post: IOS消息转发机制">&laquo; IOS消息转发机制</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>最新文章</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/07/09/at-ioszi-ding-yi-bu-deng-gao-uitableviewcell/">IOS自定义不等高UITableViewCell</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/07/09/at-iosxiao-xi-zhuan-fa-ji-zhi/">IOS消息转发机制</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/07/08/at-ios-nsstringchang-yong-category/">IOS NSString常用Category</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/07/07/at-ios-pdfxian-shi-he-liu-lan/">IOS PDF显示和浏览</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/07/07/at-ios-appqi-dong-yin-dao-jie-mian/">IOS App启动引导界面</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section>
+  <h1>关于我</h1>
+  <p>程序员、创业者、IOS开发工程师</p>
+  <br/>新浪微博：<a href='http://weibo.com/loongwoo' target='_blank'>商陆_Xu</a>
+  <br/>新浪博客：<a href="http://blog.sina.com.cn/lunaize" target="_blank" title="商陆的博客">商陆</a>
+  <br/>GitHub：<a href='https://github.com/loongwoo' target='_blank'>Loongwoo</a>
+  <br/>Git@OSC: <a href='http://git.oschina.net/redder_xu' target='_blank'>redder_xu</a>
+  <br/>CSDN博客：<a href="http://blog.csdn.net/redder_xu" target="_blank" title="CSDN">霜叶红于二月花</a>
+  <br/>个人微信：xulongwu77 欢迎调戏
+  <br/><img width="220px" src="/images/myweixin.jpg" />
+</section>
+<section>
+  <h1>友情链接</h1>
+  <ul>
+  <li><a href="http://blog.devtang.com" target="_blank" title="唐巧的技术博客">唐巧的技术博客</a></li>
+  <li><a href="http://www.leichunfeng.com" target="_blank" title="雷纯锋的技术博客">雷纯锋的技术博客</a></li>
+  <li><a href="http://www.superqq.com" target="_blank" title=“刚刚在线”>刚刚在线</a></li>
+  </ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - 许龙武 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  <span class="credit"> - 感谢 <a href="http://gitcafe.com/signup?invited_by=xulongwu" target="_blank">GitCafe</a> 为本站提供存储空间</span>
+</p>
+
+
+<script language="javascript" type="text/javascript" src="http://js.users.51.la/17858326.js"></script>
+<noscript><a href="http://www.51.la/?17858326" target="_blank"><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.51.la/17858326.asp" style="border:none" /></a></noscript>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
