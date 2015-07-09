@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-08T19:33:28+08:00</updated>
+  <updated>2015-07-09T09:16:45+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -148,7 +148,7 @@
 #pragma clang diagnostic pop
 </code></pre>
 
-<p>#pragma我们常用来做分段注释，还有一个功能是处理编译器警告。<code>-Wdeprecated-declarations</code>表示方法弃用。</p>
+<p>#pragma我们常用来做分段注释，还有一个功能是处理编译器警告。<code>-Wdeprecated-declarations</code>表示方法弃用。加了这个之后，就不会再出现黄色警告了。</p>
 
 <h2>源码下载</h2>
 
