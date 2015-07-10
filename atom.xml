@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-10T11:16:14+08:00</updated>
+  <updated>2015-07-10T11:33:45+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -78,14 +78,14 @@
     if (self) {
         questionView=[[UIView alloc]initWithFrame:CGRectZero];
         questionView.backgroundColor=[UIColor colorWithRed:0 green:0.75 blue:1 alpha:1];
-        [self addSubview:questionView];
+        [self.contentView addSubview:questionView];
 
         questionLabel=[self labelWithFont:QFont textColor:[UIColor whiteColor]];
         [questionView addSubview:questionLabel];
 
         answerView=[[UIView alloc]initWithFrame:CGRectZero];
         answerView.backgroundColor=[UIColor whiteColor];
-        [self addSubview:answerView];
+        [self.contentView addSubview:answerView];
 
         answerLabel=[self labelWithFont:AFont textColor:[UIColor blackColor]];
         [answerView addSubview:answerLabel];
@@ -104,7 +104,7 @@
 }
 </code></pre>
 
-<p>实现初始化函数initWithStyle，放两个label分别显示问题和答案，考虑的上下左右的边缘，加个UIView放置label。frame可以放到layoutSubviews中统一处理。关于上下左右留出边缘的方法还有一种，就是自定义一个UILabel重写以下方法：</p>
+<p>实现初始化函数initWithStyle，放两个label分别显示问题和答案，考虑的上下左右的边缘，加个UIView放置label。记得把questionView和answerView添加到contentView上，这样子做的好处是如果需要进入编辑模式，他会自动缩进。frame可以放到layoutSubviews中统一处理。关于上下左右留出边缘的方法还有一种，就是自定义一个UILabel重写以下方法：</p>
 
 <pre><code>@property(nonatomic) UIEdgeInsets insets;
 
