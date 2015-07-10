@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-10T11:06:42+08:00</updated>
+  <updated>2015-07-10T11:16:14+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -104,7 +104,16 @@
 }
 </code></pre>
 
-<p>实现初始化函数initWithStyle，放两个label分别显示问题和答案，考虑的上下左右的边缘，加个UIView放置label。frame可以放到layoutSubviews中统一处理。</p>
+<p>实现初始化函数initWithStyle，放两个label分别显示问题和答案，考虑的上下左右的边缘，加个UIView放置label。frame可以放到layoutSubviews中统一处理。关于上下左右留出边缘的方法还有一种，就是自定义一个UILabel重写以下方法：</p>
+
+<pre><code>@property(nonatomic) UIEdgeInsets insets;
+
+-(void)drawTextInRect:(CGRect)rect {
+    return [super drawTextInRect:UIEdgeInsetsInsetRect(rect, self.insets)];
+}
+</code></pre>
+
+<p>这样子要注意的是：根据内容计算出高度之后，就要自己加上上下所留的才是整个Label的高度。在本例中还是用笨一点的方法算了。</p>
 
 <h3>实现manual的set函数</h3>
 
