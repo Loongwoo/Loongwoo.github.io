@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-07-10T11:33:45+08:00</updated>
+  <updated>2015-08-17T16:27:18+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -12,6 +12,23 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[IOS设计模式]]></title>
+    <link href="http://loongwoo.github.io/blog/2015/08/17/iosshe-ji-mo-shi/"/>
+    <updated>2015-08-17T16:20:25+08:00</updated>
+    <id>http://loongwoo.github.io/blog/2015/08/17/iosshe-ji-mo-shi</id>
+    <content type="html"><![CDATA[<p>记录几个关于IOS的设计模式，方便以后查看</p>
+
+<ul>
+<li><a href="http://xmuzyq.iteye.com/blog/1942376">IOS设计模式之一（MVC模式，单例模式）</a></li>
+<li><a href="http://xmuzyq.iteye.com/blog/1942379">IOS设计模式之二（门面模式，装饰器模式）</a></li>
+<li><a href="http://xmuzyq.iteye.com/blog/1942381">IOS设计模式之三（适配器模式，观察者模式）</a></li>
+<li><a href="http://xmuzyq.iteye.com/blog/1942386">IOS设计模式之四（备忘录模式，命令模式）</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[IOS自定义不等高UITableViewCell]]></title>

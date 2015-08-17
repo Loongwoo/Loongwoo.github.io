@@ -5,13 +5,14 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>IOS中Property的修饰字 - 许龙武的技术博客</title>
+  <title>IOS设计模式 - 许龙武的技术博客</title>
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="assign、copy 、retain（MRC） assign: 对基础数据类型 （NSInteger）和C数据类型（int, float, double, char,等）
-copy：对NSString（不用同一块内存）
-retain：对其他NSObject和其子类（用同一块内存） &hellip;">
+  <meta name="description" content="记录几个关于IOS的设计模式，方便以后查看 IOS设计模式之一（MVC模式，单例模式）
+IOS设计模式之二（门面模式，装饰器模式）
+IOS设计模式之三（适配器模式，观察者模式）
+IOS设计模式之四（备忘录模式，命令模式） ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +21,7 @@ retain：对其他NSObject和其子类（用同一块内存） &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://loongwoo.github.io/blog/2015/07/06/at-ioszhong-propertyde-xiu-shi-zi/">
+  <link rel="canonical" href="http://loongwoo.github.io/blog/2015/08/17/iosshe-ji-mo-shi/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="许龙武的技术博客" type="application/atom+xml">
@@ -69,7 +70,7 @@ retain：对其他NSObject和其子类（用同一块内存） &hellip;">
   
   <header>
     
-      <h1 class="entry-title">IOS中Property的修饰字</h1>
+      <h1 class="entry-title">IOS设计模式</h1>
     
     
       <p class="meta">
@@ -78,42 +79,22 @@ retain：对其他NSObject和其子类（用同一块内存） &hellip;">
 
 
 
-<time class='entry-date' datetime='2015-07-06T09:42:07+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:42 am</span></time>
+<time class='entry-date' datetime='2015-08-17T16:20:25+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:20 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h2>assign、copy 、retain（MRC）</h2>
+<div class="entry-content"><p>记录几个关于IOS的设计模式，方便以后查看</p>
 
 <ul>
-<li>assign: 对基础数据类型 （NSInteger）和C数据类型（int, float, double, char,等）</li>
-<li>copy：对NSString（不用同一块内存）</li>
-<li>retain：对其他NSObject和其子类（用同一块内存）
-
-<h2>readonly、readwrite</h2></li>
-<li>readonly：只读</li>
-<li><p>readwrite：读写（默认属性）</p>
-
-<h2>weak、strong（ARC下避免循环引用需要申明weak指针）</h2>
-
-<p><a href="http://www.2cto.com/kf/201409/332193.html">三种容易引起循环引用的场景</a></p></li>
-<li><p>weak：指针指向的地址一旦被释放，这些指针都将被赋值为nil。这样的好处能有效的防止野指针。</p></li>
-<li>strong：strong就相当于retain属性，而weak相当于assign<br />
-<strong>具体一点：IBOutlet可以为weak，NSString为copy，delegate一般为weak，其他的看情况。一般来说，类“内部”的属性设置为strong，类“外部”的属性设置为weak。说到底就是一个归属权的问题。小心出现循环引用导致内存无法释放。</strong>
-
-<h2>nonatomic、atomic</h2></li>
-<li>nonatomic：不加同步，多线程并发访问会提高性能。</li>
-<li>atomic：默认值<br />
-了解<a href="http://www.parallellabs.com/2011/04/09/pthread-mutex-lock-and-thread-safety/">原子操作</a>，以及<a href="http://blog.csdn.net/cubepeng/article/details/7735962">非原子操作的效率提升</a>。</li>
+<li><a href="http://xmuzyq.iteye.com/blog/1942376">IOS设计模式之一（MVC模式，单例模式）</a></li>
+<li><a href="http://xmuzyq.iteye.com/blog/1942379">IOS设计模式之二（门面模式，装饰器模式）</a></li>
+<li><a href="http://xmuzyq.iteye.com/blog/1942381">IOS设计模式之三（适配器模式，观察者模式）</a></li>
+<li><a href="http://xmuzyq.iteye.com/blog/1942386">IOS设计模式之四（备忘录模式，命令模式）</a></li>
 </ul>
 
-
-<h2>参考链接</h2>
-
-<p>[<a href="http://www.aichengxu.com/view/32930">http://www.aichengxu.com/view/32930</a>]<br />
-[<a href="http://www.2cto.com/kf/201205/133943.html">http://www.2cto.com/kf/201205/133943.html</a>]</p>
 </div>
 
 
@@ -129,11 +110,11 @@ retain：对其他NSObject和其子类（用同一块内存） &hellip;">
 
 
 
-<time class='entry-date' datetime='2015-07-06T09:42:07+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:42 am</span></time>
+<time class='entry-date' datetime='2015-08-17T16:20:25+08:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>17</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:20 pm</span></time>
       
 
 
-      <br>原文链接：<a href="http://www.xulongwu.com/blog/2015/07/06/at-ioszhong-propertyde-xiu-shi-zi/">http://www.xulongwu.com/blog/2015/07/06/at-ioszhong-propertyde-xiu-shi-zi/</a>
+      <br>原文链接：<a href="http://www.xulongwu.com/blog/2015/08/17/iosshe-ji-mo-shi/">http://www.xulongwu.com/blog/2015/08/17/iosshe-ji-mo-shi/</a>
  <!-- 添加这一行代码 -->
     </p>
     
@@ -167,10 +148,8 @@ retain：对其他NSObject和其子类（用同一块内存） &hellip;">
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/07/05/at-iosshu-xing-he-cheng-yuan-bian-liang/" title="Previous Post: IOS属性和成员变量">&laquo; IOS属性和成员变量</a>
+        <a class="basic-alignment left" href="/blog/2015/07/09/at-ioszi-ding-yi-bu-deng-gao-uitableviewcell/" title="Previous Post: IOS自定义不等高UITableViewCell">&laquo; IOS自定义不等高UITableViewCell</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2015/07/07/at-ios-appqi-dong-yin-dao-jie-mian/" title="Next Post: IOS App启动引导界面">IOS App启动引导界面 &raquo;</a>
       
     </p>
   </footer>
