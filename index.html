@@ -9,10 +9,7 @@
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="记录几个关于IOS的设计模式，方便以后查看 IOS设计模式之一（MVC模式，单例模式）
-IOS设计模式之二（门面模式，装饰器模式）
-IOS设计模式之三（适配器模式，观察者模式）
-IOS设计模式之四（备忘录模式，命令模式） ">
+  <meta name="description" content="问题 由于应用的特殊性，iPhone5以上的手机必须倒过来使用。就出现了一个屏幕旋转的问题。而且还不能用手机的陀螺仪自动旋转。 解决办法 关闭自动UINavigationController的自动旋转，在它的拓展里实现 @implementation UINavigationController &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +64,92 @@ IOS设计模式之四（备忘录模式，命令模式） ">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/09/10/iosqiang-zhi-zhuan-ping/">IOS强制转屏</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-09-10T22:05:28+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:05 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>问题</h2>
+
+<p>由于应用的特殊性，iPhone5以上的手机必须倒过来使用。就出现了一个屏幕旋转的问题。而且还不能用手机的陀螺仪自动旋转。</p>
+
+<h2>解决办法</h2>
+
+<ol>
+<li><p>关闭自动UINavigationController的自动旋转，在它的拓展里实现</p>
+
+<p> @implementation UINavigationController (nonAutoRotation)</p>
+
+<ul>
+<li>(BOOL)shouldAutorotate
+{
+  return NO;
+}
+@end</li>
+</ul>
+</li>
+<li><p>在UIWindow的拓展里面添加以下方法</p>
+
+<p> @implementation UIWindow(Category)</p>
+
+<p> -(void)setOrientationUpsideDown:(BOOL)upsideDown animated:(BOOL)animated
+ {
+     UIInterfaceOrientation interfaceOrientation = upsideDown ? UIInterfaceOrientationPortraitUpsideDown : UIInterfaceOrientationPortrait;
+     CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
+     [UIView beginAnimations:nil context:nil];
+     [UIView setAnimationDuration:animated ? duration : 0];
+     //1. Set Status bar orientation
+     [[UIApplication sharedApplication] setStatusBarOrientation:interfaceOrientation animated:YES];
+     if(upsideDown)
+     {
+         //2. Rotate the windows
+         self.transform=CGAffineTransformMakeRotation(M_PI);
+     }
+     else
+     {
+         self.transform = CGAffineTransformIdentity;
+     }</p>
+
+<pre><code> [UIView commitAnimations];
+ //3. Set the device orientation
+ UIDeviceOrientation deviceOrientation = upsideDown ? UIDeviceOrientationPortraitUpsideDown : UIDeviceOrientationPortrait;
+ [[UIDevice currentDevice] setValue:@(deviceOrientation) forKey:@"orientation"];
+
+ [self setNeedsLayout];
+</code></pre>
+
+<p> }
+ @end
+如果Device的orientation不设置的话，转屏之后在输入的时候键盘还是会从原来的方向弹出来。</p></li>
+</ol>
+
+
+<h2>说明</h2>
+
+<p>该例子只支持Portrait的两个方向，其他的方向自然也是一样的，就是旋转的角度不一样而已。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1017,6 +1100,10 @@ self.backgroundImageView.image=[UIImage imageNamed:self.imageFile];
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/09/10/iosqiang-zhi-zhuan-ping/">IOS强制转屏</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/08/17/iosshe-ji-mo-shi/">IOS设计模式</a>
       </li>
     
@@ -1030,10 +1117,6 @@ self.backgroundImageView.image=[UIImage imageNamed:self.imageFile];
     
       <li class="post">
         <a href="/blog/2015/07/08/at-ios-nsstringchang-yong-category/">IOS NSString常用Category</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/07/07/at-ios-pdfxian-shi-he-liu-lan/">IOS PDF显示和浏览</a>
       </li>
     
   </ul>

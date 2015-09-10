@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>IOS消息转发机制 - 许龙武的技术博客</title>
+  <title>IOS强制转屏 - 许龙武的技术博客</title>
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="介绍 平时基本很少用的的知识点，但是知其所以然还是有好处的。以下的Demo完全参考最下面的链接的文章写的，理解起来不难。 源码下载 MsgForwardDemo 参考链接 http://www.jianshu.com/p/1bde36ad9938
-">
+  <meta name="description" content="问题 由于应用的特殊性，iPhone5以上的手机必须倒过来使用。就出现了一个屏幕旋转的问题。而且还不能用手机的陀螺仪自动旋转。 解决办法 关闭自动UINavigationController的自动旋转，在它的拓展里实现 @implementation UINavigationController &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://loongwoo.github.io/blog/2015/07/09/at-iosxiao-xi-zhuan-fa-ji-zhi/">
+  <link rel="canonical" href="http://loongwoo.github.io/blog/2015/09/10/iosqiang-zhi-zhuan-ping/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="许龙武的技术博客" type="application/atom+xml">
@@ -68,7 +67,7 @@
   
   <header>
     
-      <h1 class="entry-title">IOS消息转发机制</h1>
+      <h1 class="entry-title">IOS强制转屏</h1>
     
     
       <p class="meta">
@@ -77,24 +76,71 @@
 
 
 
-<time class='entry-date' datetime='2015-07-09T11:14:13+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:14 am</span></time>
+<time class='entry-date' datetime='2015-09-10T22:05:28+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:05 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h3>介绍</h3>
+<div class="entry-content"><h2>问题</h2>
 
-<p>平时基本很少用的的知识点，但是知其所以然还是有好处的。以下的Demo完全参考最下面的链接的文章写的，理解起来不难。</p>
+<p>由于应用的特殊性，iPhone5以上的手机必须倒过来使用。就出现了一个屏幕旋转的问题。而且还不能用手机的陀螺仪自动旋转。</p>
 
-<h3>源码下载</h3>
+<h2>解决办法</h2>
 
-<p><a href="https://github.com/Loongwoo/MsgForwardDemo">MsgForwardDemo</a></p>
+<ol>
+<li><p>关闭自动UINavigationController的自动旋转，在它的拓展里实现</p>
 
-<h3>参考链接</h3>
+<p> @implementation UINavigationController (nonAutoRotation)</p>
 
-<p><a href="http://www.jianshu.com/p/1bde36ad9938">http://www.jianshu.com/p/1bde36ad9938</a></p>
+<ul>
+<li>(BOOL)shouldAutorotate
+{
+  return NO;
+}
+@end</li>
+</ul>
+</li>
+<li><p>在UIWindow的拓展里面添加以下方法</p>
+
+<p> @implementation UIWindow(Category)</p>
+
+<p> -(void)setOrientationUpsideDown:(BOOL)upsideDown animated:(BOOL)animated
+ {
+     UIInterfaceOrientation interfaceOrientation = upsideDown ? UIInterfaceOrientationPortraitUpsideDown : UIInterfaceOrientationPortrait;
+     CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
+     [UIView beginAnimations:nil context:nil];
+     [UIView setAnimationDuration:animated ? duration : 0];
+     //1. Set Status bar orientation
+     [[UIApplication sharedApplication] setStatusBarOrientation:interfaceOrientation animated:YES];
+     if(upsideDown)
+     {
+         //2. Rotate the windows
+         self.transform=CGAffineTransformMakeRotation(M_PI);
+     }
+     else
+     {
+         self.transform = CGAffineTransformIdentity;
+     }</p>
+
+<pre><code> [UIView commitAnimations];
+ //3. Set the device orientation
+ UIDeviceOrientation deviceOrientation = upsideDown ? UIDeviceOrientationPortraitUpsideDown : UIDeviceOrientationPortrait;
+ [[UIDevice currentDevice] setValue:@(deviceOrientation) forKey:@"orientation"];
+
+ [self setNeedsLayout];
+</code></pre>
+
+<p> }
+ @end
+如果Device的orientation不设置的话，转屏之后在输入的时候键盘还是会从原来的方向弹出来。</p></li>
+</ol>
+
+
+<h2>说明</h2>
+
+<p>该例子只支持Portrait的两个方向，其他的方向自然也是一样的，就是旋转的角度不一样而已。</p>
 </div>
 
 
@@ -110,11 +156,11 @@
 
 
 
-<time class='entry-date' datetime='2015-07-09T11:14:13+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:14 am</span></time>
+<time class='entry-date' datetime='2015-09-10T22:05:28+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>10:05 pm</span></time>
       
 
 
-      <br>原文链接：<a href="http://www.xulongwu.com/blog/2015/07/09/at-iosxiao-xi-zhuan-fa-ji-zhi/">http://www.xulongwu.com/blog/2015/07/09/at-iosxiao-xi-zhuan-fa-ji-zhi/</a>
+      <br>原文链接：<a href="http://www.xulongwu.com/blog/2015/09/10/iosqiang-zhi-zhuan-ping/">http://www.xulongwu.com/blog/2015/09/10/iosqiang-zhi-zhuan-ping/</a>
  <!-- 添加这一行代码 -->
     </p>
     
@@ -148,10 +194,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/07/08/at-ios-nsstringchang-yong-category/" title="Previous Post: IOS NSString常用Category">&laquo; IOS NSString常用Category</a>
+        <a class="basic-alignment left" href="/blog/2015/08/17/iosshe-ji-mo-shi/" title="Previous Post: IOS设计模式">&laquo; IOS设计模式</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2015/07/09/at-ioszi-ding-yi-bu-deng-gao-uitableviewcell/" title="Next Post: IOS自定义不等高UITableViewCell">IOS自定义不等高UITableViewCell &raquo;</a>
       
     </p>
   </footer>
