@@ -9,7 +9,8 @@
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="问题 由于应用的特殊性，iPhone5以上的手机必须倒过来使用。就出现了一个屏幕旋转的问题。而且还不能用手机的陀螺仪自动旋转。 解决办法 关闭自动UINavigationController的自动旋转，在它的拓展里实现 1
+  <meta name="description" content="问题 由于应用的特殊性，iPhone5以上的手机必须倒过来使用。就出现了一个屏幕旋转的问题。而且还不能用手机的陀螺仪自动旋转。 解决办法 关闭自动旋转
+在UINavigationController的拓展里实现shouldAutorotate返回NO 1
 2
 3
 4
@@ -17,7 +18,7 @@
 6
 7
 8
-@implementation &hellip;">
+@ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -98,7 +99,8 @@
 <h2>解决办法</h2>
 
 <ol>
-<li>关闭自动UINavigationController的自动旋转，在它的拓展里实现</li>
+<li>关闭自动旋转
+在UINavigationController的拓展里实现shouldAutorotate返回NO</li>
 </ol>
 
 
