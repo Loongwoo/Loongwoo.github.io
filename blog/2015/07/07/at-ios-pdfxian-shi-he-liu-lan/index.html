@@ -89,13 +89,20 @@
 
 <h2>方法一：利用UIWebView</h2>
 
-<pre><code>-(void)loadPDF:(NSString*)fileName inWebView:(UIWebView*)webView{
-    NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
-    NSURL *url = [NSURL fileURLWithPath:path];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    [webView loadRequest:request];
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">loadPDF:</span><span class="p">(</span><span class="bp">NSString</span><span class="o">*</span><span class="p">)</span><span class="nv">fileName</span> <span class="nf">inWebView:</span><span class="p">(</span><span class="bp">UIWebView</span><span class="o">*</span><span class="p">)</span><span class="nv">webView</span><span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSString</span> <span class="o">*</span><span class="n">path</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSBundle</span> <span class="n">mainBundle</span><span class="p">]</span> <span class="nl">pathForResource</span><span class="p">:</span><span class="n">fileName</span> <span class="nl">ofType</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSURL</span> <span class="nl">fileURLWithPath</span><span class="p">:</span><span class="n">path</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">NSURLRequest</span> <span class="o">*</span><span class="n">request</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSURLRequest</span> <span class="nl">requestWithURL</span><span class="p">:</span><span class="n">url</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">webView</span> <span class="nl">loadRequest</span><span class="p">:</span><span class="n">request</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <ul>
 <li>技巧：设置<code>webView.scalesPageToFit = YES;</code>可以实现pinch放大缩小</li>
@@ -107,25 +114,44 @@
 
 <h3>CGContextDrawPDFPage</h3>
 
-<pre><code>-(void)drawInContext:(CGContextRef)context atPageNo:(int)page_no{
-    // PDF page drawing expects a Lower-Left coordinate system, so we flip the coordinate system
-    // before we start drawing.
-    CGContextTranslateCTM(context, 0.0, self.bounds.size.height);
-    CGContextScaleCTM(context, 1.0, -1.0);
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">drawInContext:</span><span class="p">(</span><span class="n">CGContextRef</span><span class="p">)</span><span class="nv">context</span> <span class="nf">atPageNo:</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="nv">page_no</span><span class="p">{</span>
+</span><span class='line'>    <span class="c1">// PDF page drawing expects a Lower-Left coordinate system, so we flip the coordinate system</span>
+</span><span class='line'>    <span class="c1">// before we start drawing.</span>
+</span><span class='line'>    <span class="n">CGContextTranslateCTM</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CGContextScaleCTM</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">pageNO</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">pageNO</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">CGPDFPageRef</span> <span class="n">page</span> <span class="o">=</span> <span class="n">CGPDFDocumentGetPage</span><span class="p">(</span><span class="n">pdfDocument</span><span class="p">,</span> <span class="n">pageNO</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CGContextSaveGState</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="bp">CGAffineTransform</span> <span class="n">pdfTransform</span> <span class="o">=</span> <span class="n">CGPDFPageGetDrawingTransform</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">kCGPDFCropBox</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">CGContextConcatCTM</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">pdfTransform</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">CGContextDrawPDFPage</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">page</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">CGContextRestoreGState</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-    if (pageNO == 0) {
-        pageNO = 1;
-    }    
-    CGPDFPageRef page = CGPDFDocumentGetPage(pdfDocument, pageNO);
-    CGContextSaveGState(context);
-    {
-        CGAffineTransform pdfTransform = CGPDFPageGetDrawingTransform(page, kCGPDFCropBox, self.bounds, 0, true);
-        CGContextConcatCTM(context, pdfTransform);
-        CGContextDrawPDFPage(context, page);
-    }
-    CGContextRestoreGState(context);
-}
-</code></pre>
 
 <p>需要先反转坐标，根据pageNO获取到CGPDFDocumentRef的那一页，直接CGContextDrawPDFPage。</p>
 
@@ -133,27 +159,48 @@
 
 <p>配合UIScrollView实现缩放，ZPDFPageController的主要代码：</p>
 
-<pre><code>-(void)viewDidLoad{
-    [super viewDidLoad];
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
-    scrollView.showsVerticalScrollIndicator=NO;
-    scrollView.showsHorizontalScrollIndicator=NO;
-    scrollView.minimumZoomScale=1.0f;
-    scrollView.maximumZoomScale=3.0f;
-    scrollView.delegate=self;
-    [self.view addSubview:scrollView];
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">UIScrollView</span> <span class="o">*</span><span class="n">scrollView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIScrollView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">scrollView</span><span class="p">.</span><span class="n">showsVerticalScrollIndicator</span><span class="o">=</span><span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">scrollView</span><span class="p">.</span><span class="n">showsHorizontalScrollIndicator</span><span class="o">=</span><span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">scrollView</span><span class="p">.</span><span class="n">minimumZoomScale</span><span class="o">=</span><span class="mf">1.0f</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">scrollView</span><span class="p">.</span><span class="n">maximumZoomScale</span><span class="o">=</span><span class="mf">3.0f</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">scrollView</span><span class="p">.</span><span class="n">delegate</span><span class="o">=</span><span class="nb">self</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">scrollView</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">pdfView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ZPDFView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">scrollView</span><span class="p">.</span><span class="n">bounds</span> <span class="nl">atPage</span><span class="p">:(</span><span class="kt">int</span><span class="p">)</span><span class="nb">self</span><span class="p">.</span><span class="n">pageNO</span> <span class="nl">withPDFDoc</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">pdfDocument</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">pdfView</span><span class="p">.</span><span class="n">backgroundColor</span><span class="o">=</span><span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">scrollView</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">pdfView</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">scrollView</span><span class="p">.</span><span class="n">contentSize</span><span class="o">=</span><span class="n">pdfView</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">UIView</span> <span class="o">*</span><span class="p">)</span><span class="nf">viewForZoomingInScrollView:</span><span class="p">(</span><span class="bp">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="nv">scrollView</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">pdfView</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-    pdfView = [[ZPDFView alloc] initWithFrame:scrollView.bounds atPage:(int)self.pageNO withPDFDoc:self.pdfDocument];
-    pdfView.backgroundColor=[UIColor whiteColor];
-    [scrollView addSubview:pdfView];
-
-    scrollView.contentSize=pdfView.bounds.size;
-}
-
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
-    return pdfView;
-}
-</code></pre>
 
 <h3>UIPageViewController</h3>
 

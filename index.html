@@ -274,27 +274,43 @@
 
 <p>由于考虑到多平台的通用性，选择json保存数据，这里用的Pod管理的MJExtension库,方便把json转化为Model，先创建一个questions.json的文件。：</p>
 
-<pre><code>[
-  {
-    "ID": 1,
-    "question": "我的******为什么不可以用？",
-    "answer": "1. 确保打开手机麦克风权限，IOS手机请前往‘设置-通用-隐私-麦克风’，找到******并打开；\n2. 确保手机遥控器充满电；\n3. 插入是确保能看到‘******’的信息。"
-  }
-]
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">[</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;ID&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;question&quot;</span><span class="p">:</span> <span class="s2">&quot;我的******为什么不可以用？&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;answer&quot;</span><span class="p">:</span> <span class="s2">&quot;1. 确保打开手机麦克风权限，IOS手机请前往‘设置-通用-隐私-麦克风’，找到******并打开；\n2. 确保手机遥控器充满电；\n3. 插入是确保能看到‘******’的信息。&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>内容是一个数组，每一项有3个数据:ID、question和answer。</p>
 
 <h3>ManualModel</h3>
 
-<pre><code>@interface ManualModel : NSObject
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@interface</span> <span class="nc">ManualModel</span> : <span class="bp">NSObject</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">assign</span><span class="p">)</span> <span class="bp">NSInteger</span> <span class="n">ID</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">copy</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">question</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">copy</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">answer</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
 
-@property (nonatomic, assign) NSInteger ID;
-@property (nonatomic, copy) NSString *question;
-@property (nonatomic, copy) NSString *answer;
-
-@end
-</code></pre>
 
 <p>ManualModel中的三项和json的一一对应，不对应的话也可以，就是要在转化的时候手动指定就可以了，具体请看<a href="https://github.com/CoderMJLee/MJExtension">MJExtension</a>的讲解。关于生成json对应的Model，有人做了一个Xcode插件<a href="https://github.com/EnjoySR/ESJsonFormat-Xcode">ESJsonFormat-Xcode</a>，图形化快速生成所有的属性，还避免了手动敲代码导致的可能某个属性名差一个字母这些低级错误，用起来还是很方便的。</p>
 
@@ -302,106 +318,190 @@
 
 <h3>.h文件</h3>
 
-<pre><code>@class ManualModel;
-@interface UnequalHeightCell : UITableViewCell
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@class</span> <span class="nc">ManualModel</span>;
+</span><span class='line'><span class="k">@interface</span> <span class="nc">UnequalHeightCell</span> : <span class="bp">UITableViewCell</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span><span class="n">ManualModel</span> <span class="o">*</span><span class="n">manual</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">+(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nf">cellHeight:</span><span class="p">(</span><span class="n">ManualModel</span><span class="o">*</span><span class="p">)</span><span class="nv">model</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
 
-@property (nonatomic, strong)ManualModel *manual;
-
-+(CGFloat)cellHeight:(ManualModel*)model;
-@end
-</code></pre>
 
 <p>创建UnequalHeightCell，添加属性manual，以及类的方法cellHeight用来计算cell 的高度。</p>
 
 <h3>.m文件</h3>
 
-<pre><code>@implementation UnequalHeightCell{
-    UIView *questionView, *answerView;
-    UILabel *questionLabel,*answerLabel;
-}
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@implementation</span> <span class="nc">UnequalHeightCell</span><span class="p">{</span>
+</span><span class='line'>    <span class="bp">UIView</span> <span class="o">*</span><span class="n">questionView</span><span class="p">,</span> <span class="o">*</span><span class="n">answerView</span><span class="p">;</span>
+</span><span class='line'>    <span class="bp">UILabel</span> <span class="o">*</span><span class="n">questionLabel</span><span class="p">,</span><span class="o">*</span><span class="n">answerLabel</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="kt">instancetype</span><span class="p">)</span><span class="nf">initWithStyle:</span><span class="p">(</span><span class="n">UITableViewCellStyle</span><span class="p">)</span><span class="nv">style</span> <span class="nf">reuseIdentifier:</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">reuseIdentifier</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="nb">self</span> <span class="o">=</span> <span class="p">[</span><span class="nb">super</span> <span class="nl">initWithStyle</span><span class="p">:</span><span class="n">style</span> <span class="nl">reuseIdentifier</span><span class="p">:</span><span class="n">reuseIdentifier</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nb">self</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">questionView</span><span class="o">=</span><span class="p">[[</span><span class="bp">UIView</span> <span class="n">alloc</span><span class="p">]</span><span class="nl">initWithFrame</span><span class="p">:</span><span class="n">CGRectZero</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">questionView</span><span class="p">.</span><span class="n">backgroundColor</span><span class="o">=</span><span class="p">[</span><span class="bp">UIColor</span> <span class="nl">colorWithRed</span><span class="p">:</span><span class="mi">0</span> <span class="nl">green</span><span class="p">:</span><span class="mf">0.75</span> <span class="nl">blue</span><span class="p">:</span><span class="mi">1</span> <span class="nl">alpha</span><span class="p">:</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">contentView</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">questionView</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">questionLabel</span><span class="o">=</span><span class="p">[</span><span class="nb">self</span> <span class="nl">labelWithFont</span><span class="p">:</span><span class="n">QFont</span> <span class="nl">textColor</span><span class="p">:[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">]];</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">questionView</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">questionLabel</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">answerView</span><span class="o">=</span><span class="p">[[</span><span class="bp">UIView</span> <span class="n">alloc</span><span class="p">]</span><span class="nl">initWithFrame</span><span class="p">:</span><span class="n">CGRectZero</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">answerView</span><span class="p">.</span><span class="n">backgroundColor</span><span class="o">=</span><span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">contentView</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">answerView</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="n">answerLabel</span><span class="o">=</span><span class="p">[</span><span class="nb">self</span> <span class="nl">labelWithFont</span><span class="p">:</span><span class="n">AFont</span> <span class="nl">textColor</span><span class="p">:[</span><span class="bp">UIColor</span> <span class="n">blackColor</span><span class="p">]];</span>
+</span><span class='line'>        <span class="p">[</span><span class="n">answerView</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">answerLabel</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">self</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="bp">UILabel</span><span class="o">*</span><span class="p">)</span><span class="nf">labelWithFont:</span><span class="p">(</span><span class="bp">UIFont</span><span class="o">*</span><span class="p">)</span><span class="nv">font</span> <span class="nf">textColor:</span><span class="p">(</span><span class="bp">UIColor</span><span class="o">*</span><span class="p">)</span><span class="nv">textColor</span><span class="p">{</span>
+</span><span class='line'>    <span class="bp">UILabel</span> <span class="o">*</span><span class="n">label</span><span class="o">=</span><span class="p">[[</span><span class="bp">UILabel</span> <span class="n">alloc</span><span class="p">]</span><span class="nl">initWithFrame</span><span class="p">:</span><span class="n">CGRectZero</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">label</span><span class="p">.</span><span class="n">backgroundColor</span><span class="o">=</span><span class="p">[</span><span class="bp">UIColor</span> <span class="n">clearColor</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">label</span><span class="p">.</span><span class="n">textColor</span><span class="o">=</span><span class="n">textColor</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">label</span><span class="p">.</span><span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">label</span><span class="p">.</span><span class="n">numberOfLines</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">label</span><span class="p">.</span><span class="n">textAlignment</span><span class="o">=</span><span class="n">NSTextAlignmentLeft</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">label</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
--(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        questionView=[[UIView alloc]initWithFrame:CGRectZero];
-        questionView.backgroundColor=[UIColor colorWithRed:0 green:0.75 blue:1 alpha:1];
-        [self.contentView addSubview:questionView];
-
-        questionLabel=[self labelWithFont:QFont textColor:[UIColor whiteColor]];
-        [questionView addSubview:questionLabel];
-
-        answerView=[[UIView alloc]initWithFrame:CGRectZero];
-        answerView.backgroundColor=[UIColor whiteColor];
-        [self.contentView addSubview:answerView];
-
-        answerLabel=[self labelWithFont:AFont textColor:[UIColor blackColor]];
-        [answerView addSubview:answerLabel];
-    }
-    return self;
-}
-
--(UILabel*)labelWithFont:(UIFont*)font textColor:(UIColor*)textColor{
-    UILabel *label=[[UILabel alloc]initWithFrame:CGRectZero];
-    label.backgroundColor=[UIColor clearColor];
-    label.textColor=textColor;
-    label.font=font;
-    label.numberOfLines=0;
-    label.textAlignment=NSTextAlignmentLeft;
-    return label;
-}
-</code></pre>
 
 <p>实现初始化函数initWithStyle，放两个label分别显示问题和答案，考虑的上下左右的边缘，加个UIView放置label。记得把questionView和answerView添加到contentView上，这样子做的好处是如果需要进入编辑模式，他会自动缩进。frame可以放到layoutSubviews中统一处理。关于上下左右留出边缘的方法还有一种，就是自定义一个UILabel重写以下方法：</p>
 
-<pre><code>@property(nonatomic) UIEdgeInsets insets;
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">nonatomic</span><span class="p">)</span> <span class="bp">UIEdgeInsets</span> <span class="n">insets</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">drawTextInRect:</span><span class="p">(</span><span class="bp">CGRect</span><span class="p">)</span><span class="nv">rect</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">super</span> <span class="nl">drawTextInRect</span><span class="p">:</span><span class="n">UIEdgeInsetsInsetRect</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">insets</span><span class="p">)];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
--(void)drawTextInRect:(CGRect)rect {
-    return [super drawTextInRect:UIEdgeInsetsInsetRect(rect, self.insets)];
-}
-</code></pre>
 
 <p>这样子要注意的是：根据内容计算出高度之后，就要自己加上上下所留的才是整个Label的高度。在本例中还是用笨一点的方法算了。</p>
 
 <h3>实现manual的set函数</h3>
 
-<pre><code>-(void)setManual:(ManualModel *)manual{
-    _manual=manual;
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setManual:</span><span class="p">(</span><span class="n">ManualModel</span> <span class="o">*</span><span class="p">)</span><span class="nv">manual</span><span class="p">{</span>
+</span><span class='line'>    <span class="n">_manual</span><span class="o">=</span><span class="n">manual</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">questionLabel</span><span class="p">.</span><span class="n">text</span><span class="o">=</span><span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;Q%d: %@&quot;</span><span class="p">,(</span><span class="kt">int</span><span class="p">)</span><span class="n">manual</span><span class="p">.</span><span class="n">ID</span><span class="p">,</span><span class="n">manual</span><span class="p">.</span><span class="n">question</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">answerLabel</span><span class="p">.</span><span class="n">text</span><span class="o">=</span><span class="n">manual</span><span class="p">.</span><span class="n">answer</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span> <span class="n">setNeedsLayout</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">layoutSubviews</span><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">super</span> <span class="n">layoutSubviews</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//设置问题的frame</span>
+</span><span class='line'>    <span class="n">CGFloat</span> <span class="n">height</span><span class="o">=</span><span class="p">[</span><span class="n">UnequalHeightCell</span> <span class="nl">height</span><span class="p">:</span><span class="n">_manual</span><span class="p">.</span><span class="n">question</span> <span class="nl">font</span><span class="p">:</span><span class="n">QFont</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">questionView</span><span class="p">.</span><span class="n">frame</span><span class="o">=</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ScreenWidth</span><span class="p">,</span> <span class="n">height</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">questionLabel</span><span class="p">.</span><span class="n">frame</span><span class="o">=</span><span class="n">CGRectInset</span><span class="p">(</span><span class="n">questionView</span><span class="p">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">LeftRightMargin</span><span class="p">,</span> <span class="n">TopBottomMargin</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//设置答案的frame</span>
+</span><span class='line'>    <span class="n">height</span><span class="o">=</span><span class="p">[</span><span class="n">UnequalHeightCell</span> <span class="nl">height</span><span class="p">:</span><span class="n">_manual</span><span class="p">.</span><span class="n">answer</span> <span class="nl">font</span><span class="p">:</span><span class="n">AFont</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">answerView</span><span class="p">.</span><span class="n">frame</span><span class="o">=</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">questionView</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">,</span> <span class="n">ScreenWidth</span><span class="p">,</span> <span class="n">height</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">answerLabel</span><span class="p">.</span><span class="n">frame</span><span class="o">=</span><span class="n">CGRectInset</span><span class="p">(</span><span class="n">answerView</span><span class="p">.</span><span class="n">bounds</span><span class="p">,</span> <span class="n">LeftRightMargin</span><span class="p">,</span> <span class="n">TopBottomMargin</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-    questionLabel.text=[NSString stringWithFormat:@"Q%d: %@",(int)manual.ID,manual.question];
-    answerLabel.text=manual.answer;
-
-    [self setNeedsLayout];
-}
-
--(void)layoutSubviews{
-    [super layoutSubviews];
-
-    //设置问题的frame
-    CGFloat height=[UnequalHeightCell height:_manual.question font:QFont];
-    questionView.frame=CGRectMake(0, 0, ScreenWidth, height);
-    questionLabel.frame=CGRectInset(questionView.bounds, LeftRightMargin, TopBottomMargin);
-
-    //设置答案的frame
-    height=[UnequalHeightCell height:_manual.answer font:AFont];
-    answerView.frame=CGRectMake(0, questionView.frame.size.height, ScreenWidth, height);
-    answerLabel.frame=CGRectInset(answerView.bounds, LeftRightMargin, TopBottomMargin);
-}
-</code></pre>
 
 <p>在调用<code>[self setNeedsLayout];</code>的时候会执行layoutSubviews，设置所有控件的frame。</p>
 
-<pre><code>//根据字体计算问题和答案View需要的高度
-+(CGFloat)height:(NSString*)text font:(UIFont*)font{
-    CGSize size=[text sizeWithFont:font constrainedToSize:CGSizeMake(ScreenWidth-2*LeftRightMargin, 2000) lineBreakMode:NSLineBreakByWordWrapping];
-    return MAX(MinHeight, ceilf(size.height)+2*TopBottomMargin);
-}
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="c1">//根据字体计算问题和答案View需要的高度</span>
+</span><span class='line'><span class="p">+(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nf">height:</span><span class="p">(</span><span class="bp">NSString</span><span class="o">*</span><span class="p">)</span><span class="nv">text</span> <span class="nf">font:</span><span class="p">(</span><span class="bp">UIFont</span><span class="o">*</span><span class="p">)</span><span class="nv">font</span><span class="p">{</span>
+</span><span class='line'>    <span class="bp">CGSize</span> <span class="n">size</span><span class="o">=</span><span class="p">[</span><span class="n">text</span> <span class="nl">sizeWithFont</span><span class="p">:</span><span class="n">font</span> <span class="nl">constrainedToSize</span><span class="p">:</span><span class="n">CGSizeMake</span><span class="p">(</span><span class="n">ScreenWidth</span><span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">LeftRightMargin</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span> <span class="nl">lineBreakMode</span><span class="p">:</span><span class="n">NSLineBreakByWordWrapping</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">MAX</span><span class="p">(</span><span class="n">MinHeight</span><span class="p">,</span> <span class="n">ceilf</span><span class="p">(</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">TopBottomMargin</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//Cell的总高度</span>
+</span><span class='line'><span class="p">+(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nf">cellHeight:</span><span class="p">(</span><span class="n">ManualModel</span><span class="o">*</span><span class="p">)</span><span class="nv">model</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">height</span><span class="p">:</span><span class="n">model</span><span class="p">.</span><span class="n">question</span> <span class="nl">font</span><span class="p">:</span><span class="n">QFont</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">height</span><span class="p">:</span><span class="n">model</span><span class="p">.</span><span class="n">answer</span> <span class="nl">font</span><span class="p">:</span><span class="n">AFont</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-//Cell的总高度
-+(CGFloat)cellHeight:(ManualModel*)model{
-    return [self height:model.question font:QFont] + [self height:model.answer font:AFont];
-}
-</code></pre>
 
 <p>其中sizeWithFont是<a href="http://www.xulongwu.com/blog/2015/07/08/at-ios-nsstringchang-yong-category/">IOS NSString常用Category</a>用了的。cellHeight是构造不等高的cell所必须的。他是questionView和answerView的两个高度和。如果控件更多，计算就复杂一点，意思是一样的。</p>
 
@@ -409,43 +509,77 @@
 
 <p>ViewController继承于UITableViewController，先获取数据源</p>
 
-<pre><code>@property (nonatomic, strong)NSArray *questionAndAnswerArr;
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span> <span class="k">strong</span><span class="p">)</span><span class="bp">NSArray</span> <span class="o">*</span><span class="n">questionAndAnswerArr</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">questionAndAnswerArr</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">_questionAndAnswerArr</span><span class="o">==</span><span class="nb">nil</span><span class="p">){</span>
+</span><span class='line'>        <span class="bp">NSString</span> <span class="o">*</span><span class="n">path</span><span class="o">=</span><span class="p">[[</span><span class="bp">NSBundle</span> <span class="n">mainBundle</span><span class="p">]</span> <span class="nl">pathForResource</span><span class="p">:</span><span class="s">@&quot;questions&quot;</span> <span class="nl">ofType</span><span class="p">:</span><span class="s">@&quot;json&quot;</span><span class="p">];</span>
+</span><span class='line'>        <span class="bp">NSData</span> <span class="o">*</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="bp">NSData</span> <span class="nl">dataWithContentsOfFile</span><span class="p">:</span><span class="n">path</span><span class="p">];</span>
+</span><span class='line'>        <span class="bp">NSArray</span> <span class="o">*</span><span class="n">tmp</span><span class="o">=</span><span class="p">[</span><span class="n">data</span> <span class="n">JSONObject</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">_questionAndAnswerArr</span><span class="o">=</span><span class="p">[</span><span class="n">ManualModel</span> <span class="nl">objectArrayWithKeyValuesArray</span><span class="p">:</span><span class="n">tmp</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">_questionAndAnswerArr</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
--(NSArray *)questionAndAnswerArr{
-    if(_questionAndAnswerArr==nil){
-        NSString *path=[[NSBundle mainBundle] pathForResource:@"questions" ofType:@"json"];
-        NSData *data=[NSData dataWithContentsOfFile:path];
-        NSArray *tmp=[data JSONObject];
-        _questionAndAnswerArr=[ManualModel objectArrayWithKeyValuesArray:tmp];
-    }
-    return _questionAndAnswerArr;
-}
-</code></pre>
 
 <p>objectArrayWithKeyValuesArray是MJExtension中的方法，可以把字典的数组转化为Model的数组。然后在实现UITableViewDataSource的三个方法</p>
 
-<pre><code>#pragma UITableViewDelegate &amp; UITableViewDataSource
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.questionAndAnswerArr.count;
-}
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="cp">#pragma UITableViewDelegate &amp; UITableViewDataSource</span>
+</span><span class='line'><span class="p">-(</span><span class="bp">NSInteger</span><span class="p">)</span><span class="nf">tableView:</span><span class="p">(</span><span class="bp">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="nf">numberOfRowsInSection:</span><span class="p">(</span><span class="bp">NSInteger</span><span class="p">)</span><span class="nv">section</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">self</span><span class="p">.</span><span class="n">questionAndAnswerArr</span><span class="p">.</span><span class="n">count</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="n">CGFloat</span><span class="p">)</span><span class="nf">tableView:</span><span class="p">(</span><span class="bp">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="nf">heightForRowAtIndexPath:</span><span class="p">(</span><span class="bp">NSIndexPath</span> <span class="o">*</span><span class="p">)</span><span class="nv">indexPath</span><span class="p">{</span>
+</span><span class='line'>    <span class="n">ManualModel</span> <span class="o">*</span><span class="n">model</span><span class="o">=</span><span class="nb">self</span><span class="p">.</span><span class="n">questionAndAnswerArr</span><span class="p">[</span><span class="n">indexPath</span><span class="p">.</span><span class="n">row</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">UnequalHeightCell</span> <span class="nl">cellHeight</span><span class="p">:</span><span class="n">model</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="bp">UITableViewCell</span><span class="o">*</span><span class="p">)</span><span class="nf">tableView:</span><span class="p">(</span><span class="bp">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="nf">cellForRowAtIndexPath:</span><span class="p">(</span><span class="bp">NSIndexPath</span> <span class="o">*</span><span class="p">)</span><span class="nv">indexPath</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">static</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">identity</span><span class="o">=</span><span class="s">@&quot;mycell&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">UnequalHeightCell</span> <span class="o">*</span><span class="n">cell</span><span class="o">=</span><span class="p">[</span><span class="n">tableView</span> <span class="nl">dequeueReusableCellWithIdentifier</span><span class="p">:</span><span class="n">identity</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">cell</span><span class="o">==</span><span class="nb">nil</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">cell</span><span class="o">=</span><span class="p">[[</span><span class="n">UnequalHeightCell</span> <span class="n">alloc</span><span class="p">]</span><span class="nl">initWithStyle</span><span class="p">:</span><span class="n">UITableViewCellStyleDefault</span> <span class="nl">reuseIdentifier</span><span class="p">:</span><span class="n">identity</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">cell</span><span class="p">.</span><span class="n">selectionStyle</span><span class="o">=</span><span class="n">UITableViewCellSelectionStyleNone</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">cell</span><span class="p">.</span><span class="n">manual</span><span class="o">=</span><span class="nb">self</span><span class="p">.</span><span class="n">questionAndAnswerArr</span><span class="p">[</span><span class="n">indexPath</span><span class="p">.</span><span class="n">row</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">cell</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="cp">#pragma UITableViewDelegate &amp; UITableViewDataSource</span>
+</span></code></pre></td></tr></table></div></figure>
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    ManualModel *model=self.questionAndAnswerArr[indexPath.row];
-    return [UnequalHeightCell cellHeight:model];
-}
-
--(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    static NSString *identity=@"mycell";
-    UnequalHeightCell *cell=[tableView dequeueReusableCellWithIdentifier:identity];
-    if (cell==nil) {
-        cell=[[UnequalHeightCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identity];
-        cell.selectionStyle=UITableViewCellSelectionStyleNone;
-    }
-    cell.manual=self.questionAndAnswerArr[indexPath.row];
-    return cell;
-}
-#pragma UITableViewDelegate &amp; UITableViewDataSource
-</code></pre>
 
 <p>注意到heightForRowAtIndexPath中返回的不是一个固定的值了。而是根据数据源算出来的值。这就实现了不等高的Cell。</p>
 
@@ -529,129 +663,197 @@
 
 <h3>汉字转拼音</h3>
 
-<pre><code>-(NSString *)transformToPinyin {
-    NSMutableString *mutableString = [NSMutableString stringWithString:self];
-    CFStringTransform((CFMutableStringRef)mutableString, NULL, kCFStringTransformToLatin, false);
-    mutableString = (NSMutableString *)[mutableString stringByFoldingWithOptions:NSDiacriticInsensitiveSearch locale:[NSLocale currentLocale]];
-    return mutableString;
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">transformToPinyin</span> <span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSMutableString</span> <span class="o">*</span><span class="n">mutableString</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableString</span> <span class="nl">stringWithString</span><span class="p">:</span><span class="nb">self</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">CFStringTransform</span><span class="p">((</span><span class="n">CFMutableStringRef</span><span class="p">)</span><span class="n">mutableString</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">kCFStringTransformToLatin</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">mutableString</span> <span class="o">=</span> <span class="p">(</span><span class="bp">NSMutableString</span> <span class="o">*</span><span class="p">)[</span><span class="n">mutableString</span> <span class="nl">stringByFoldingWithOptions</span><span class="p">:</span><span class="n">NSDiacriticInsensitiveSearch</span> <span class="nl">locale</span><span class="p">:[</span><span class="bp">NSLocale</span> <span class="n">currentLocale</span><span class="p">]];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">mutableString</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>尽管对汉字的排序可以用<code>- (NSComparisonResult)localizedCompare:(NSString *)string;</code>进行排序，但也有时候需要手动排序，这个拓展就有用了。</p>
 
 <h3>URL编码</h3>
 
-<pre><code>-(NSString *)URLEncodedString{
-    NSString *encodedString = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-        (CFStringRef)self,
-        (CFStringRef)@"!$&amp;'()*+,-./:;=?@_~%#[]",
-        NULL,
-        kCFStringEncodingUTF8));
-    return encodedString;
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">URLEncodedString</span><span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSString</span> <span class="o">*</span><span class="n">encodedString</span> <span class="o">=</span> <span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">CFBridgingRelease</span><span class="p">(</span><span class="n">CFURLCreateStringByAddingPercentEscapes</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span>
+</span><span class='line'>        <span class="p">(</span><span class="n">CFStringRef</span><span class="p">)</span><span class="nb">self</span><span class="p">,</span>
+</span><span class='line'>        <span class="p">(</span><span class="n">CFStringRef</span><span class="p">)</span><span class="s">@&quot;!$&amp;&#39;()*+,-./:;=?@_~%#[]&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nb">NULL</span><span class="p">,</span>
+</span><span class='line'>        <span class="n">kCFStringEncodingUTF8</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">encodedString</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>对于包含中文的URL不能整体转化为UTF-8的格式，那么就可以用<code>CFURLCreateStringByAddingPercentEscapes</code>来排除掉一些应该保留的字符。</p>
 
 <h3>Json字符串转化为Object</h3>
 
-<pre><code>-(id)JSONObject{
-    return [NSJSONSerialization JSONObjectWithData:[self dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="kt">id</span><span class="p">)</span><span class="nf">JSONObject</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="bp">NSJSONSerialization</span> <span class="nl">JSONObjectWithData</span><span class="p">:[</span><span class="nb">self</span> <span class="nl">dataUsingEncoding</span><span class="p">:</span><span class="n">NSUTF8StringEncoding</span><span class="p">]</span> <span class="nl">options</span><span class="p">:</span><span class="n">kNilOptions</span> <span class="nl">error</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>网络接口很多是Json的字符串，该方法直接转化为NSArray、NSDictionary等。</p>
 
 <h3>MD5加密</h3>
 
-<pre><code>-(NSString*)md5{
-    const char *cStr = [self UTF8String];
-    unsigned char result[CC_MD5_DIGEST_LENGTH];
-    CC_MD5( cStr, (int)strlen(cStr), result );
-    return [NSString stringWithFormat: @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X", 
-        result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8], 
-        result[9], result[10], result[11], result[12], result[13], result[14], result[15]];
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="bp">NSString</span><span class="o">*</span><span class="p">)</span><span class="nf">md5</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">cStr</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="n">UTF8String</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">result</span><span class="p">[</span><span class="n">CC_MD5_DIGEST_LENGTH</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">CC_MD5</span><span class="p">(</span> <span class="n">cStr</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">strlen</span><span class="p">(</span><span class="n">cStr</span><span class="p">),</span> <span class="n">result</span> <span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span> <span class="s">@&quot;%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">15</span><span class="p">]];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>MD5加密也是常用的方法，记得导入<code>#import &lt;CommonCrypto/CommonDigest.h&gt;</code>。</p>
 
 <h3>UTF16的MD5加密</h3>
 
-<pre><code>-(NSString *)md5ForUTF16{
-    NSData *temp = [self dataUsingEncoding:NSUTF16LittleEndianStringEncoding];
-    UInt8 *cStr = (UInt8 *)[temp bytes];
-    unsigned char result[CC_MD5_DIGEST_LENGTH];
-    CC_MD5(cStr, (int)[temp length], result);
-    return [NSString stringWithFormat:@"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",  
-        result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8], 
-    result[9], result[10], result[11], result[12], result[13], result[14], result[15]];
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">md5ForUTF16</span><span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSData</span> <span class="o">*</span><span class="n">temp</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">dataUsingEncoding</span><span class="p">:</span><span class="n">NSUTF16LittleEndianStringEncoding</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">UInt8</span> <span class="o">*</span><span class="n">cStr</span> <span class="o">=</span> <span class="p">(</span><span class="kt">UInt8</span> <span class="o">*</span><span class="p">)[</span><span class="n">temp</span> <span class="n">bytes</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">result</span><span class="p">[</span><span class="n">CC_MD5_DIGEST_LENGTH</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">CC_MD5</span><span class="p">(</span><span class="n">cStr</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)[</span><span class="n">temp</span> <span class="n">length</span><span class="p">],</span> <span class="n">result</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">15</span><span class="p">]];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>这个加密倒不是很常用，经常有前面一个就够用了，这里统一记录一下。</p>
 
 <h3>去掉前后的空格</h3>
 
-<pre><code>-(NSString *)trim {
-    return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">trim</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">stringByTrimmingCharactersInSet</span><span class="p">:[</span><span class="bp">NSCharacterSet</span> <span class="n">whitespaceAndNewlineCharacterSet</span><span class="p">]];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>记得在写C#的时候，经常要带着trim函数走。但是IOS里面用的地方不多，记得用过的就是URL的参数，以及在要把输入内容转化为数字的时候。在输入结束的时候trim一下是个应该坚持的习惯。</p>
 
 <h3>去掉行中多余空格</h3>
 
-<pre><code>-(NSString *)trimTheExtraSpaces{
-    NSCharacterSet *whitespaces = [NSCharacterSet whitespaceCharacterSet];
-    NSPredicate *noEmptyStrings = [NSPredicate predicateWithFormat:@"SELF != ''"];
-    NSArray *parts = [self componentsSeparatedByCharactersInSet:whitespaces];
-    NSArray *filteredArray = [parts filteredArrayUsingPredicate:noEmptyStrings];
-    return [filteredArray componentsJoinedByString:@" "];
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">trimTheExtraSpaces</span><span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSCharacterSet</span> <span class="o">*</span><span class="n">whitespaces</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSCharacterSet</span> <span class="n">whitespaceCharacterSet</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">NSPredicate</span> <span class="o">*</span><span class="n">noEmptyStrings</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSPredicate</span> <span class="nl">predicateWithFormat</span><span class="p">:</span><span class="s">@&quot;SELF != &#39;&#39;&quot;</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">NSArray</span> <span class="o">*</span><span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">componentsSeparatedByCharactersInSet</span><span class="p">:</span><span class="n">whitespaces</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">NSArray</span> <span class="o">*</span><span class="n">filteredArray</span> <span class="o">=</span> <span class="p">[</span><span class="n">parts</span> <span class="nl">filteredArrayUsingPredicate</span><span class="p">:</span><span class="n">noEmptyStrings</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">filteredArray</span> <span class="nl">componentsJoinedByString</span><span class="p">:</span><span class="s">@&quot; &quot;</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>该方法会去掉string中的多余空格，有多个的话留一个。</p>
 
 <h3>是否是空字符</h3>
 
-<pre><code>-(BOOL)isEmpty {
-    NSCharacterSet *charSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-    NSString *trimmed = [self stringByTrimmingCharactersInSet:charSet];
-    return [trimmed isEqualToString:@""];
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">isEmpty</span> <span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSCharacterSet</span> <span class="o">*</span><span class="n">charSet</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSCharacterSet</span> <span class="n">whitespaceAndNewlineCharacterSet</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">NSString</span> <span class="o">*</span><span class="n">trimmed</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">stringByTrimmingCharactersInSet</span><span class="p">:</span><span class="n">charSet</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">trimmed</span> <span class="nl">isEqualToString</span><span class="p">:</span><span class="s">@&quot;&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>我们常常用<code>if( nil == tempStr || 0 == tempStr.lenth ){...}</code>来判断是否为空。但比如<code>NSString \*tmp4=@"   ";</code>这样一个字符串，<code>[tmp4 length]</code>求的长度为3。但是用上面的方法可以看到是空的。</p>
 
 <h3>自适应大小</h3>
 
-<pre><code>-(CGSize)sizeWithFont:(UIFont *)font
-    constrainedToSize:(CGSize)constrainedSize
-        lineBreakMode:(NSLineBreakMode)lineBreakMode {
-    if ([self respondsToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        paragraphStyle.lineBreakMode = lineBreakMode;
-        NSDictionary *attributes = @{NSFontAttributeName:font, NSParagraphStyleAttributeName:paragraphStyle};
-        CGRect boundingRect = [self boundingRectWithSize:constrainedSize 
-            options:NSStringDrawingUsesLineFragmentOrigin 
-            attributes:attributes context:nil];
-        return CGSizeMake(ceilf(boundingRect.size.width), ceilf(boundingRect.size.height));
-    }
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    return [self sizeWithFont:font constrainedToSize:constrainedSize lineBreakMode:lineBreakMode];
-#pragma clang diagnostic pop
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="bp">CGSize</span><span class="p">)</span><span class="nf">sizeWithFont:</span><span class="p">(</span><span class="bp">UIFont</span> <span class="o">*</span><span class="p">)</span><span class="nv">font</span>
+</span><span class='line'>    <span class="nf">constrainedToSize:</span><span class="p">(</span><span class="bp">CGSize</span><span class="p">)</span><span class="nv">constrainedSize</span>
+</span><span class='line'>            <span class="nf">lineBreakMode:</span><span class="p">(</span><span class="n">NSLineBreakMode</span><span class="p">)</span><span class="nv">lineBreakMode</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">([</span><span class="nb">self</span> <span class="nl">respondsToSelector</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">boundingRectWithSize</span><span class="p">:</span><span class="nl">options</span><span class="p">:</span><span class="nl">attributes</span><span class="p">:</span><span class="nl">context</span><span class="p">:)])</span> <span class="p">{</span>
+</span><span class='line'>        <span class="bp">NSMutableParagraphStyle</span> <span class="o">*</span><span class="n">paragraphStyle</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSMutableParagraphStyle</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">paragraphStyle</span><span class="p">.</span><span class="n">lineBreakMode</span> <span class="o">=</span> <span class="n">lineBreakMode</span><span class="p">;</span>
+</span><span class='line'>        <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">attributes</span> <span class="o">=</span> <span class="l">@{</span><span class="nl">NSFontAttributeName</span><span class="p">:</span><span class="n">font</span><span class="p">,</span> <span class="nl">NSParagraphStyleAttributeName</span><span class="p">:</span><span class="n">paragraphStyle</span><span class="l">}</span><span class="p">;</span>
+</span><span class='line'>        <span class="bp">CGRect</span> <span class="n">boundingRect</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">boundingRectWithSize</span><span class="p">:</span><span class="n">constrainedSize</span> <span class="nl">options</span><span class="p">:</span><span class="n">NSStringDrawingUsesLineFragmentOrigin</span>  <span class="nl">attributes</span><span class="p">:</span><span class="n">attributes</span> <span class="nl">context</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="n">ceilf</span><span class="p">(</span><span class="n">boundingRect</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">),</span> <span class="n">ceilf</span><span class="p">(</span><span class="n">boundingRect</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="cp">#pragma clang diagnostic push</span>
+</span><span class='line'><span class="cp">#pragma clang diagnostic ignored &quot;-Wdeprecated-declarations&quot;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">sizeWithFont</span><span class="p">:</span><span class="n">font</span> <span class="nl">constrainedToSize</span><span class="p">:</span><span class="n">constrainedSize</span> <span class="nl">lineBreakMode</span><span class="p">:</span><span class="n">lineBreakMode</span><span class="p">];</span>
+</span><span class='line'><span class="cp">#pragma clang diagnostic pop</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>这个就再熟悉不过了，不过定义Category的时候要记得导入<code>#import &lt;UIKit/UIKit.h&gt;</code>，否则CGSize这些会报错。还有一个用法</p>
 
-<pre><code>#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-相关命令"
-// 你自己的代码
-#pragma clang diagnostic pop
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="cp">#pragma clang diagnostic push</span>
+</span><span class='line'><span class="cp">#pragma clang diagnostic ignored &quot;-相关命令&quot;</span>
+</span><span class='line'><span class="c1">// 你自己的代码</span>
+</span><span class='line'><span class="cp">#pragma clang diagnostic pop</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>#pragma我们常用来做分段注释，还有一个功能是处理编译器警告。<code>-Wdeprecated-declarations</code>表示方法弃用。加了这个之后，就不会再出现黄色警告了。<br/>
 其他的情况可以查询<a href="http://fuckingclangwarnings.com">Which Clang Warning Is Generating This Message?</a></p>
@@ -695,13 +897,20 @@
 
 <h2>方法一：利用UIWebView</h2>
 
-<pre><code>-(void)loadPDF:(NSString*)fileName inWebView:(UIWebView*)webView{
-    NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:nil];
-    NSURL *url = [NSURL fileURLWithPath:path];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    [webView loadRequest:request];
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">loadPDF:</span><span class="p">(</span><span class="bp">NSString</span><span class="o">*</span><span class="p">)</span><span class="nv">fileName</span> <span class="nf">inWebView:</span><span class="p">(</span><span class="bp">UIWebView</span><span class="o">*</span><span class="p">)</span><span class="nv">webView</span><span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSString</span> <span class="o">*</span><span class="n">path</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSBundle</span> <span class="n">mainBundle</span><span class="p">]</span> <span class="nl">pathForResource</span><span class="p">:</span><span class="n">fileName</span> <span class="nl">ofType</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">NSURL</span> <span class="o">*</span><span class="n">url</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSURL</span> <span class="nl">fileURLWithPath</span><span class="p">:</span><span class="n">path</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">NSURLRequest</span> <span class="o">*</span><span class="n">request</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSURLRequest</span> <span class="nl">requestWithURL</span><span class="p">:</span><span class="n">url</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">webView</span> <span class="nl">loadRequest</span><span class="p">:</span><span class="n">request</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <ul>
 <li>技巧：设置<code>webView.scalesPageToFit = YES;</code>可以实现pinch放大缩小</li>
@@ -713,25 +922,44 @@
 
 <h3>CGContextDrawPDFPage</h3>
 
-<pre><code>-(void)drawInContext:(CGContextRef)context atPageNo:(int)page_no{
-    // PDF page drawing expects a Lower-Left coordinate system, so we flip the coordinate system
-    // before we start drawing.
-    CGContextTranslateCTM(context, 0.0, self.bounds.size.height);
-    CGContextScaleCTM(context, 1.0, -1.0);
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">drawInContext:</span><span class="p">(</span><span class="n">CGContextRef</span><span class="p">)</span><span class="nv">context</span> <span class="nf">atPageNo:</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="nv">page_no</span><span class="p">{</span>
+</span><span class='line'>    <span class="c1">// PDF page drawing expects a Lower-Left coordinate system, so we flip the coordinate system</span>
+</span><span class='line'>    <span class="c1">// before we start drawing.</span>
+</span><span class='line'>    <span class="n">CGContextTranslateCTM</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CGContextScaleCTM</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">pageNO</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="n">pageNO</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">CGPDFPageRef</span> <span class="n">page</span> <span class="o">=</span> <span class="n">CGPDFDocumentGetPage</span><span class="p">(</span><span class="n">pdfDocument</span><span class="p">,</span> <span class="n">pageNO</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CGContextSaveGState</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="bp">CGAffineTransform</span> <span class="n">pdfTransform</span> <span class="o">=</span> <span class="n">CGPDFPageGetDrawingTransform</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">kCGPDFCropBox</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">bounds</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">CGContextConcatCTM</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">pdfTransform</span><span class="p">);</span>
+</span><span class='line'>        <span class="n">CGContextDrawPDFPage</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">page</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">CGContextRestoreGState</span><span class="p">(</span><span class="n">context</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-    if (pageNO == 0) {
-        pageNO = 1;
-    }    
-    CGPDFPageRef page = CGPDFDocumentGetPage(pdfDocument, pageNO);
-    CGContextSaveGState(context);
-    {
-        CGAffineTransform pdfTransform = CGPDFPageGetDrawingTransform(page, kCGPDFCropBox, self.bounds, 0, true);
-        CGContextConcatCTM(context, pdfTransform);
-        CGContextDrawPDFPage(context, page);
-    }
-    CGContextRestoreGState(context);
-}
-</code></pre>
 
 <p>需要先反转坐标，根据pageNO获取到CGPDFDocumentRef的那一页，直接CGContextDrawPDFPage。</p>
 
@@ -739,27 +967,48 @@
 
 <p>配合UIScrollView实现缩放，ZPDFPageController的主要代码：</p>
 
-<pre><code>-(void)viewDidLoad{
-    [super viewDidLoad];
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
-    scrollView.showsVerticalScrollIndicator=NO;
-    scrollView.showsHorizontalScrollIndicator=NO;
-    scrollView.minimumZoomScale=1.0f;
-    scrollView.maximumZoomScale=3.0f;
-    scrollView.delegate=self;
-    [self.view addSubview:scrollView];
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">UIScrollView</span> <span class="o">*</span><span class="n">scrollView</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">UIScrollView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">bounds</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">scrollView</span><span class="p">.</span><span class="n">showsVerticalScrollIndicator</span><span class="o">=</span><span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">scrollView</span><span class="p">.</span><span class="n">showsHorizontalScrollIndicator</span><span class="o">=</span><span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">scrollView</span><span class="p">.</span><span class="n">minimumZoomScale</span><span class="o">=</span><span class="mf">1.0f</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">scrollView</span><span class="p">.</span><span class="n">maximumZoomScale</span><span class="o">=</span><span class="mf">3.0f</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">scrollView</span><span class="p">.</span><span class="n">delegate</span><span class="o">=</span><span class="nb">self</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">scrollView</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">pdfView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ZPDFView</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithFrame</span><span class="p">:</span><span class="n">scrollView</span><span class="p">.</span><span class="n">bounds</span> <span class="nl">atPage</span><span class="p">:(</span><span class="kt">int</span><span class="p">)</span><span class="nb">self</span><span class="p">.</span><span class="n">pageNO</span> <span class="nl">withPDFDoc</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">pdfDocument</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">pdfView</span><span class="p">.</span><span class="n">backgroundColor</span><span class="o">=</span><span class="p">[</span><span class="bp">UIColor</span> <span class="n">whiteColor</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">scrollView</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">pdfView</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">scrollView</span><span class="p">.</span><span class="n">contentSize</span><span class="o">=</span><span class="n">pdfView</span><span class="p">.</span><span class="n">bounds</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="bp">UIView</span> <span class="o">*</span><span class="p">)</span><span class="nf">viewForZoomingInScrollView:</span><span class="p">(</span><span class="bp">UIScrollView</span> <span class="o">*</span><span class="p">)</span><span class="nv">scrollView</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">pdfView</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-    pdfView = [[ZPDFView alloc] initWithFrame:scrollView.bounds atPage:(int)self.pageNO withPDFDoc:self.pdfDocument];
-    pdfView.backgroundColor=[UIColor whiteColor];
-    [scrollView addSubview:pdfView];
-
-    scrollView.contentSize=pdfView.bounds.size;
-}
-
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
-    return pdfView;
-}
-</code></pre>
 
 <h3>UIPageViewController</h3>
 
@@ -832,108 +1081,191 @@
 
 <p>连接内容VC和PageContentViewController.h，再连接好titleLabel和backgroundImageView，最后申明如下三个属性：</p>
 
-<pre><code>@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet UIImageView *backgroundImageView;
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">weak</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="kt">IBOutlet</span> <span class="bp">UILabel</span> <span class="o">*</span><span class="n">titleLabel</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">weak</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="kt">IBOutlet</span> <span class="bp">UIImageView</span> <span class="o">*</span><span class="n">backgroundImageView</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">assign</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">NSUInteger</span> <span class="n">pageIndex</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">copy</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">titleText</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">copy</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">imageFile</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
 
-@property(assign, nonatomic) NSUInteger pageIndex;
-@property(copy, nonatomic) NSString *titleText;
-@property(copy, nonatomic) NSString *imageFile;
-</code></pre>
 
 <p>PageContentViewController.m, 在viewDidLoad中添加</p>
 
-<pre><code>self.titleLabel.text=self.titleText;
-self.backgroundImageView.image=[UIImage imageNamed:self.imageFile];
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">titleLabel</span><span class="p">.</span><span class="n">text</span><span class="o">=</span><span class="nb">self</span><span class="p">.</span><span class="n">titleText</span><span class="p">;</span>
+</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">backgroundImageView</span><span class="p">.</span><span class="n">image</span><span class="o">=</span><span class="p">[</span><span class="bp">UIImage</span> <span class="nl">imageNamed</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">imageFile</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <h3>ViewController</h3>
 
 <p>ViewController.h中申请UIPageViewControllerDataSource，连接startBtn</p>
 
-<pre><code>@interface ViewController : UIViewController&lt;UIPageViewControllerDataSource&gt;
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@interface</span> <span class="nc">ViewController</span> : <span class="bp">UIViewController</span><span class="o">&lt;</span><span class="bp">UIPageViewControllerDataSource</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span><span class="p">(</span><span class="kt">IBAction</span><span class="p">)</span><span class="nl">startWalkthrough</span><span class="p">:(</span><span class="kt">id</span><span class="p">)</span><span class="n">sender</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">strong</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">UIPageViewController</span> <span class="o">*</span><span class="n">pageViewController</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">strong</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">NSArray</span> <span class="o">*</span><span class="n">pageTitles</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">strong</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">NSArray</span> <span class="o">*</span><span class="n">pageImages</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
 
--(IBAction)startWalkthrough:(id)sender;
-
-@property (strong, nonatomic) UIPageViewController *pageViewController;
-@property (strong, nonatomic) NSArray *pageTitles;
-@property (strong, nonatomic) NSArray *pageImages;
-@end
-</code></pre>
 
 <p>ViewController.m, 实现UIPageViewControllerDateSource的四个方法</p>
 
-<pre><code>#pragma mark - Page View Controller Data Source
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="cp">#pragma mark - Page View Controller Data Source</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="bp">UIViewController</span> <span class="o">*</span><span class="p">)</span><span class="nf">pageViewController:</span><span class="p">(</span><span class="bp">UIPageViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">pageViewController</span> <span class="nf">viewControllerBeforeViewController:</span><span class="p">(</span><span class="bp">UIViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">viewController</span><span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSUInteger</span> <span class="n">index</span> <span class="o">=</span> <span class="p">((</span><span class="n">PageContentViewController</span><span class="o">*</span><span class="p">)</span> <span class="n">viewController</span><span class="p">).</span><span class="n">pageIndex</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">((</span><span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">index</span> <span class="o">==</span> <span class="n">NSNotFound</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">index</span><span class="o">--</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">viewControllerAtIndex</span><span class="p">:</span><span class="n">index</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="bp">UIViewController</span> <span class="o">*</span><span class="p">)</span><span class="nf">pageViewController:</span><span class="p">(</span><span class="bp">UIPageViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">pageViewController</span> <span class="nf">viewControllerAfterViewController:</span><span class="p">(</span><span class="bp">UIViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">viewController</span><span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSUInteger</span> <span class="n">index</span> <span class="o">=</span> <span class="p">((</span><span class="n">PageContentViewController</span><span class="o">*</span><span class="p">)</span> <span class="n">viewController</span><span class="p">).</span><span class="n">pageIndex</span><span class="p">;</span>         
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">==</span> <span class="n">NSNotFound</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>              
+</span><span class='line'>    <span class="n">index</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">==</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">pageTitles</span> <span class="n">count</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">viewControllerAtIndex</span><span class="p">:</span><span class="n">index</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="bp">NSInteger</span><span class="p">)</span><span class="nf">presentationCountForPageViewController:</span><span class="p">(</span><span class="bp">UIPageViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">pageViewController</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">pageTitles</span> <span class="n">count</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="bp">NSInteger</span><span class="p">)</span><span class="nf">presentationIndexForPageViewController:</span><span class="p">(</span><span class="bp">UIPageViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">pageViewController</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
--(UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerBeforeViewController:(UIViewController *)viewController{
-    NSUInteger index = ((PageContentViewController*) viewController).pageIndex;
-    if ((index == 0) || (index == NSNotFound)) {
-        return nil;
-    }
-    index--;
-    return [self viewControllerAtIndex:index];
-}
-
--(UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController{
-    NSUInteger index = ((PageContentViewController*) viewController).pageIndex;         
-    if (index == NSNotFound) {
-        return nil;
-    }               
-    index++;
-    if (index == [self.pageTitles count]) {
-        return nil;
-    }
-    return [self viewControllerAtIndex:index];
-}
-
--(NSInteger)presentationCountForPageViewController:(UIPageViewController *)pageViewController{
-    return [self.pageTitles count];
-}
-
--(NSInteger)presentationIndexForPageViewController:(UIPageViewController *)pageViewController{
-    return 0;
-}
-</code></pre>
 
 <p>前面两个方法告诉PageViewController前一页或者后一页的显示内容；后两个方法告诉页面指示器（Page Indicator）的总页数和初始位置，当然只有在UIPageViewController的TransitionStyle为UIPageViewControllerTransitionStyleScroll的时候才有效。</p>
 
-<pre><code>-(PageContentViewController *)viewControllerAtIndex:(NSUInteger)index{
-    if (([self.pageTitles count] == 0) || (index &gt;= [self.pageTitles count])) {
-        return nil;
-    }
-    // Create a new view controller and pass suitable data.
-    PageContentViewController *pageContentViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageContentViewController"];
-    pageContentViewController.imageFile = self.pageImages[index];
-    pageContentViewController.titleText = self.pageTitles[index];
-    pageContentViewController.pageIndex = index;
-    return pageContentViewController;
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="n">PageContentViewController</span> <span class="o">*</span><span class="p">)</span><span class="nf">viewControllerAtIndex:</span><span class="p">(</span><span class="bp">NSUInteger</span><span class="p">)</span><span class="nv">index</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(([</span><span class="nb">self</span><span class="p">.</span><span class="n">pageTitles</span> <span class="n">count</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">pageTitles</span> <span class="n">count</span><span class="p">]))</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="c1">// Create a new view controller and pass suitable data.</span>
+</span><span class='line'>    <span class="n">PageContentViewController</span> <span class="o">*</span><span class="n">pageContentViewController</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">storyboard</span> <span class="nl">instantiateViewControllerWithIdentifier</span><span class="p">:</span><span class="s">@&quot;PageContentViewController&quot;</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">pageContentViewController</span><span class="p">.</span><span class="n">imageFile</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">pageImages</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">pageContentViewController</span><span class="p">.</span><span class="n">titleText</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">pageTitles</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">pageContentViewController</span><span class="p">.</span><span class="n">pageIndex</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">pageContentViewController</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>该方法根据位置信息返回内容页面。</p>
 
 <p>最后实现ViewDidLoad</p>
 
-<pre><code>-(void)viewDidLoad{
-    [super viewDidLoad];
-    _pageTitles = @[ @"帆船", @"美女", @"豪车",  @"碧海蓝天"];
-    _pageImages = @[@"page1.jpg", @"page2.jpg", @"page3.jpg", @"page4.jpg"];
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">_pageTitles</span> <span class="o">=</span> <span class="l">@[</span> <span class="s">@&quot;帆船&quot;</span><span class="p">,</span> <span class="s">@&quot;美女&quot;</span><span class="p">,</span> <span class="s">@&quot;豪车&quot;</span><span class="p">,</span>  <span class="s">@&quot;碧海蓝天&quot;</span><span class="l">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">_pageImages</span> <span class="o">=</span> <span class="l">@[</span><span class="s">@&quot;page1.jpg&quot;</span><span class="p">,</span> <span class="s">@&quot;page2.jpg&quot;</span><span class="p">,</span> <span class="s">@&quot;page3.jpg&quot;</span><span class="p">,</span> <span class="s">@&quot;page4.jpg&quot;</span><span class="l">]</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Create page view controller</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">pageViewController</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">storyboard</span> <span class="nl">instantiateViewControllerWithIdentifier</span><span class="p">:</span><span class="s">@&quot;PageViewController&quot;</span><span class="p">];</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">pageViewController</span><span class="p">.</span><span class="n">dataSource</span> <span class="o">=</span> <span class="nb">self</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">PageContentViewController</span> <span class="o">*</span><span class="n">startingViewController</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">viewControllerAtIndex</span><span class="p">:</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">NSArray</span> <span class="o">*</span><span class="n">viewControllers</span> <span class="o">=</span> <span class="l">@[</span><span class="n">startingViewController</span><span class="l">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">pageViewController</span> <span class="nl">setViewControllers</span><span class="p">:</span><span class="n">viewControllers</span> <span class="nl">direction</span><span class="p">:</span><span class="n">UIPageViewControllerNavigationDirectionForward</span> <span class="nl">animated</span><span class="p">:</span><span class="nb">NO</span> <span class="nl">completion</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Change the size of page view controller</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">pageViewController</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="o">-</span><span class="mi">30</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span> <span class="nl">addChildViewController</span><span class="p">:</span><span class="n">_pageViewController</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">_pageViewController</span><span class="p">.</span><span class="n">view</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">pageViewController</span> <span class="nl">didMoveToParentViewController</span><span class="p">:</span><span class="nb">self</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-    // Create page view controller
-    self.pageViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"PageViewController"];
-    self.pageViewController.dataSource = self;
-
-    PageContentViewController *startingViewController = [self viewControllerAtIndex:0];
-    NSArray *viewControllers = @[startingViewController];
-    [self.pageViewController setViewControllers:viewControllers direction:UIPageViewControllerNavigationDirectionForward animated:NO completion:nil];
-
-    // Change the size of page view controller
-    self.pageViewController.view.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height-30);
-
-    [self addChildViewController:_pageViewController];
-    [self.view addSubview:_pageViewController.view];
-    [self.pageViewController didMoveToParentViewController:self];
-}
-</code></pre>
 
 <h2>效果展示</h2>
 
@@ -1046,24 +1378,39 @@ self.backgroundImageView.image=[UIImage imageNamed:self.imageFile];
 
 <h2>关于@synthesize object =_object的解释</h2>
 
-<pre><code>@interface MyClass:NSObject{
-    MyObjecct *_object;//成员变量
-}
-@property(nonamtic, retain) MyObjecct *object;//属性property
-@end
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">@</span><span class="n">interface</span><span class="err"> </span><span class="nl">MyClass</span><span class="p">:</span><span class="bp">NSObject</span><span class="p">{</span>
+</span><span class='line'>    <span class="n">MyObjecct</span><span class="err"> </span><span class="o">*</span><span class="n">_object</span><span class="p">;</span><span class="c1">//成员变量</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="n">nonamtic</span><span class="p">,</span><span class="err"> </span><span class="k">retain</span><span class="p">)</span><span class="err"> </span><span class="n">MyObjecct</span><span class="err"> </span><span class="o">*</span><span class="n">object</span><span class="p">;</span><span class="c1">//属性property</span>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">@</span><span class="n">implementatin</span><span class="err"> </span><span class="n">MyClass</span>
+</span><span class='line'><span class="k">@synthesize</span><span class="err"> </span><span class="n">object</span><span class="o">=</span><span class="n">_object</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
 
-@implementatin MyClass
-@synthesize object=_object;
-</code></pre>
 
 <p>synthesize定义了一对getter和setter方法，在这里的getter方法是object，setter方法是setObject，事实上getter和setter方法操作的是变量_object。属性通过点表达式(.)来访问其实是调用了getter和setter方法，其实就是操作了成员变量_object。故在.m文件中可以直接的使用_object实例变量，也可以通过属性self.object是一样的。<strong>简单来说，属性就是定义了getter和setter方法来操作_object成员变量</strong></p>
 
 <h2>现在推荐的做法</h2>
 
-<pre><code>@interface MyClass:NSObject
-@property(nonamtic, retain) MyObjecct *object;//属性
-@end
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">@</span><span class="n">interface</span><span class="err"> </span><span class="nl">MyClass</span><span class="p">:</span><span class="bp">NSObject</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="n">nonamtic</span><span class="p">,</span><span class="err"> </span><span class="k">retain</span><span class="p">)</span><span class="err"> </span><span class="n">MyObjecct</span><span class="err"> </span><span class="o">*</span><span class="n">object</span><span class="p">;</span><span class="c1">//属性</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>编译器会自动生成_object、getter和setter方法。</p>
 
@@ -1078,12 +1425,18 @@ self.backgroundImageView.image=[UIImage imageNamed:self.imageFile];
 
 <p>类别（Category）：常常为了拓展类的功能会对类进行拓展。如</p>
 
-<pre><code>@interface UIViewController (UINavigationControllerItem)
-    @property(nonatomic,readonly,retain) UINavigationItem *navigationItem;
-    @property(nonatomic) BOOL hidesBottomBarWhenPushed;
-    @property(nonatomic,readonly,retain) UINavigationController *navigationController;
-@end
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@interface</span> <span class="bp">UIViewController</span> <span class="nl">(UINavigationControllerItem)</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span><span class="k">readonly</span><span class="p">,</span><span class="k">retain</span><span class="p">)</span> <span class="bp">UINavigationItem</span> <span class="o">*</span><span class="n">navigationItem</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">nonatomic</span><span class="p">)</span> <span class="kt">BOOL</span> <span class="n">hidesBottomBarWhenPushed</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span><span class="k">readonly</span><span class="p">,</span><span class="k">retain</span><span class="p">)</span> <span class="bp">UINavigationController</span> <span class="o">*</span><span class="n">navigationController</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>这里添加的属性，不会自动生成实例变量，这里添加的属性其实是添加的getter与setter方法。</p>
 

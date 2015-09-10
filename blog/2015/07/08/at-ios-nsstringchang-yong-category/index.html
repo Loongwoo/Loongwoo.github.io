@@ -9,7 +9,13 @@
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="我们经常会在项目中用一些NSString的Category，可以记录下来，免得每次都要查。比如NSString的URL编码、MD5加密、自适应大小等等。 方法解析 汉字转拼音 -(NSString *)transformToPinyin { NSMutableString * &hellip;">
+  <meta name="description" content="我们经常会在项目中用一些NSString的Category，可以记录下来，免得每次都要查。比如NSString的URL编码、MD5加密、自适应大小等等。 方法解析 汉字转拼音 1
+2
+3
+4
+5
+6
+-(NSString *)transformToPinyin { NSMutableString &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -89,129 +95,197 @@
 
 <h3>汉字转拼音</h3>
 
-<pre><code>-(NSString *)transformToPinyin {
-    NSMutableString *mutableString = [NSMutableString stringWithString:self];
-    CFStringTransform((CFMutableStringRef)mutableString, NULL, kCFStringTransformToLatin, false);
-    mutableString = (NSMutableString *)[mutableString stringByFoldingWithOptions:NSDiacriticInsensitiveSearch locale:[NSLocale currentLocale]];
-    return mutableString;
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">transformToPinyin</span> <span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSMutableString</span> <span class="o">*</span><span class="n">mutableString</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSMutableString</span> <span class="nl">stringWithString</span><span class="p">:</span><span class="nb">self</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">CFStringTransform</span><span class="p">((</span><span class="n">CFMutableStringRef</span><span class="p">)</span><span class="n">mutableString</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">kCFStringTransformToLatin</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">mutableString</span> <span class="o">=</span> <span class="p">(</span><span class="bp">NSMutableString</span> <span class="o">*</span><span class="p">)[</span><span class="n">mutableString</span> <span class="nl">stringByFoldingWithOptions</span><span class="p">:</span><span class="n">NSDiacriticInsensitiveSearch</span> <span class="nl">locale</span><span class="p">:[</span><span class="bp">NSLocale</span> <span class="n">currentLocale</span><span class="p">]];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">mutableString</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>尽管对汉字的排序可以用<code>- (NSComparisonResult)localizedCompare:(NSString *)string;</code>进行排序，但也有时候需要手动排序，这个拓展就有用了。</p>
 
 <h3>URL编码</h3>
 
-<pre><code>-(NSString *)URLEncodedString{
-    NSString *encodedString = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
-        (CFStringRef)self,
-        (CFStringRef)@"!$&amp;'()*+,-./:;=?@_~%#[]",
-        NULL,
-        kCFStringEncodingUTF8));
-    return encodedString;
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">URLEncodedString</span><span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSString</span> <span class="o">*</span><span class="n">encodedString</span> <span class="o">=</span> <span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">CFBridgingRelease</span><span class="p">(</span><span class="n">CFURLCreateStringByAddingPercentEscapes</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span>
+</span><span class='line'>        <span class="p">(</span><span class="n">CFStringRef</span><span class="p">)</span><span class="nb">self</span><span class="p">,</span>
+</span><span class='line'>        <span class="p">(</span><span class="n">CFStringRef</span><span class="p">)</span><span class="s">@&quot;!$&amp;&#39;()*+,-./:;=?@_~%#[]&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nb">NULL</span><span class="p">,</span>
+</span><span class='line'>        <span class="n">kCFStringEncodingUTF8</span><span class="p">));</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">encodedString</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>对于包含中文的URL不能整体转化为UTF-8的格式，那么就可以用<code>CFURLCreateStringByAddingPercentEscapes</code>来排除掉一些应该保留的字符。</p>
 
 <h3>Json字符串转化为Object</h3>
 
-<pre><code>-(id)JSONObject{
-    return [NSJSONSerialization JSONObjectWithData:[self dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="kt">id</span><span class="p">)</span><span class="nf">JSONObject</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="bp">NSJSONSerialization</span> <span class="nl">JSONObjectWithData</span><span class="p">:[</span><span class="nb">self</span> <span class="nl">dataUsingEncoding</span><span class="p">:</span><span class="n">NSUTF8StringEncoding</span><span class="p">]</span> <span class="nl">options</span><span class="p">:</span><span class="n">kNilOptions</span> <span class="nl">error</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>网络接口很多是Json的字符串，该方法直接转化为NSArray、NSDictionary等。</p>
 
 <h3>MD5加密</h3>
 
-<pre><code>-(NSString*)md5{
-    const char *cStr = [self UTF8String];
-    unsigned char result[CC_MD5_DIGEST_LENGTH];
-    CC_MD5( cStr, (int)strlen(cStr), result );
-    return [NSString stringWithFormat: @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X", 
-        result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8], 
-        result[9], result[10], result[11], result[12], result[13], result[14], result[15]];
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="bp">NSString</span><span class="o">*</span><span class="p">)</span><span class="nf">md5</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">cStr</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="n">UTF8String</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">result</span><span class="p">[</span><span class="n">CC_MD5_DIGEST_LENGTH</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">CC_MD5</span><span class="p">(</span> <span class="n">cStr</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">strlen</span><span class="p">(</span><span class="n">cStr</span><span class="p">),</span> <span class="n">result</span> <span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span> <span class="s">@&quot;%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">15</span><span class="p">]];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>MD5加密也是常用的方法，记得导入<code>#import &lt;CommonCrypto/CommonDigest.h&gt;</code>。</p>
 
 <h3>UTF16的MD5加密</h3>
 
-<pre><code>-(NSString *)md5ForUTF16{
-    NSData *temp = [self dataUsingEncoding:NSUTF16LittleEndianStringEncoding];
-    UInt8 *cStr = (UInt8 *)[temp bytes];
-    unsigned char result[CC_MD5_DIGEST_LENGTH];
-    CC_MD5(cStr, (int)[temp length], result);
-    return [NSString stringWithFormat:@"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",  
-        result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8], 
-    result[9], result[10], result[11], result[12], result[13], result[14], result[15]];
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">md5ForUTF16</span><span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSData</span> <span class="o">*</span><span class="n">temp</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">dataUsingEncoding</span><span class="p">:</span><span class="n">NSUTF16LittleEndianStringEncoding</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">UInt8</span> <span class="o">*</span><span class="n">cStr</span> <span class="o">=</span> <span class="p">(</span><span class="kt">UInt8</span> <span class="o">*</span><span class="p">)[</span><span class="n">temp</span> <span class="n">bytes</span><span class="p">];</span>
+</span><span class='line'>    <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">result</span><span class="p">[</span><span class="n">CC_MD5_DIGEST_LENGTH</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">CC_MD5</span><span class="p">(</span><span class="n">cStr</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)[</span><span class="n">temp</span> <span class="n">length</span><span class="p">],</span> <span class="n">result</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="bp">NSString</span> <span class="nl">stringWithFormat</span><span class="p">:</span><span class="s">@&quot;%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">15</span><span class="p">]];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>这个加密倒不是很常用，经常有前面一个就够用了，这里统一记录一下。</p>
 
 <h3>去掉前后的空格</h3>
 
-<pre><code>-(NSString *)trim {
-    return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">trim</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">stringByTrimmingCharactersInSet</span><span class="p">:[</span><span class="bp">NSCharacterSet</span> <span class="n">whitespaceAndNewlineCharacterSet</span><span class="p">]];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>记得在写C#的时候，经常要带着trim函数走。但是IOS里面用的地方不多，记得用过的就是URL的参数，以及在要把输入内容转化为数字的时候。在输入结束的时候trim一下是个应该坚持的习惯。</p>
 
 <h3>去掉行中多余空格</h3>
 
-<pre><code>-(NSString *)trimTheExtraSpaces{
-    NSCharacterSet *whitespaces = [NSCharacterSet whitespaceCharacterSet];
-    NSPredicate *noEmptyStrings = [NSPredicate predicateWithFormat:@"SELF != ''"];
-    NSArray *parts = [self componentsSeparatedByCharactersInSet:whitespaces];
-    NSArray *filteredArray = [parts filteredArrayUsingPredicate:noEmptyStrings];
-    return [filteredArray componentsJoinedByString:@" "];
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">trimTheExtraSpaces</span><span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSCharacterSet</span> <span class="o">*</span><span class="n">whitespaces</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSCharacterSet</span> <span class="n">whitespaceCharacterSet</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">NSPredicate</span> <span class="o">*</span><span class="n">noEmptyStrings</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSPredicate</span> <span class="nl">predicateWithFormat</span><span class="p">:</span><span class="s">@&quot;SELF != &#39;&#39;&quot;</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">NSArray</span> <span class="o">*</span><span class="n">parts</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">componentsSeparatedByCharactersInSet</span><span class="p">:</span><span class="n">whitespaces</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">NSArray</span> <span class="o">*</span><span class="n">filteredArray</span> <span class="o">=</span> <span class="p">[</span><span class="n">parts</span> <span class="nl">filteredArrayUsingPredicate</span><span class="p">:</span><span class="n">noEmptyStrings</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">filteredArray</span> <span class="nl">componentsJoinedByString</span><span class="p">:</span><span class="s">@&quot; &quot;</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>该方法会去掉string中的多余空格，有多个的话留一个。</p>
 
 <h3>是否是空字符</h3>
 
-<pre><code>-(BOOL)isEmpty {
-    NSCharacterSet *charSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-    NSString *trimmed = [self stringByTrimmingCharactersInSet:charSet];
-    return [trimmed isEqualToString:@""];
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">isEmpty</span> <span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSCharacterSet</span> <span class="o">*</span><span class="n">charSet</span> <span class="o">=</span> <span class="p">[</span><span class="bp">NSCharacterSet</span> <span class="n">whitespaceAndNewlineCharacterSet</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">NSString</span> <span class="o">*</span><span class="n">trimmed</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">stringByTrimmingCharactersInSet</span><span class="p">:</span><span class="n">charSet</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="n">trimmed</span> <span class="nl">isEqualToString</span><span class="p">:</span><span class="s">@&quot;&quot;</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>我们常常用<code>if( nil == tempStr || 0 == tempStr.lenth ){...}</code>来判断是否为空。但比如<code>NSString \*tmp4=@"   ";</code>这样一个字符串，<code>[tmp4 length]</code>求的长度为3。但是用上面的方法可以看到是空的。</p>
 
 <h3>自适应大小</h3>
 
-<pre><code>-(CGSize)sizeWithFont:(UIFont *)font
-    constrainedToSize:(CGSize)constrainedSize
-        lineBreakMode:(NSLineBreakMode)lineBreakMode {
-    if ([self respondsToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        paragraphStyle.lineBreakMode = lineBreakMode;
-        NSDictionary *attributes = @{NSFontAttributeName:font, NSParagraphStyleAttributeName:paragraphStyle};
-        CGRect boundingRect = [self boundingRectWithSize:constrainedSize 
-            options:NSStringDrawingUsesLineFragmentOrigin 
-            attributes:attributes context:nil];
-        return CGSizeMake(ceilf(boundingRect.size.width), ceilf(boundingRect.size.height));
-    }
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-    return [self sizeWithFont:font constrainedToSize:constrainedSize lineBreakMode:lineBreakMode];
-#pragma clang diagnostic pop
-}
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="bp">CGSize</span><span class="p">)</span><span class="nf">sizeWithFont:</span><span class="p">(</span><span class="bp">UIFont</span> <span class="o">*</span><span class="p">)</span><span class="nv">font</span>
+</span><span class='line'>    <span class="nf">constrainedToSize:</span><span class="p">(</span><span class="bp">CGSize</span><span class="p">)</span><span class="nv">constrainedSize</span>
+</span><span class='line'>            <span class="nf">lineBreakMode:</span><span class="p">(</span><span class="n">NSLineBreakMode</span><span class="p">)</span><span class="nv">lineBreakMode</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">([</span><span class="nb">self</span> <span class="nl">respondsToSelector</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">boundingRectWithSize</span><span class="p">:</span><span class="nl">options</span><span class="p">:</span><span class="nl">attributes</span><span class="p">:</span><span class="nl">context</span><span class="p">:)])</span> <span class="p">{</span>
+</span><span class='line'>        <span class="bp">NSMutableParagraphStyle</span> <span class="o">*</span><span class="n">paragraphStyle</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">NSMutableParagraphStyle</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>        <span class="n">paragraphStyle</span><span class="p">.</span><span class="n">lineBreakMode</span> <span class="o">=</span> <span class="n">lineBreakMode</span><span class="p">;</span>
+</span><span class='line'>        <span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">attributes</span> <span class="o">=</span> <span class="l">@{</span><span class="nl">NSFontAttributeName</span><span class="p">:</span><span class="n">font</span><span class="p">,</span> <span class="nl">NSParagraphStyleAttributeName</span><span class="p">:</span><span class="n">paragraphStyle</span><span class="l">}</span><span class="p">;</span>
+</span><span class='line'>        <span class="bp">CGRect</span> <span class="n">boundingRect</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">boundingRectWithSize</span><span class="p">:</span><span class="n">constrainedSize</span> <span class="nl">options</span><span class="p">:</span><span class="n">NSStringDrawingUsesLineFragmentOrigin</span>  <span class="nl">attributes</span><span class="p">:</span><span class="n">attributes</span> <span class="nl">context</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="n">ceilf</span><span class="p">(</span><span class="n">boundingRect</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">),</span> <span class="n">ceilf</span><span class="p">(</span><span class="n">boundingRect</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="cp">#pragma clang diagnostic push</span>
+</span><span class='line'><span class="cp">#pragma clang diagnostic ignored &quot;-Wdeprecated-declarations&quot;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">sizeWithFont</span><span class="p">:</span><span class="n">font</span> <span class="nl">constrainedToSize</span><span class="p">:</span><span class="n">constrainedSize</span> <span class="nl">lineBreakMode</span><span class="p">:</span><span class="n">lineBreakMode</span><span class="p">];</span>
+</span><span class='line'><span class="cp">#pragma clang diagnostic pop</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>这个就再熟悉不过了，不过定义Category的时候要记得导入<code>#import &lt;UIKit/UIKit.h&gt;</code>，否则CGSize这些会报错。还有一个用法</p>
 
-<pre><code>#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-相关命令"
-// 你自己的代码
-#pragma clang diagnostic pop
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="cp">#pragma clang diagnostic push</span>
+</span><span class='line'><span class="cp">#pragma clang diagnostic ignored &quot;-相关命令&quot;</span>
+</span><span class='line'><span class="c1">// 你自己的代码</span>
+</span><span class='line'><span class="cp">#pragma clang diagnostic pop</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>#pragma我们常用来做分段注释，还有一个功能是处理编译器警告。<code>-Wdeprecated-declarations</code>表示方法弃用。加了这个之后，就不会再出现黄色警告了。<br/>
 其他的情况可以查询<a href="http://fuckingclangwarnings.com">Which Clang Warning Is Generating This Message?</a></p>
