@@ -9,7 +9,15 @@
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="问题 由于应用的特殊性，iPhone5以上的手机必须倒过来使用。就出现了一个屏幕旋转的问题。而且还不能用手机的陀螺仪自动旋转。 解决办法 关闭自动UINavigationController的自动旋转，在它的拓展里实现 @implementation UINavigationController &hellip;">
+  <meta name="description" content="问题 由于应用的特殊性，iPhone5以上的手机必须倒过来使用。就出现了一个屏幕旋转的问题。而且还不能用手机的陀螺仪自动旋转。 解决办法 关闭自动UINavigationController的自动旋转，在它的拓展里实现 1
+2
+3
+4
+5
+6
+7
+8
+@implementation &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -90,52 +98,102 @@
 <h2>解决办法</h2>
 
 <ol>
-<li><p>关闭自动UINavigationController的自动旋转，在它的拓展里实现</p>
-
-<p> @implementation UINavigationController (nonAutoRotation)</p>
-
-<ul>
-<li>(BOOL)shouldAutorotate
-{
-  return NO;
-}
-@end</li>
-</ul>
-</li>
-<li><p>在UIWindow的拓展里面添加以下方法</p>
-
-<p> @implementation UIWindow(Category)</p>
-
-<p> -(void)setOrientationUpsideDown:(BOOL)upsideDown animated:(BOOL)animated
- {
-     UIInterfaceOrientation interfaceOrientation = upsideDown ? UIInterfaceOrientationPortraitUpsideDown : UIInterfaceOrientationPortrait;
-     CGFloat duration = [UIApplication sharedApplication].statusBarOrientationAnimationDuration;
-     [UIView beginAnimations:nil context:nil];
-     [UIView setAnimationDuration:animated ? duration : 0];
-     //1. Set Status bar orientation
-     [[UIApplication sharedApplication] setStatusBarOrientation:interfaceOrientation animated:YES];
-     if(upsideDown)
-     {
-         //2. Rotate the windows
-         self.transform=CGAffineTransformMakeRotation(M_PI);
-     }
-     else
-     {
-         self.transform = CGAffineTransformIdentity;
-     }
-     [UIView commitAnimations];
-     //3. Set the device orientation
-     UIDeviceOrientation deviceOrientation = upsideDown ? UIDeviceOrientationPortraitUpsideDown : UIDeviceOrientationPortrait;
-     [[UIDevice currentDevice] setValue:@(deviceOrientation) forKey:@&ldquo;orientation&rdquo;];</p>
-
-<pre><code> [self setNeedsLayout];
-</code></pre>
-
-<p> }
- @end
-如果Device的orientation不设置的话，转屏之后在输入的时候键盘还是会从原来的方向弹出来。</p></li>
+<li>关闭自动UINavigationController的自动旋转，在它的拓展里实现</li>
 </ol>
 
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@implementation</span> <span class="bp">UINavigationController</span> <span class="nl">(nonAutoRotation)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">shouldAutorotate</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>注意是UINavigationController，而不是UIViewController。</p>
+
+<ol>
+<li>在UIWindow的拓展里面添加以下方法</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@implementation</span> <span class="bp">UIWindow</span><span class="nl">(Category)</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setOrientationUpsideDown:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">upsideDown</span> <span class="nf">animated:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">animated</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="n">UIInterfaceOrientation</span> <span class="n">interfaceOrientation</span> <span class="o">=</span> <span class="n">upsideDown</span> <span class="o">?</span> <span class="nl">UIInterfaceOrientationPortraitUpsideDown</span> <span class="p">:</span> <span class="n">UIInterfaceOrientationPortrait</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">CGFloat</span> <span class="n">duration</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIApplication</span> <span class="n">sharedApplication</span><span class="p">].</span><span class="n">statusBarOrientationAnimationDuration</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[</span><span class="bp">UIView</span> <span class="nl">beginAnimations</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">context</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="bp">UIView</span> <span class="nl">setAnimationDuration</span><span class="p">:</span><span class="n">animated</span> <span class="o">?</span> <span class="nl">duration</span> <span class="p">:</span> <span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>    <span class="c1">//1. Set Status bar orientation</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[[</span><span class="bp">UIApplication</span> <span class="n">sharedApplication</span><span class="p">]</span> <span class="nl">setStatusBarOrientation</span><span class="p">:</span><span class="n">interfaceOrientation</span> <span class="nl">animated</span><span class="p">:</span><span class="nb">YES</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">upsideDown</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="c1">//2. Rotate the windows</span>
+</span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">transform</span><span class="o">=</span><span class="n">CGAffineTransformMakeRotation</span><span class="p">(</span><span class="n">M_PI</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">CGAffineTransformIdentity</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="p">[</span><span class="bp">UIView</span> <span class="n">commitAnimations</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//3. Set the device orientation</span>
+</span><span class='line'>    <span class="n">UIDeviceOrientation</span> <span class="n">deviceOrientation</span> <span class="o">=</span> <span class="n">upsideDown</span> <span class="o">?</span> <span class="nl">UIDeviceOrientationPortraitUpsideDown</span> <span class="p">:</span> <span class="n">UIDeviceOrientationPortrait</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[[</span><span class="bp">UIDevice</span> <span class="n">currentDevice</span><span class="p">]</span> <span class="nl">setValue</span><span class="p">:</span><span class="l">@(</span><span class="n">deviceOrientation</span><span class="l">)</span> <span class="nl">forKey</span><span class="p">:</span><span class="s">@&quot;orientation&quot;</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span> <span class="n">setNeedsLayout</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果Device的orientation不设置的话，转屏之后在输入的时候键盘还是会从原来的方向弹出来。</p>
 
 <h2>说明</h2>
 
