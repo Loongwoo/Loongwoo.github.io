@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-09-10T23:03:18+08:00</updated>
+  <updated>2015-09-10T23:44:59+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -12,6 +12,38 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Markdown添加优酷视频]]></title>
+    <link href="http://loongwoo.github.io/blog/2015/09/10/hai-nan-qi-xing/"/>
+    <updated>2015-09-10T23:11:58+08:00</updated>
+    <id>http://loongwoo.github.io/blog/2015/09/10/hai-nan-qi-xing</id>
+    <content type="html"><![CDATA[<h2>代码如下：</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="err">海南骑行</span><span class="nl">Style</span><span class="p">:</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">iframe</span> <span class="n">height</span><span class="o">=</span><span class="mi">450</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span> <span class="n">src</span><span class="o">=</span><span class="s">&quot;http://player.youku.com/embed/XNDYyODQ5MTI4&quot;</span> <span class="n">frameborder</span><span class="o">=</span><span class="mi">0</span> <span class="n">allowfullscreen</span><span class="o">&gt;&lt;/</span><span class="n">iframe</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>加个标题【海南骑行Style:  】后面加两个空字符表示换行；</li>
+<li>获取ID，找到要播放的视频，比如：<a href="http://v.youku.com/v_show/id_XNDYyODQ5MTI4.html">http://v.youku.com/v_show/id_XNDYyODQ5MTI4.html</a> ，可以得到ID为XNDYyODQ5MTI4；</li>
+<li>替换到src中结果为 <a href="http://player.youku.com/embed/XNDYyODQ5MTI4">http://player.youku.com/embed/XNDYyODQ5MTI4</a> 就成功了。</li>
+</ol>
+
+
+<h2>效果展示</h2>
+
+<p>海南骑行Style:</p>
+
+<iframe height=450 width=600 src="http://player.youku.com/embed/XNDYyODQ5MTI4" frameborder=0 allowfullscreen></iframe>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[IOS强制转屏]]></title>

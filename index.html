@@ -9,15 +9,10 @@
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="问题 由于应用的特殊性，iPhone5以上的手机必须倒过来使用。就出现了一个屏幕旋转的问题。而且还不能用手机的陀螺仪自动旋转。 解决办法 关闭自动UINavigationController的自动旋转，在它的拓展里实现 1
+  <meta name="description" content="代码如下： 1
 2
-3
-4
-5
-6
-7
-8
-@implementation &hellip;">
+海南骑行Style:
+&lt;iframe height=450 width=600 src=&quot;http://player.youku.com/embed/XNDYyODQ5MTI4&quot; frameborder=0 allowfullscreen&gt;&lt &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -72,6 +67,58 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/09/10/hai-nan-qi-xing/">Markdown添加优酷视频</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-09-10T23:11:58+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:11 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>代码如下：</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="err">海南骑行</span><span class="nl">Style</span><span class="p">:</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">iframe</span> <span class="n">height</span><span class="o">=</span><span class="mi">450</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span> <span class="n">src</span><span class="o">=</span><span class="s">&quot;http://player.youku.com/embed/XNDYyODQ5MTI4&quot;</span> <span class="n">frameborder</span><span class="o">=</span><span class="mi">0</span> <span class="n">allowfullscreen</span><span class="o">&gt;&lt;/</span><span class="n">iframe</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>加个标题【海南骑行Style:  】后面加两个空字符表示换行；</li>
+<li>获取ID，找到要播放的视频，比如：<a href="http://v.youku.com/v_show/id_XNDYyODQ5MTI4.html">http://v.youku.com/v_show/id_XNDYyODQ5MTI4.html</a> ，可以得到ID为XNDYyODQ5MTI4；</li>
+<li>替换到src中结果为 <a href="http://player.youku.com/embed/XNDYyODQ5MTI4">http://player.youku.com/embed/XNDYyODQ5MTI4</a> 就成功了。</li>
+</ol>
+
+
+<h2>效果展示</h2>
+
+<p>海南骑行Style:</p>
+
+<iframe height=450 width=600 src="http://player.youku.com/embed/XNDYyODQ5MTI4" frameborder=0 allowfullscreen></iframe>
+
+
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1456,48 +1503,9 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/07/05/at-qian-yan/">前言</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-07-05T20:13:43+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>8:13 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1>为什么开博客？</h1>
-
-<p>毕业几年了，刚开始做C#的时候写过一些博客，当时做的时间不久，知识点都是一知半解的。然后又做了两年Android手机，用了Jave和C语言。去年才开始做IOS开发，做智能家居的创业公司，边学边开发，也没时间总结，前后做了3个APP，往往是刚做完就又开始下一个，其实都不忍心看刚刚才开发完成的这一个。</p>
-
-<p>这一年里每每不懂了就来网上扒，也没个总结，只怕到时候还是什么都还回去了。今天弄了一个技术博客，希望自己能够坚持充电，也不断总结自己的知识点。</p>
-
-<h1>这个技术博客怎么弄的？</h1>
-
-<p>这个主要是参考了<a href="http://blog.leichunfeng.com">雷纯锋</a>和<a href="http://blog.devtang.com">唐巧</a>的几篇文章搞出来的，功能还很简单，有空了再完善一下。话说弄一个自己专属的博客可以让自己享受下DIY的乐趣，增加一些发博的动力，想起来也蛮好玩的。</p>
-
-<h1>Markdown语法</h1>
-
-<p>Markdown语言对文章排版非常方便，其实常用的就是分段，加链接、图片，几个符号就搞定了，发布出来就能看到效果，很方便实用。顺便记录一个网址，方便查询<a href="http://segmentfault.com/markdown">Markdown 编辑器语法指南</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/posts/2">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -1508,6 +1516,10 @@
     <section>
   <h1>最新文章</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/09/10/hai-nan-qi-xing/">Markdown添加优酷视频</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2015/09/10/iosqiang-zhi-zhuan-ping/">IOS强制转屏</a>
@@ -1523,10 +1535,6 @@
     
       <li class="post">
         <a href="/blog/2015/07/09/at-iosxiao-xi-zhuan-fa-ji-zhi/">IOS消息转发机制</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/07/08/at-ios-nsstringchang-yong-category/">IOS NSString常用Category</a>
       </li>
     
   </ul>
