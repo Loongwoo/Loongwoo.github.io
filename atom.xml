@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-09-10T23:44:59+08:00</updated>
+  <updated>2015-09-10T23:53:05+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Markdown添加优酷视频]]></title>
-    <link href="http://loongwoo.github.io/blog/2015/09/10/hai-nan-qi-xing/"/>
-    <updated>2015-09-10T23:11:58+08:00</updated>
-    <id>http://loongwoo.github.io/blog/2015/09/10/hai-nan-qi-xing</id>
+    <link href="http://loongwoo.github.io/blog/2015/09/10/markdowntian-jia-you-ku-shi-pin/"/>
+    <updated>2015-09-10T23:52:16+08:00</updated>
+    <id>http://loongwoo.github.io/blog/2015/09/10/markdowntian-jia-you-ku-shi-pin</id>
     <content type="html"><![CDATA[<h2>代码如下：</h2>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -39,8 +39,6 @@
 <p>海南骑行Style:</p>
 
 <iframe height=450 width=600 src="http://player.youku.com/embed/XNDYyODQ5MTI4" frameborder=0 allowfullscreen></iframe>
-
-
 
 ]]></content>
   </entry>
