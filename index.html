@@ -102,6 +102,7 @@
 <li>加个标题【海南骑行Style:  】后面加两个空字符表示换行；</li>
 <li>获取ID，找到要播放的视频，比如：<a href="http://v.youku.com/v_show/id_XNDYyODQ5MTI4.html">http://v.youku.com/v_show/id_XNDYyODQ5MTI4.html</a> ，可以得到ID为XNDYyODQ5MTI4；</li>
 <li>替换到src中结果为 <a href="http://player.youku.com/embed/XNDYyODQ5MTI4">http://player.youku.com/embed/XNDYyODQ5MTI4</a> 就成功了。</li>
+<li>视频框的长宽可以自己设置，而且还没有广告:)</li>
 </ol>
 
 
@@ -207,31 +208,45 @@
 <span class='line-number'>29</span>
 <span class='line-number'>30</span>
 <span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
 </pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@implementation</span> <span class="bp">UIWindow</span><span class="nl">(Category)</span>
 </span><span class='line'>
 </span><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">setOrientationUpsideDown:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">upsideDown</span> <span class="nf">animated:</span><span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nv">animated</span>
 </span><span class='line'><span class="p">{</span>
 </span><span class='line'>    <span class="n">UIInterfaceOrientation</span> <span class="n">interfaceOrientation</span> <span class="o">=</span> <span class="n">upsideDown</span> <span class="o">?</span> <span class="nl">UIInterfaceOrientationPortraitUpsideDown</span> <span class="p">:</span> <span class="n">UIInterfaceOrientationPortrait</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//Get the animation time</span>
 </span><span class='line'>    <span class="n">CGFloat</span> <span class="n">duration</span> <span class="o">=</span> <span class="p">[</span><span class="bp">UIApplication</span> <span class="n">sharedApplication</span><span class="p">].</span><span class="n">statusBarOrientationAnimationDuration</span><span class="p">;</span>
+</span><span class='line'>
 </span><span class='line'>    <span class="p">[</span><span class="bp">UIView</span> <span class="nl">beginAnimations</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">context</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
 </span><span class='line'>    <span class="p">[</span><span class="bp">UIView</span> <span class="nl">setAnimationDuration</span><span class="p">:</span><span class="n">animated</span> <span class="o">?</span> <span class="nl">duration</span> <span class="p">:</span> <span class="mi">0</span><span class="p">];</span>
-</span><span class='line'>    <span class="c1">//1. Set Status bar orientation</span>
 </span><span class='line'>
+</span><span class='line'>    <span class="c1">//Set Status bar orientation</span>
 </span><span class='line'>    <span class="p">[[</span><span class="bp">UIApplication</span> <span class="n">sharedApplication</span><span class="p">]</span> <span class="nl">setStatusBarOrientation</span><span class="p">:</span><span class="n">interfaceOrientation</span> <span class="nl">animated</span><span class="p">:</span><span class="nb">YES</span><span class="p">];</span>
 </span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="n">upsideDown</span><span class="p">)</span>
 </span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>        <span class="c1">//2. Rotate the windows</span>
+</span><span class='line'>        <span class="c1">//Rotate the windows to portrait upsidedown</span>
 </span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">transform</span><span class="o">=</span><span class="n">CGAffineTransformMakeRotation</span><span class="p">(</span><span class="n">M_PI</span><span class="p">);</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>    <span class="k">else</span>
 </span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="c1">//Restore it to portrait</span>
 </span><span class='line'>        <span class="nb">self</span><span class="p">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">CGAffineTransformIdentity</span><span class="p">;</span>
 </span><span class='line'>    <span class="p">}</span>
 </span><span class='line'>    <span class="p">[</span><span class="bp">UIView</span> <span class="n">commitAnimations</span><span class="p">];</span>
 </span><span class='line'>
-</span><span class='line'>    <span class="c1">//3. Set the device orientation</span>
+</span><span class='line'>    <span class="c1">//Set the device orientation</span>
 </span><span class='line'>    <span class="n">UIDeviceOrientation</span> <span class="n">deviceOrientation</span> <span class="o">=</span> <span class="n">upsideDown</span> <span class="o">?</span> <span class="nl">UIDeviceOrientationPortraitUpsideDown</span> <span class="p">:</span> <span class="n">UIDeviceOrientationPortrait</span><span class="p">;</span>
 </span><span class='line'>    <span class="p">[[</span><span class="bp">UIDevice</span> <span class="n">currentDevice</span><span class="p">]</span> <span class="nl">setValue</span><span class="p">:</span><span class="l">@(</span><span class="n">deviceOrientation</span><span class="l">)</span> <span class="nl">forKey</span><span class="p">:</span><span class="s">@&quot;orientation&quot;</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">//This method is OK too</span>
+</span><span class='line'>    <span class="c1">//[[UIDevice currentDevice] setValuesForKeysWithDictionary:@{@&quot;orientation&quot;: @(deviceOrientation)}];</span>
 </span><span class='line'>
 </span><span class='line'>    <span class="p">[</span><span class="nb">self</span> <span class="n">setNeedsLayout</span><span class="p">];</span>
 </span><span class='line'>    <span class="p">}</span>
