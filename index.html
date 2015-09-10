@@ -125,14 +125,13 @@
      else
      {
          self.transform = CGAffineTransformIdentity;
-     }</p>
+     }
+     [UIView commitAnimations];
+     //3. Set the device orientation
+     UIDeviceOrientation deviceOrientation = upsideDown ? UIDeviceOrientationPortraitUpsideDown : UIDeviceOrientationPortrait;
+     [[UIDevice currentDevice] setValue:@(deviceOrientation) forKey:@&ldquo;orientation&rdquo;];</p>
 
-<pre><code> [UIView commitAnimations];
- //3. Set the device orientation
- UIDeviceOrientation deviceOrientation = upsideDown ? UIDeviceOrientationPortraitUpsideDown : UIDeviceOrientationPortrait;
- [[UIDevice currentDevice] setValue:@(deviceOrientation) forKey:@"orientation"];
-
- [self setNeedsLayout];
+<pre><code> [self setNeedsLayout];
 </code></pre>
 
 <p> }
