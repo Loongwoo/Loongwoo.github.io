@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-09-11T00:09:45+08:00</updated>
+  <updated>2015-09-11T12:26:58+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -12,6 +12,129 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[IOS自动布局constraintsWithVisualFormat]]></title>
+    <link href="http://loongwoo.github.io/blog/2015/09/11/ioszi-dong-bu-ju-constraintswithvisualformat/"/>
+    <updated>2015-09-11T11:37:47+08:00</updated>
+    <id>http://loongwoo.github.io/blog/2015/09/11/ioszi-dong-bu-ju-constraintswithvisualformat</id>
+    <content type="html"><![CDATA[<p>在手敲代码的时候进行Autolayout就需要给控件添加constraint（约束）。下面演示UIView的addConstraints方法的使用：</p>
+
+<h2>添加控件</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="bp">UIButton</span> <span class="o">*</span><span class="n">quickbtn</span><span class="o">=</span><span class="p">[</span><span class="bp">UIButton</span> <span class="nl">buttonWithType</span><span class="p">:</span><span class="n">UIButtonTypeCustom</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">quickbtn</span> <span class="nl">setBackgroundColor</span><span class="p">:[</span><span class="bp">UIColor</span> <span class="nl">colorFromHexString</span><span class="p">:</span><span class="s">@&quot;#00bfff&quot;</span><span class="p">]</span> <span class="nl">forState</span><span class="p">:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">quickbtn</span> <span class="nl">setTitle</span><span class="p">:</span><span class="n">NSLocalizedString</span><span class="p">(</span><span class="s">@&quot;快点我&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">)</span> <span class="nl">forState</span><span class="p">:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'><span class="n">quickbtn</span><span class="p">.</span><span class="n">titleLabel</span><span class="p">.</span><span class="n">font</span><span class="o">=</span><span class="p">[</span><span class="bp">UIFont</span> <span class="nl">systemFontOfSize</span><span class="p">:</span><span class="mi">16</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">quickbtn</span> <span class="nl">addTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">_quickAction</span><span class="p">:)</span> <span class="nl">forControlEvents</span><span class="p">:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">quickbtn</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="bp">UIButton</span> <span class="o">*</span><span class="n">nextbtn</span><span class="o">=</span><span class="p">[</span><span class="bp">UIButton</span> <span class="nl">buttonWithType</span><span class="p">:</span><span class="n">UIButtonTypeCustom</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">nextbtn</span> <span class="nl">setBackgroundColor</span><span class="p">:</span><span class="n">KWColor</span> <span class="nl">forState</span><span class="p">:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">nextbtn</span> <span class="nl">setTitle</span><span class="p">:</span><span class="n">NSLocalizedString</span><span class="p">(</span><span class="s">@&quot;别点我&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">)</span> <span class="nl">forState</span><span class="p">:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'><span class="n">nextbtn</span><span class="p">.</span><span class="n">titleLabel</span><span class="p">.</span><span class="n">font</span><span class="o">=</span><span class="p">[</span><span class="bp">UIFont</span> <span class="nl">systemFontOfSize</span><span class="p">:</span><span class="mi">16</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">nextbtn</span> <span class="nl">addTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">_nextAction</span><span class="p">:)</span> <span class="nl">forControlEvents</span><span class="p">:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">nextbtn</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>添加了两个按钮，注意到还没有指定frame，我的要求是把他们放到屏幕底部，左右分开同高同宽，中间放一个像素的空隙。这里一般的方法是算出他们的frame后直接指定，还可以用autoresizingMask设置一下。但是考虑到算起来麻烦，可以用constraint进行相对布局。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="n">quickbtn</span><span class="p">.</span><span class="n">autoresizingMask</span> <span class="o">=</span> <span class="n">UIViewAutoresizingFlexibleWidth</span> <span class="o">|</span> <span class="n">UIViewAutoresizingFlexibleTopMargin</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>constraintsWithVisualFormat</h2>
+
+<ol>
+<li>首先关闭AutoresizingMask</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="n">quickbtn</span><span class="p">.</span><span class="n">translatesAutoresizingMaskIntoConstraints</span><span class="o">=</span><span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'><span class="n">nextbtn</span><span class="p">.</span><span class="n">translatesAutoresizingMaskIntoConstraints</span><span class="o">=</span><span class="nb">NO</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>添加约束</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="c1">//format: 约束语句</span>
+</span><span class='line'><span class="c1">//options: 置为0</span>
+</span><span class='line'><span class="c1">//metrics: 可以把参数写在这里，format中就可以直接制定key</span>
+</span><span class='line'><span class="c1">//views: 通过NSDictionaryOfVariableBindings()把要添加约束的控件加进来就可以了</span>
+</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">constraintsWithVisualFormat:</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">format</span> <span class="nf">options:</span><span class="p">(</span><span class="n">NSLayoutFormatOptions</span><span class="p">)</span><span class="nv">opts</span> <span class="nf">metrics:</span><span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">metrics</span> <span class="nf">views:</span><span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">views</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面是代码，<code>constraintsWithVisualFormat</code>的第一个参数format的写法注释了。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="c1">//等于NSDictionary *views=@{@&quot;quickbtn&quot;:quickbtn, @&quot;nextbtn&quot;:nextbtn}；</span>
+</span><span class='line'><span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">views</span><span class="o">=</span><span class="n">NSDictionaryOfVariableBindings</span><span class="p">(</span><span class="n">quickbtn</span><span class="p">,</span> <span class="n">nextbtn</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//V:表示竖向，[quickbtn(==44)]表示quickbtn高度为44，-10-|表示quickbtn距离底部10像素，</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;V:[quickbtn(==44)]-10-|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">views</span><span class="p">:</span><span class="n">views</span><span class="p">]];</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//V:表示竖向，[nextbtn(quickbtn)]表示nextbtn与quickbtn等高，-10-|表示nextbtn距离底部10像素</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;V:[nextbtn(quickbtn)]-10-|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">views</span><span class="p">:</span><span class="n">views</span><span class="p">]];</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//H:表示横向，|-10-表示距离左边10像素，中间的-1-表示两个按钮相间1像素，[nextbtn(quickbtn)]表示等宽，-10-|表示距离右边10像素</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;H:|-10-[quickbtn]-1-[nextbtn(quickbtn)]-10-|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">views</span><span class="p">:</span><span class="n">views</span><span class="p">]];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>看起来很麻烦，习惯了会比算坐标方便很多，因为只要制定距离superview的左右margin和高宽就好了。</li>
+</ol>
+
+
+<h2>效果如下</h2>
+
+<p><img src="http://loongwoo.github.io/images/constraintsWithVisualFormat.png" alt="VFL演示效果" /></p>
+
+<h2>参考链接</h2>
+
+<ol>
+<li><a href="http://blog.sina.com.cn/s/blog_4cd8dd130101t0cd.html">Autolayout 中的Visual format language</a></li>
+<li><a href="http://www.cocoachina.com/ios/20141209/10549.html">使用Auto Layout中的VFL(Visual format language)&ndash;代码实现自动布局</a></li>
+</ol>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Markdown添加优酷视频]]></title>

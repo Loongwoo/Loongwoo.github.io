@@ -1,0 +1,358 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>IOS自动布局constraintsWithVisualFormat - 许龙武的技术博客</title>
+  <meta name="author" content="许龙武">
+
+  
+  <meta name="description" content="在手敲代码的时候进行Autolayout就需要给控件添加constraint（约束）。下面演示UIView的addConstraints方法的使用： 添加控件 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+UIButton *quickbtn=[UIButton &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://loongwoo.github.io/blog/2015/09/11/ioszi-dong-bu-ju-constraintswithvisualformat/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="许龙武的技术博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://cdn.staticfile.org/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">许龙武的技术博客</a></h1>
+  
+    <h2>记录所学，快乐分享</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="loongwoo.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">所有文章</a></li>
+  <li><a href="http://weibo.com/loongwoo">我的微博</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">IOS自动布局constraintsWithVisualFormat</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-09-11T11:37:47+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:37 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>在手敲代码的时候进行Autolayout就需要给控件添加constraint（约束）。下面演示UIView的addConstraints方法的使用：</p>
+
+<h2>添加控件</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="bp">UIButton</span> <span class="o">*</span><span class="n">quickbtn</span><span class="o">=</span><span class="p">[</span><span class="bp">UIButton</span> <span class="nl">buttonWithType</span><span class="p">:</span><span class="n">UIButtonTypeCustom</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">quickbtn</span> <span class="nl">setBackgroundColor</span><span class="p">:[</span><span class="bp">UIColor</span> <span class="nl">colorFromHexString</span><span class="p">:</span><span class="s">@&quot;#00bfff&quot;</span><span class="p">]</span> <span class="nl">forState</span><span class="p">:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">quickbtn</span> <span class="nl">setTitle</span><span class="p">:</span><span class="n">NSLocalizedString</span><span class="p">(</span><span class="s">@&quot;快点我&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">)</span> <span class="nl">forState</span><span class="p">:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'><span class="n">quickbtn</span><span class="p">.</span><span class="n">titleLabel</span><span class="p">.</span><span class="n">font</span><span class="o">=</span><span class="p">[</span><span class="bp">UIFont</span> <span class="nl">systemFontOfSize</span><span class="p">:</span><span class="mi">16</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">quickbtn</span> <span class="nl">addTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">_quickAction</span><span class="p">:)</span> <span class="nl">forControlEvents</span><span class="p">:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">quickbtn</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="bp">UIButton</span> <span class="o">*</span><span class="n">nextbtn</span><span class="o">=</span><span class="p">[</span><span class="bp">UIButton</span> <span class="nl">buttonWithType</span><span class="p">:</span><span class="n">UIButtonTypeCustom</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">nextbtn</span> <span class="nl">setBackgroundColor</span><span class="p">:</span><span class="n">KWColor</span> <span class="nl">forState</span><span class="p">:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">nextbtn</span> <span class="nl">setTitle</span><span class="p">:</span><span class="n">NSLocalizedString</span><span class="p">(</span><span class="s">@&quot;别点我&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">)</span> <span class="nl">forState</span><span class="p">:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'><span class="n">nextbtn</span><span class="p">.</span><span class="n">titleLabel</span><span class="p">.</span><span class="n">font</span><span class="o">=</span><span class="p">[</span><span class="bp">UIFont</span> <span class="nl">systemFontOfSize</span><span class="p">:</span><span class="mi">16</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">nextbtn</span> <span class="nl">addTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">_nextAction</span><span class="p">:)</span> <span class="nl">forControlEvents</span><span class="p">:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">nextbtn</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>添加了两个按钮，注意到还没有指定frame，我的要求是把他们放到屏幕底部，左右分开同高同宽，中间放一个像素的空隙。这里一般的方法是算出他们的frame后直接指定，还可以用autoresizingMask设置一下。但是考虑到算起来麻烦，可以用constraint进行相对布局。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="n">quickbtn</span><span class="p">.</span><span class="n">autoresizingMask</span> <span class="o">=</span> <span class="n">UIViewAutoresizingFlexibleWidth</span> <span class="o">|</span> <span class="n">UIViewAutoresizingFlexibleTopMargin</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>constraintsWithVisualFormat</h2>
+
+<ol>
+<li>首先关闭AutoresizingMask</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="n">quickbtn</span><span class="p">.</span><span class="n">translatesAutoresizingMaskIntoConstraints</span><span class="o">=</span><span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'><span class="n">nextbtn</span><span class="p">.</span><span class="n">translatesAutoresizingMaskIntoConstraints</span><span class="o">=</span><span class="nb">NO</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>添加约束</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="c1">//format: 约束语句</span>
+</span><span class='line'><span class="c1">//options: 置为0</span>
+</span><span class='line'><span class="c1">//metrics: 可以把参数写在这里，format中就可以直接制定key</span>
+</span><span class='line'><span class="c1">//views: 通过NSDictionaryOfVariableBindings()把要添加约束的控件加进来就可以了</span>
+</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">constraintsWithVisualFormat:</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">format</span> <span class="nf">options:</span><span class="p">(</span><span class="n">NSLayoutFormatOptions</span><span class="p">)</span><span class="nv">opts</span> <span class="nf">metrics:</span><span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">metrics</span> <span class="nf">views:</span><span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">views</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面是代码，<code>constraintsWithVisualFormat</code>的第一个参数format的写法注释了。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="c1">//等于NSDictionary *views=@{@&quot;quickbtn&quot;:quickbtn, @&quot;nextbtn&quot;:nextbtn}；</span>
+</span><span class='line'><span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">views</span><span class="o">=</span><span class="n">NSDictionaryOfVariableBindings</span><span class="p">(</span><span class="n">quickbtn</span><span class="p">,</span> <span class="n">nextbtn</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//V:表示竖向，[quickbtn(==44)]表示quickbtn高度为44，-10-|表示quickbtn距离底部10像素，</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;V:[quickbtn(==44)]-10-|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">views</span><span class="p">:</span><span class="n">views</span><span class="p">]];</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//V:表示竖向，[nextbtn(quickbtn)]表示nextbtn与quickbtn等高，-10-|表示nextbtn距离底部10像素</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;V:[nextbtn(quickbtn)]-10-|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">views</span><span class="p">:</span><span class="n">views</span><span class="p">]];</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//H:表示横向，|-10-表示距离左边10像素，中间的-1-表示两个按钮相间1像素，[nextbtn(quickbtn)]表示等宽，-10-|表示距离右边10像素</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;H:|-10-[quickbtn]-1-[nextbtn(quickbtn)]-10-|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">views</span><span class="p">:</span><span class="n">views</span><span class="p">]];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>看起来很麻烦，习惯了会比算坐标方便很多，因为只要制定距离superview的左右margin和高宽就好了。</li>
+</ol>
+
+
+<h2>效果如下</h2>
+
+<p><img src="/images/constraintsWithVisualFormat.png" alt="VFL演示效果" /></p>
+
+<h2>参考链接</h2>
+
+<ol>
+<li><a href="http://blog.sina.com.cn/s/blog_4cd8dd130101t0cd.html">Autolayout 中的Visual format language</a></li>
+<li><a href="http://www.cocoachina.com/ios/20141209/10549.html">使用Auto Layout中的VFL(Visual format language)&ndash;代码实现自动布局</a></li>
+</ol>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">许龙武</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-09-11T11:37:47+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:37 am</span></time>
+      
+
+
+      <br>原文链接：<a href="http://www.xulongwu.com/blog/2015/09/11/ioszi-dong-bu-ju-constraintswithvisualformat/">http://www.xulongwu.com/blog/2015/09/11/ioszi-dong-bu-ju-constraintswithvisualformat/</a>
+ <!-- 添加这一行代码 -->
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+    <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_renren"></a>
+  <a href="http://www.jiathis.com/share?uid=2043882" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">var jiathis_config = {data_track_clickback:'true'};</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2043882" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+<!--UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2043882"></script>
+<!--UY END -->
+
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/09/10/markdowntian-jia-you-ku-shi-pin/" title="Previous Post: Markdown添加优酷视频">&laquo; Markdown添加优酷视频</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>最新文章</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/09/11/ioszi-dong-bu-ju-constraintswithvisualformat/">IOS自动布局constraintsWithVisualFormat</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/10/markdowntian-jia-you-ku-shi-pin/">Markdown添加优酷视频</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/10/iosqiang-zhi-zhuan-ping/">IOS强制转屏</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/17/iosshe-ji-mo-shi/">IOS设计模式</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/07/09/at-ioszi-ding-yi-bu-deng-gao-uitableviewcell/">IOS自定义不等高UITableViewCell</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section>
+  <h1>关于我</h1>
+  <p>程序员、创业者、IOS开发工程师</p>
+  <br/>新浪微博：<a href='http://weibo.com/loongwoo' target='_blank'>商陆_Xu</a>
+  <br/>新浪博客：<a href="http://blog.sina.com.cn/lunaize" target="_blank" title="商陆的博客">商陆</a>
+  <br/>GitHub：<a href='https://github.com/loongwoo' target='_blank'>Loongwoo</a>
+  <br/>Git@OSC: <a href='http://git.oschina.net/redder_xu' target='_blank'>redder_xu</a>
+  <br/>CSDN博客：<a href="http://blog.csdn.net/redder_xu" target="_blank" title="CSDN">霜叶红于二月花</a>
+  <br/>个人微信：xulongwu77 欢迎调戏
+  <br/><img width="220px" src="/images/myweixin.jpg" />
+</section>
+<section>
+  <h1>友情链接</h1>
+  <ul>
+  <li><a href="http://blog.devtang.com" target="_blank" title="唐巧的技术博客">唐巧的技术博客</a></li>
+  <li><a href="http://www.leichunfeng.com" target="_blank" title="雷纯锋的技术博客">雷纯锋的技术博客</a></li>
+  <li><a href="http://www.superqq.com" target="_blank" title=“刚刚在线”>刚刚在线</a></li>
+  </ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - 许龙武 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  <span class="credit"> - 感谢 <a href="http://gitcafe.com/signup?invited_by=xulongwu" target="_blank">GitCafe</a> 为本站提供存储空间</span>
+</p>
+
+
+<script language="javascript" type="text/javascript" src="http://js.users.51.la/17858326.js"></script>
+<noscript><a href="http://www.51.la/?17858326" target="_blank"><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.51.la/17858326.asp" style="border:none" /></a></noscript>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

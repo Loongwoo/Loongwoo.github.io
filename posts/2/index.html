@@ -9,7 +9,8 @@
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="为什么开博客？ 毕业几年了，刚开始做C#的时候写过一些博客，当时做的时间不久，知识点都是一知半解的。然后又做了两年Android手机，用了Jave和C语言。去年才开始做IOS开发，做智能家居的创业公司，边学边开发，也没时间总结，前后做了3个APP，往往是刚做完就又开始下一个， &hellip;">
+  <meta name="description" content="接手IOS开发开始就是从项目入手，基础很薄弱。成员变量和属性的用法一向比较混乱，难得有空补点课。 类（Class）中的成员变量和属性 相关文档 英文文档 《The Objective-c Programming Language》
+中文文档 Objective-C编程语言官方文档翻译 关于@ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -70,6 +71,116 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2015/07/05/at-iosshu-xing-he-cheng-yuan-bian-liang/">IOS属性和成员变量</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-07-05T21:48:27+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:48 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>接手IOS开发开始就是从项目入手，基础很薄弱。成员变量和属性的用法一向比较混乱，难得有空补点课。</p>
+
+<h1>类（Class）中的成员变量和属性</h1>
+
+<h2>相关文档</h2>
+
+<p>英文文档 <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/EncapsulatingData/EncapsulatingData.html">《The Objective-c Programming Language》</a><br />
+中文文档 <a href="http://blog.csdn.net/column/details/object-c.html">Objective-C编程语言官方文档翻译</a></p>
+
+<h2>关于@synthesize object =_object的解释</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">@</span><span class="n">interface</span><span class="err"> </span><span class="nl">MyClass</span><span class="p">:</span><span class="bp">NSObject</span><span class="p">{</span>
+</span><span class='line'>    <span class="n">MyObjecct</span><span class="err"> </span><span class="o">*</span><span class="n">_object</span><span class="p">;</span><span class="c1">//成员变量</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="n">nonamtic</span><span class="p">,</span><span class="err"> </span><span class="k">retain</span><span class="p">)</span><span class="err"> </span><span class="n">MyObjecct</span><span class="err"> </span><span class="o">*</span><span class="n">object</span><span class="p">;</span><span class="c1">//属性property</span>
+</span><span class='line'><span class="k">@end</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">@</span><span class="n">implementatin</span><span class="err"> </span><span class="n">MyClass</span>
+</span><span class='line'><span class="k">@synthesize</span><span class="err"> </span><span class="n">object</span><span class="o">=</span><span class="n">_object</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>synthesize定义了一对getter和setter方法，在这里的getter方法是object，setter方法是setObject，事实上getter和setter方法操作的是变量_object。属性通过点表达式(.)来访问其实是调用了getter和setter方法，其实就是操作了成员变量_object。故在.m文件中可以直接的使用_object实例变量，也可以通过属性self.object是一样的。<strong>简单来说，属性就是定义了getter和setter方法来操作_object成员变量</strong></p>
+
+<h2>现在推荐的做法</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">@</span><span class="n">interface</span><span class="err"> </span><span class="nl">MyClass</span><span class="p">:</span><span class="bp">NSObject</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="n">nonamtic</span><span class="p">,</span><span class="err"> </span><span class="k">retain</span><span class="p">)</span><span class="err"> </span><span class="n">MyObjecct</span><span class="err"> </span><span class="o">*</span><span class="n">object</span><span class="p">;</span><span class="c1">//属性</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>编译器会自动生成_object、getter和setter方法。</p>
+
+<ol>
+<li>成员变量为该类变量私有，最好声明在implementation里</li>
+<li>public的属性写在.h文件里</li>
+<li>如果自己内部需要setter和getter来实现一些东西，就在.m文件的类目里用property来申明</li>
+</ol>
+
+
+<h1>类别（Category）中得属性</h1>
+
+<p>类别（Category）：常常为了拓展类的功能会对类进行拓展。如</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@interface</span> <span class="bp">UIViewController</span> <span class="nl">(UINavigationControllerItem)</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span><span class="k">readonly</span><span class="p">,</span><span class="k">retain</span><span class="p">)</span> <span class="bp">UINavigationItem</span> <span class="o">*</span><span class="n">navigationItem</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">nonatomic</span><span class="p">)</span> <span class="kt">BOOL</span> <span class="n">hidesBottomBarWhenPushed</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span><span class="k">readonly</span><span class="p">,</span><span class="k">retain</span><span class="p">)</span> <span class="bp">UINavigationController</span> <span class="o">*</span><span class="n">navigationController</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里添加的属性，不会自动生成实例变量，这里添加的属性其实是添加的getter与setter方法。</p>
+
+<h1>后记</h1>
+
+<h2>下节预告</h2>
+
+<p>下一篇可以梳理一下属性的nonatomic、retain、weak、strong的用法，以及类别中添加属性的方法。</p>
+
+<h2>参考链接：</h2>
+
+<p><a href="http://www.cnblogs.com/ygm900/p/3660364.html">http://www.cnblogs.com/ygm900/p/3660364.html</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2015/07/05/at-qian-yan/">前言</a></h1>
     
     
@@ -121,6 +232,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/09/11/ioszi-dong-bu-ju-constraintswithvisualformat/">IOS自动布局constraintsWithVisualFormat</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/09/10/markdowntian-jia-you-ku-shi-pin/">Markdown添加优酷视频</a>
       </li>
     
@@ -134,10 +249,6 @@
     
       <li class="post">
         <a href="/blog/2015/07/09/at-ioszi-ding-yi-bu-deng-gao-uitableviewcell/">IOS自定义不等高UITableViewCell</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/07/09/at-iosxiao-xi-zhuan-fa-ji-zhi/">IOS消息转发机制</a>
       </li>
     
   </ul>

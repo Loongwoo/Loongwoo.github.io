@@ -9,10 +9,20 @@
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="代码如下： 1
+  <meta name="description" content="在手敲代码的时候进行Autolayout就需要给控件添加constraint（约束）。下面演示UIView的addConstraints方法的使用： 添加控件 1
 2
-海南骑行Style:
-&lt;iframe height=450 width=600 src=&quot;http://player.youku.com/embed/XNDYyODQ5MTI4&quot; frameborder=0 allowfullscreen&gt;&lt &hellip;">
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+UIButton *quickbtn=[UIButton &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +77,149 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/09/11/ioszi-dong-bu-ju-constraintswithvisualformat/">IOS自动布局constraintsWithVisualFormat</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-09-11T11:37:47+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:37 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>在手敲代码的时候进行Autolayout就需要给控件添加constraint（约束）。下面演示UIView的addConstraints方法的使用：</p>
+
+<h2>添加控件</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="bp">UIButton</span> <span class="o">*</span><span class="n">quickbtn</span><span class="o">=</span><span class="p">[</span><span class="bp">UIButton</span> <span class="nl">buttonWithType</span><span class="p">:</span><span class="n">UIButtonTypeCustom</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">quickbtn</span> <span class="nl">setBackgroundColor</span><span class="p">:[</span><span class="bp">UIColor</span> <span class="nl">colorFromHexString</span><span class="p">:</span><span class="s">@&quot;#00bfff&quot;</span><span class="p">]</span> <span class="nl">forState</span><span class="p">:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">quickbtn</span> <span class="nl">setTitle</span><span class="p">:</span><span class="n">NSLocalizedString</span><span class="p">(</span><span class="s">@&quot;快点我&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">)</span> <span class="nl">forState</span><span class="p">:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'><span class="n">quickbtn</span><span class="p">.</span><span class="n">titleLabel</span><span class="p">.</span><span class="n">font</span><span class="o">=</span><span class="p">[</span><span class="bp">UIFont</span> <span class="nl">systemFontOfSize</span><span class="p">:</span><span class="mi">16</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">quickbtn</span> <span class="nl">addTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">_quickAction</span><span class="p">:)</span> <span class="nl">forControlEvents</span><span class="p">:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">quickbtn</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="bp">UIButton</span> <span class="o">*</span><span class="n">nextbtn</span><span class="o">=</span><span class="p">[</span><span class="bp">UIButton</span> <span class="nl">buttonWithType</span><span class="p">:</span><span class="n">UIButtonTypeCustom</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">nextbtn</span> <span class="nl">setBackgroundColor</span><span class="p">:</span><span class="n">KWColor</span> <span class="nl">forState</span><span class="p">:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">nextbtn</span> <span class="nl">setTitle</span><span class="p">:</span><span class="n">NSLocalizedString</span><span class="p">(</span><span class="s">@&quot;别点我&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">)</span> <span class="nl">forState</span><span class="p">:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'><span class="n">nextbtn</span><span class="p">.</span><span class="n">titleLabel</span><span class="p">.</span><span class="n">font</span><span class="o">=</span><span class="p">[</span><span class="bp">UIFont</span> <span class="nl">systemFontOfSize</span><span class="p">:</span><span class="mi">16</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">nextbtn</span> <span class="nl">addTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">_nextAction</span><span class="p">:)</span> <span class="nl">forControlEvents</span><span class="p">:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">nextbtn</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>添加了两个按钮，注意到还没有指定frame，我的要求是把他们放到屏幕底部，左右分开同高同宽，中间放一个像素的空隙。这里一般的方法是算出他们的frame后直接指定，还可以用autoresizingMask设置一下。但是考虑到算起来麻烦，可以用constraint进行相对布局。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="n">quickbtn</span><span class="p">.</span><span class="n">autoresizingMask</span> <span class="o">=</span> <span class="n">UIViewAutoresizingFlexibleWidth</span> <span class="o">|</span> <span class="n">UIViewAutoresizingFlexibleTopMargin</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>constraintsWithVisualFormat</h2>
+
+<ol>
+<li>首先关闭AutoresizingMask</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="n">quickbtn</span><span class="p">.</span><span class="n">translatesAutoresizingMaskIntoConstraints</span><span class="o">=</span><span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'><span class="n">nextbtn</span><span class="p">.</span><span class="n">translatesAutoresizingMaskIntoConstraints</span><span class="o">=</span><span class="nb">NO</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>添加约束</li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="c1">//format: 约束语句</span>
+</span><span class='line'><span class="c1">//options: 置为0</span>
+</span><span class='line'><span class="c1">//metrics: 可以把参数写在这里，format中就可以直接制定key</span>
+</span><span class='line'><span class="c1">//views: 通过NSDictionaryOfVariableBindings()把要添加约束的控件加进来就可以了</span>
+</span><span class='line'><span class="p">+</span> <span class="p">(</span><span class="bp">NSArray</span> <span class="o">*</span><span class="p">)</span><span class="nf">constraintsWithVisualFormat:</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">format</span> <span class="nf">options:</span><span class="p">(</span><span class="n">NSLayoutFormatOptions</span><span class="p">)</span><span class="nv">opts</span> <span class="nf">metrics:</span><span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">metrics</span> <span class="nf">views:</span><span class="p">(</span><span class="bp">NSDictionary</span> <span class="o">*</span><span class="p">)</span><span class="nv">views</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面是代码，<code>constraintsWithVisualFormat</code>的第一个参数format的写法注释了。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="c1">//等于NSDictionary *views=@{@&quot;quickbtn&quot;:quickbtn, @&quot;nextbtn&quot;:nextbtn}；</span>
+</span><span class='line'><span class="bp">NSDictionary</span> <span class="o">*</span><span class="n">views</span><span class="o">=</span><span class="n">NSDictionaryOfVariableBindings</span><span class="p">(</span><span class="n">quickbtn</span><span class="p">,</span> <span class="n">nextbtn</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//V:表示竖向，[quickbtn(==44)]表示quickbtn高度为44，-10-|表示quickbtn距离底部10像素，</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;V:[quickbtn(==44)]-10-|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">views</span><span class="p">:</span><span class="n">views</span><span class="p">]];</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//V:表示竖向，[nextbtn(quickbtn)]表示nextbtn与quickbtn等高，-10-|表示nextbtn距离底部10像素</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;V:[nextbtn(quickbtn)]-10-|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">views</span><span class="p">:</span><span class="n">views</span><span class="p">]];</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//H:表示横向，|-10-表示距离左边10像素，中间的-1-表示两个按钮相间1像素，[nextbtn(quickbtn)]表示等宽，-10-|表示距离右边10像素</span>
+</span><span class='line'><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addConstraints</span><span class="p">:[</span><span class="bp">NSLayoutConstraint</span> <span class="nl">constraintsWithVisualFormat</span><span class="p">:</span><span class="s">@&quot;H:|-10-[quickbtn]-1-[nextbtn(quickbtn)]-10-|&quot;</span> <span class="nl">options</span><span class="p">:</span><span class="mi">0</span> <span class="nl">metrics</span><span class="p">:</span><span class="nb">nil</span> <span class="nl">views</span><span class="p">:</span><span class="n">views</span><span class="p">]];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ol>
+<li>看起来很麻烦，习惯了会比算坐标方便很多，因为只要制定距离superview的左右margin和高宽就好了。</li>
+</ol>
+
+
+<h2>效果如下</h2>
+
+<p><img src="/images/constraintsWithVisualFormat.png" alt="VFL演示效果" /></p>
+
+<h2>参考链接</h2>
+
+<ol>
+<li><a href="http://blog.sina.com.cn/s/blog_4cd8dd130101t0cd.html">Autolayout 中的Visual format language</a></li>
+<li><a href="http://www.cocoachina.com/ios/20141209/10549.html">使用Auto Layout中的VFL(Visual format language)&ndash;代码实现自动布局</a></li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1406,116 +1559,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/07/05/at-iosshu-xing-he-cheng-yuan-bian-liang/">IOS属性和成员变量</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-07-05T21:48:27+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:48 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>接手IOS开发开始就是从项目入手，基础很薄弱。成员变量和属性的用法一向比较混乱，难得有空补点课。</p>
-
-<h1>类（Class）中的成员变量和属性</h1>
-
-<h2>相关文档</h2>
-
-<p>英文文档 <a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/EncapsulatingData/EncapsulatingData.html">《The Objective-c Programming Language》</a><br />
-中文文档 <a href="http://blog.csdn.net/column/details/object-c.html">Objective-C编程语言官方文档翻译</a></p>
-
-<h2>关于@synthesize object =_object的解释</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">@</span><span class="n">interface</span><span class="err"> </span><span class="nl">MyClass</span><span class="p">:</span><span class="bp">NSObject</span><span class="p">{</span>
-</span><span class='line'>    <span class="n">MyObjecct</span><span class="err"> </span><span class="o">*</span><span class="n">_object</span><span class="p">;</span><span class="c1">//成员变量</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="n">nonamtic</span><span class="p">,</span><span class="err"> </span><span class="k">retain</span><span class="p">)</span><span class="err"> </span><span class="n">MyObjecct</span><span class="err"> </span><span class="o">*</span><span class="n">object</span><span class="p">;</span><span class="c1">//属性property</span>
-</span><span class='line'><span class="k">@end</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">@</span><span class="n">implementatin</span><span class="err"> </span><span class="n">MyClass</span>
-</span><span class='line'><span class="k">@synthesize</span><span class="err"> </span><span class="n">object</span><span class="o">=</span><span class="n">_object</span><span class="p">;</span>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>synthesize定义了一对getter和setter方法，在这里的getter方法是object，setter方法是setObject，事实上getter和setter方法操作的是变量_object。属性通过点表达式(.)来访问其实是调用了getter和setter方法，其实就是操作了成员变量_object。故在.m文件中可以直接的使用_object实例变量，也可以通过属性self.object是一样的。<strong>简单来说，属性就是定义了getter和setter方法来操作_object成员变量</strong></p>
-
-<h2>现在推荐的做法</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">@</span><span class="n">interface</span><span class="err"> </span><span class="nl">MyClass</span><span class="p">:</span><span class="bp">NSObject</span>
-</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="n">nonamtic</span><span class="p">,</span><span class="err"> </span><span class="k">retain</span><span class="p">)</span><span class="err"> </span><span class="n">MyObjecct</span><span class="err"> </span><span class="o">*</span><span class="n">object</span><span class="p">;</span><span class="c1">//属性</span>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>编译器会自动生成_object、getter和setter方法。</p>
-
-<ol>
-<li>成员变量为该类变量私有，最好声明在implementation里</li>
-<li>public的属性写在.h文件里</li>
-<li>如果自己内部需要setter和getter来实现一些东西，就在.m文件的类目里用property来申明</li>
-</ol>
-
-
-<h1>类别（Category）中得属性</h1>
-
-<p>类别（Category）：常常为了拓展类的功能会对类进行拓展。如</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@interface</span> <span class="bp">UIViewController</span> <span class="nl">(UINavigationControllerItem)</span>
-</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span><span class="k">readonly</span><span class="p">,</span><span class="k">retain</span><span class="p">)</span> <span class="bp">UINavigationItem</span> <span class="o">*</span><span class="n">navigationItem</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">nonatomic</span><span class="p">)</span> <span class="kt">BOOL</span> <span class="n">hidesBottomBarWhenPushed</span><span class="p">;</span>
-</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">nonatomic</span><span class="p">,</span><span class="k">readonly</span><span class="p">,</span><span class="k">retain</span><span class="p">)</span> <span class="bp">UINavigationController</span> <span class="o">*</span><span class="n">navigationController</span><span class="p">;</span>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这里添加的属性，不会自动生成实例变量，这里添加的属性其实是添加的getter与setter方法。</p>
-
-<h1>后记</h1>
-
-<h2>下节预告</h2>
-
-<p>下一篇可以梳理一下属性的nonatomic、retain、weak、strong的用法，以及类别中添加属性的方法。</p>
-
-<h2>参考链接：</h2>
-
-<p><a href="http://www.cnblogs.com/ygm900/p/3660364.html">http://www.cnblogs.com/ygm900/p/3660364.html</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -1531,6 +1574,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/09/11/ioszi-dong-bu-ju-constraintswithvisualformat/">IOS自动布局constraintsWithVisualFormat</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/09/10/markdowntian-jia-you-ku-shi-pin/">Markdown添加优酷视频</a>
       </li>
     
@@ -1544,10 +1591,6 @@
     
       <li class="post">
         <a href="/blog/2015/07/09/at-ioszi-ding-yi-bu-deng-gao-uitableviewcell/">IOS自定义不等高UITableViewCell</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/07/09/at-iosxiao-xi-zhuan-fa-ji-zhi/">IOS消息转发机制</a>
       </li>
     
   </ul>
