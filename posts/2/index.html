@@ -9,8 +9,9 @@
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="接手IOS开发开始就是从项目入手，基础很薄弱。成员变量和属性的用法一向比较混乱，难得有空补点课。 类（Class）中的成员变量和属性 相关文档 英文文档 《The Objective-c Programming Language》
-中文文档 Objective-C编程语言官方文档翻译 关于@ &hellip;">
+  <meta name="description" content="assign、copy 、retain（MRC） assign: 对基础数据类型 （NSInteger）和C数据类型（int, float, double, char,等）
+copy：对NSString（不用同一块内存）
+retain：对其他NSObject和其子类（用同一块内存） &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,63 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/07/06/at-ioszhong-propertyde-xiu-shi-zi/">IOS中Property的修饰字</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-07-06T09:42:07+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:42 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>assign、copy 、retain（MRC）</h2>
+
+<ul>
+<li>assign: 对基础数据类型 （NSInteger）和C数据类型（int, float, double, char,等）</li>
+<li>copy：对NSString（不用同一块内存）</li>
+<li>retain：对其他NSObject和其子类（用同一块内存）
+
+<h2>readonly、readwrite</h2></li>
+<li>readonly：只读</li>
+<li><p>readwrite：读写（默认属性）</p>
+
+<h2>weak、strong（ARC下避免循环引用需要申明weak指针）</h2>
+
+<p><a href="http://www.2cto.com/kf/201409/332193.html">三种容易引起循环引用的场景</a></p></li>
+<li><p>weak：指针指向的地址一旦被释放，这些指针都将被赋值为nil。这样的好处能有效的防止野指针。</p></li>
+<li>strong：strong就相当于retain属性，而weak相当于assign<br />
+<strong>具体一点：IBOutlet可以为weak，NSString为copy，delegate一般为weak，其他的看情况。一般来说，类“内部”的属性设置为strong，类“外部”的属性设置为weak。说到底就是一个归属权的问题。小心出现循环引用导致内存无法释放。</strong>
+
+<h2>nonatomic、atomic</h2></li>
+<li>nonatomic：不加同步，多线程并发访问会提高性能。</li>
+<li>atomic：默认值<br />
+了解<a href="http://www.parallellabs.com/2011/04/09/pthread-mutex-lock-and-thread-safety/">原子操作</a>，以及<a href="http://blog.csdn.net/cubepeng/article/details/7735962">非原子操作的效率提升</a>。</li>
+</ul>
+
+
+<h2>参考链接</h2>
+
+<p>[<a href="http://www.aichengxu.com/view/32930">http://www.aichengxu.com/view/32930</a>]<br />
+[<a href="http://www.2cto.com/kf/201205/133943.html">http://www.2cto.com/kf/201205/133943.html</a>]</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -232,6 +290,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/09/11/iosxian-zhi-uitextfieldchang-du/">IOS限制UITextField长度</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/09/11/ioszi-dong-bu-ju-constraintswithvisualformat/">IOS自动布局constraintsWithVisualFormat</a>
       </li>
     
@@ -245,10 +307,6 @@
     
       <li class="post">
         <a href="/blog/2015/08/17/iosshe-ji-mo-shi/">IOS设计模式</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/07/09/at-ioszi-ding-yi-bu-deng-gao-uitableviewcell/">IOS自定义不等高UITableViewCell</a>
       </li>
     
   </ul>

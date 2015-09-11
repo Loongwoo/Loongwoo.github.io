@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>IOS限制UITextField长度 - 许龙武的技术博客</title>
+  <meta name="author" content="许龙武">
+
+  
+  <meta name="description" content="首先想到的是实现UITextFieldDelegate的以下方法 1
+2
+3
+4
+5
+6
+7
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://loongwoo.github.io/blog/2015/09/11/iosxian-zhi-uitextfieldchang-du/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="许龙武的技术博客" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://cdn.staticfile.org/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">许龙武的技术博客</a></h1>
+  
+    <h2>记录所学，快乐分享</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="loongwoo.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">所有文章</a></li>
+  <li><a href="http://weibo.com/loongwoo">我的微博</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">IOS限制UITextField长度</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-09-11T16:14:35+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:14 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><ul>
+<li>首先想到的是实现<code>UITextFieldDelegate</code>的以下方法</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">textField:</span><span class="p">(</span><span class="bp">UITextField</span> <span class="o">*</span><span class="p">)</span><span class="nv">textField</span> <span class="nf">shouldChangeCharactersInRange:</span><span class="p">(</span><span class="n">NSRange</span><span class="p">)</span><span class="nv">range</span> <span class="nf">replacementString:</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">string</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSUInteger</span> <span class="n">newLength</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">textField</span><span class="p">.</span><span class="n">text</span> <span class="n">length</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">string</span> <span class="n">length</span><span class="p">]</span> <span class="o">-</span> <span class="n">range</span><span class="p">.</span><span class="n">length</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">maxLength</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">newLength</span> <span class="o">&gt;</span> <span class="n">maxLength</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>这时候会发现输入中文时如果开了联想，以上的方法不会响应。那么就可以输入超过所设定的最大值。这时候可以加上监听<code>UIControlEventEditingChanged</code>事件来强制性截断输入值。</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">[</span><span class="n">textField</span> <span class="nl">addTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">textFieldDidChange</span><span class="p">:)</span> <span class="nl">forControlEvents</span><span class="p">:</span><span class="n">UIControlEventEditingChanged</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">textFieldDidChange:</span><span class="p">(</span><span class="bp">UITextField</span> <span class="o">*</span><span class="p">)</span><span class="nv">textfield</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">textfield</span> <span class="o">==</span> <span class="nb">self</span><span class="p">.</span><span class="n">textField</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">textField</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="n">maxLength</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">textField</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="n">textField</span><span class="p">.</span><span class="n">text</span> <span class="nl">substringToIndex</span><span class="p">:</span><span class="n">maxLength</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">许龙武</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2015-09-11T16:14:35+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:14 pm</span></time>
+      
+
+
+      <br>原文链接：<a href="http://www.xulongwu.com/blog/2015/09/11/iosxian-zhi-uitextfieldchang-du/">http://www.xulongwu.com/blog/2015/09/11/iosxian-zhi-uitextfieldchang-du/</a>
+ <!-- 添加这一行代码 -->
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+    <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_renren"></a>
+  <a href="http://www.jiathis.com/share?uid=2043882" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript">var jiathis_config = {data_track_clickback:'true'};</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=2043882" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+<!--UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2043882"></script>
+<!--UY END -->
+
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/09/11/ioszi-dong-bu-ju-constraintswithvisualformat/" title="Previous Post: IOS自动布局constraintsWithVisualFormat">&laquo; IOS自动布局constraintsWithVisualFormat</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>最新文章</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/09/11/iosxian-zhi-uitextfieldchang-du/">IOS限制UITextField长度</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/11/ioszi-dong-bu-ju-constraintswithvisualformat/">IOS自动布局constraintsWithVisualFormat</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/10/markdowntian-jia-you-ku-shi-pin/">Markdown添加优酷视频</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/09/10/iosqiang-zhi-zhuan-ping/">IOS强制转屏</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/08/17/iosshe-ji-mo-shi/">IOS设计模式</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section>
+  <h1>关于我</h1>
+  <p>程序员、创业者、IOS开发工程师</p>
+  <br/>新浪微博：<a href='http://weibo.com/loongwoo' target='_blank'>商陆_Xu</a>
+  <br/>新浪博客：<a href="http://blog.sina.com.cn/lunaize" target="_blank" title="商陆的博客">商陆</a>
+  <br/>GitHub：<a href='https://github.com/loongwoo' target='_blank'>Loongwoo</a>
+  <br/>Git@OSC: <a href='http://git.oschina.net/redder_xu' target='_blank'>redder_xu</a>
+  <br/>CSDN博客：<a href="http://blog.csdn.net/redder_xu" target="_blank" title="CSDN">霜叶红于二月花</a>
+  <br/>个人微信：xulongwu77 欢迎调戏
+  <br/><img width="220px" src="/images/myweixin.jpg" />
+</section>
+<section>
+  <h1>友情链接</h1>
+  <ul>
+  <li><a href="http://blog.devtang.com" target="_blank" title="唐巧的技术博客">唐巧的技术博客</a></li>
+  <li><a href="http://www.leichunfeng.com" target="_blank" title="雷纯锋的技术博客">雷纯锋的技术博客</a></li>
+  <li><a href="http://www.superqq.com" target="_blank" title=“刚刚在线”>刚刚在线</a></li>
+  </ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - 许龙武 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+  <span class="credit"> - 感谢 <a href="http://gitcafe.com/signup?invited_by=xulongwu" target="_blank">GitCafe</a> 为本站提供存储空间</span>
+</p>
+
+
+<script language="javascript" type="text/javascript" src="http://js.users.51.la/17858326.js"></script>
+<noscript><a href="http://www.51.la/?17858326" target="_blank"><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.51.la/17858326.asp" style="border:none" /></a></noscript>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

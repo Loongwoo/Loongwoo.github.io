@@ -9,20 +9,14 @@
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="在手敲代码的时候进行Autolayout就需要给控件添加constraint（约束）。下面演示UIView的addConstraints方法的使用： 添加控件 1
+  <meta name="description" content="首先想到的是实现UITextFieldDelegate的以下方法 1
 2
 3
 4
 5
 6
 7
-8
-9
-10
-11
-12
-13
-UIButton *quickbtn=[UIButton &hellip;">
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +71,89 @@ UIButton *quickbtn=[UIButton &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/09/11/iosxian-zhi-uitextfieldchang-du/">IOS限制UITextField长度</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-09-11T16:14:35+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>4:14 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><ul>
+<li>首先想到的是实现<code>UITextFieldDelegate</code>的以下方法</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">textField:</span><span class="p">(</span><span class="bp">UITextField</span> <span class="o">*</span><span class="p">)</span><span class="nv">textField</span> <span class="nf">shouldChangeCharactersInRange:</span><span class="p">(</span><span class="n">NSRange</span><span class="p">)</span><span class="nv">range</span> <span class="nf">replacementString:</span><span class="p">(</span><span class="bp">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">string</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSUInteger</span> <span class="n">newLength</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">textField</span><span class="p">.</span><span class="n">text</span> <span class="n">length</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">string</span> <span class="n">length</span><span class="p">]</span> <span class="o">-</span> <span class="n">range</span><span class="p">.</span><span class="n">length</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">maxLength</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">newLength</span> <span class="o">&gt;</span> <span class="n">maxLength</span><span class="p">)</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">NO</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nb">YES</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>这时候会发现输入中文时如果开了联想，以上的方法不会响应。那么就可以输入超过所设定的最大值。这时候可以加上监听<code>UIControlEventEditingChanged</code>事件来强制性截断输入值。</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">[</span><span class="n">textField</span> <span class="nl">addTarget</span><span class="p">:</span><span class="nb">self</span> <span class="nl">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">textFieldDidChange</span><span class="p">:)</span> <span class="nl">forControlEvents</span><span class="p">:</span><span class="n">UIControlEventEditingChanged</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">textFieldDidChange:</span><span class="p">(</span><span class="bp">UITextField</span> <span class="o">*</span><span class="p">)</span><span class="nv">textfield</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">textfield</span> <span class="o">==</span> <span class="nb">self</span><span class="p">.</span><span class="n">textField</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">textField</span><span class="p">.</span><span class="n">text</span><span class="p">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="n">maxLength</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="n">textField</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="p">[</span><span class="n">textField</span><span class="p">.</span><span class="n">text</span> <span class="nl">substringToIndex</span><span class="p">:</span><span class="n">maxLength</span><span class="p">];</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1502,63 +1579,6 @@ UIButton *quickbtn=[UIButton &hellip;">
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/07/06/at-ioszhong-propertyde-xiu-shi-zi/">IOS中Property的修饰字</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-07-06T09:42:07+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>9:42 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>assign、copy 、retain（MRC）</h2>
-
-<ul>
-<li>assign: 对基础数据类型 （NSInteger）和C数据类型（int, float, double, char,等）</li>
-<li>copy：对NSString（不用同一块内存）</li>
-<li>retain：对其他NSObject和其子类（用同一块内存）
-
-<h2>readonly、readwrite</h2></li>
-<li>readonly：只读</li>
-<li><p>readwrite：读写（默认属性）</p>
-
-<h2>weak、strong（ARC下避免循环引用需要申明weak指针）</h2>
-
-<p><a href="http://www.2cto.com/kf/201409/332193.html">三种容易引起循环引用的场景</a></p></li>
-<li><p>weak：指针指向的地址一旦被释放，这些指针都将被赋值为nil。这样的好处能有效的防止野指针。</p></li>
-<li>strong：strong就相当于retain属性，而weak相当于assign<br />
-<strong>具体一点：IBOutlet可以为weak，NSString为copy，delegate一般为weak，其他的看情况。一般来说，类“内部”的属性设置为strong，类“外部”的属性设置为weak。说到底就是一个归属权的问题。小心出现循环引用导致内存无法释放。</strong>
-
-<h2>nonatomic、atomic</h2></li>
-<li>nonatomic：不加同步，多线程并发访问会提高性能。</li>
-<li>atomic：默认值<br />
-了解<a href="http://www.parallellabs.com/2011/04/09/pthread-mutex-lock-and-thread-safety/">原子操作</a>，以及<a href="http://blog.csdn.net/cubepeng/article/details/7735962">非原子操作的效率提升</a>。</li>
-</ul>
-
-
-<h2>参考链接</h2>
-
-<p>[<a href="http://www.aichengxu.com/view/32930">http://www.aichengxu.com/view/32930</a>]<br />
-[<a href="http://www.2cto.com/kf/201205/133943.html">http://www.2cto.com/kf/201205/133943.html</a>]</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -1574,6 +1594,10 @@ UIButton *quickbtn=[UIButton &hellip;">
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/09/11/iosxian-zhi-uitextfieldchang-du/">IOS限制UITextField长度</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/09/11/ioszi-dong-bu-ju-constraintswithvisualformat/">IOS自动布局constraintsWithVisualFormat</a>
       </li>
     
@@ -1587,10 +1611,6 @@ UIButton *quickbtn=[UIButton &hellip;">
     
       <li class="post">
         <a href="/blog/2015/08/17/iosshe-ji-mo-shi/">IOS设计模式</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/07/09/at-ioszi-ding-yi-bu-deng-gao-uitableviewcell/">IOS自定义不等高UITableViewCell</a>
       </li>
     
   </ul>
