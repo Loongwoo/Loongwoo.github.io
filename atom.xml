@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-09-12T18:58:01+08:00</updated>
+  <updated>2015-09-12T19:02:43+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -18,7 +18,7 @@
     <link href="http://loongwoo.github.io/blog/2015/09/12/iosshi-yong-bundle/"/>
     <updated>2015-09-12T18:47:28+08:00</updated>
     <id>http://loongwoo.github.io/blog/2015/09/12/iosshi-yong-bundle</id>
-    <content type="html"><![CDATA[<p>关于生成Bundle，可以参考<a href="http://blog.sina.com.cn/s/blog_7b9d64af0101jmj2.html">source/_posts/2015-09-12-iosshi-yong-bundle.markdown</a>。</p>
+    <content type="html"><![CDATA[<p>关于生成Bundle，可以参考<a href="http://blog.sina.com.cn/s/blog_7b9d64af0101jmj2.html">iOS-生成Bundle包-引入bundle-使用bundle</a>。</p>
 
 <h2>使用Bundle中的图片</h2>
 
