@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-09-12T18:28:04+08:00</updated>
+  <updated>2015-09-12T18:29:44+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -32,7 +32,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>使用的时候如下：</p>
+<p>tbl就是新的文件的名字，使用的时候如下：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">str</span> <span class="o">=</span> <span class="n">XLocalizedString</span><span class="p">(</span><span class="s">@&quot;Settings&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">);</span>
