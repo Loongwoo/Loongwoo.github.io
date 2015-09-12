@@ -9,8 +9,8 @@
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="关于生成Bundle，可以参考iOS-生成Bundle包-引入bundle-使用bundle。 使用Bundle中的图片 1
-UIImage *image = [UIImage imageNamed:@&quot;MyBundle.bundle/img_collect_success&quot &hellip;">
+  <meta name="description" content="在生成SDK的时候我们常常把资源文件打包成一个Bundle。 关于生成Bundle 方法一：可以参考iOS-生成Bundle包-引入bundle-使用bundle。
+方法二：不用这么麻烦的就新建一个文件夹，把资源放进去后给文件夹加一个后缀‘.bundle’即可。 使用Bundle中的图片 1 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,7 +84,15 @@ UIImage *image = [UIImage imageNamed:@&quot;MyBundle.bundle/img_collect_success&
   </header>
 
 
-<div class="entry-content"><p>关于生成Bundle，可以参考<a href="http://blog.sina.com.cn/s/blog_7b9d64af0101jmj2.html">iOS-生成Bundle包-引入bundle-使用bundle</a>。</p>
+<div class="entry-content"><p>在生成SDK的时候我们常常把资源文件打包成一个Bundle。</p>
+
+<h2>关于生成Bundle</h2>
+
+<ol>
+<li>方法一：可以参考<a href="http://blog.sina.com.cn/s/blog_7b9d64af0101jmj2.html">iOS-生成Bundle包-引入bundle-使用bundle</a>。</li>
+<li>方法二：不用这么麻烦的就新建一个文件夹，把资源放进去后给文件夹加一个后缀‘.bundle’即可。</li>
+</ol>
+
 
 <h2>使用Bundle中的图片</h2>
 
@@ -102,14 +110,8 @@ UIImage *image = [UIImage imageNamed:@&quot;MyBundle.bundle/img_collect_success&
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="cp">#define MYBUNDLE_NAME @&quot;MyBundle.bundle&quot;</span>
-</span><span class='line'><span class="cp">#define MYBUNDLE_PATH [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent: MYBUNDLE_NAME]</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="cp">#define MYBUNDLE_PATH [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent: @&quot;MyBundle.bundle&quot;]</span>
 </span><span class='line'><span class="cp">#define MYBUNDLE [NSBundle bundleWithPath: MYBUNDLE_PATH]</span>
-</span><span class='line'><span class="c1">//以下方式也可以</span>
-</span><span class='line'><span class="c1">//#define MYBUNDLE [[ NSBundle mainBundle] pathForResource: @ &quot;MyBundle&quot; ofType :@ &quot;bundle&quot;]</span>
 </span><span class='line'>
 </span><span class='line'><span class="c1">//获取Bundle中的字符串</span>
 </span><span class='line'><span class="cp">#define MYLocalizedString(key, comment) [MYBUNDLE localizedStringForKey:(key) value:@&quot;&quot; table:nil]</span>
