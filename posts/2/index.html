@@ -9,9 +9,7 @@
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="assign、copy 、retain（MRC） assign: 对基础数据类型 （NSInteger）和C数据类型（int, float, double, char,等）
-copy：对NSString（不用同一块内存）
-retain：对其他NSObject和其子类（用同一块内存） &hellip;">
+  <meta name="description" content="前言 由于之前一直都是用纯代码构建页面，一直没有学习怎么用storyboard。已经深深的感受到了纯代码写页面的繁琐了。所以这个Demo不但学习怎么用PageViewController实现启动引导的图片展示，也初步学习了怎么用storyboard构建页面。 构建storyboard &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +64,263 @@ retain：对其他NSObject和其子类（用同一块内存） &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/07/07/at-ios-appqi-dong-yin-dao-jie-mian/">IOS App启动引导界面</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2015-07-07T01:49:19+08:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>1:49 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>由于之前一直都是用纯代码构建页面，一直没有学习怎么用storyboard。已经深深的感受到了纯代码写页面的繁琐了。所以这个Demo不但学习怎么用PageViewController实现启动引导的图片展示，也初步学习了怎么用storyboard构建页面。</p>
+
+<h2>构建storyboard</h2>
+
+<p>先创建一个Single View Application，构建Main.storyboard，预览如下
+<img src="/images/storyboard.png" alt="预览" />
+除了最左的View Controller（根VC），新增了两个分别是右上Page View Controller和右下View Controller（内容VC）。</p>
+
+<ol>
+<li>确保勾选Use Auto Layout和Use Size Classes</li>
+<li>关于Size Classes的讲解请参考<a href="http://www.cocoachina.com/ios/20141217/10669.html">链接1</a>，此处为了适配所有的设备，故选择了默认的w Any h Any</li>
+<li>为内容VC添加一个Label和UIImageView，分别设置Constraints<br/>
+鼠标右键点击Label拖动，在提示框选择Top Space to Top Layout Guide（IOS7中会自动向下移动20个像素）和Center Horizontally In Container（水平居中）。点击右边Edit可以设置具体的值。
+<img src="/images/labelSC.png" alt="设置Label的约束" />
+如下设置上下左右约束，Trailing Space to: superview（右）为-16；Leading Space to: superview（左）为-16；Top Space to: Label（上）为10，Button Space to: Bottom Layout Guide（下）为0；
+<img src="/images/imageviewSC.png" alt="设置imageView的界限" /></li>
+<li>为根VC添加一个Button，也设置好Constraints</li>
+</ol>
+
+
+<h2>代码实现</h2>
+
+<h3>创建PageContentViewController</h3>
+
+<p>连接内容VC和PageContentViewController.h，再连接好titleLabel和backgroundImageView，最后申明如下三个属性：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">weak</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="kt">IBOutlet</span> <span class="bp">UILabel</span> <span class="o">*</span><span class="n">titleLabel</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">weak</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="kt">IBOutlet</span> <span class="bp">UIImageView</span> <span class="o">*</span><span class="n">backgroundImageView</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">assign</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">NSUInteger</span> <span class="n">pageIndex</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">copy</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">titleText</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span><span class="p">(</span><span class="k">copy</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">NSString</span> <span class="o">*</span><span class="n">imageFile</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>PageContentViewController.m, 在viewDidLoad中添加</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">titleLabel</span><span class="p">.</span><span class="n">text</span><span class="o">=</span><span class="nb">self</span><span class="p">.</span><span class="n">titleText</span><span class="p">;</span>
+</span><span class='line'><span class="nb">self</span><span class="p">.</span><span class="n">backgroundImageView</span><span class="p">.</span><span class="n">image</span><span class="o">=</span><span class="p">[</span><span class="bp">UIImage</span> <span class="nl">imageNamed</span><span class="p">:</span><span class="nb">self</span><span class="p">.</span><span class="n">imageFile</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>ViewController</h3>
+
+<p>ViewController.h中申请UIPageViewControllerDataSource，连接startBtn</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="k">@interface</span> <span class="nc">ViewController</span> : <span class="bp">UIViewController</span><span class="o">&lt;</span><span class="bp">UIPageViewControllerDataSource</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">-</span><span class="p">(</span><span class="kt">IBAction</span><span class="p">)</span><span class="nl">startWalkthrough</span><span class="p">:(</span><span class="kt">id</span><span class="p">)</span><span class="n">sender</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">strong</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">UIPageViewController</span> <span class="o">*</span><span class="n">pageViewController</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">strong</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">NSArray</span> <span class="o">*</span><span class="n">pageTitles</span><span class="p">;</span>
+</span><span class='line'><span class="k">@property</span> <span class="p">(</span><span class="k">strong</span><span class="p">,</span> <span class="k">nonatomic</span><span class="p">)</span> <span class="bp">NSArray</span> <span class="o">*</span><span class="n">pageImages</span><span class="p">;</span>
+</span><span class='line'><span class="k">@end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ViewController.m, 实现UIPageViewControllerDateSource的四个方法</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="cp">#pragma mark - Page View Controller Data Source</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="bp">UIViewController</span> <span class="o">*</span><span class="p">)</span><span class="nf">pageViewController:</span><span class="p">(</span><span class="bp">UIPageViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">pageViewController</span> <span class="nf">viewControllerBeforeViewController:</span><span class="p">(</span><span class="bp">UIViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">viewController</span><span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSUInteger</span> <span class="n">index</span> <span class="o">=</span> <span class="p">((</span><span class="n">PageContentViewController</span><span class="o">*</span><span class="p">)</span> <span class="n">viewController</span><span class="p">).</span><span class="n">pageIndex</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">((</span><span class="n">index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">index</span> <span class="o">==</span> <span class="n">NSNotFound</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">index</span><span class="o">--</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">viewControllerAtIndex</span><span class="p">:</span><span class="n">index</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="bp">UIViewController</span> <span class="o">*</span><span class="p">)</span><span class="nf">pageViewController:</span><span class="p">(</span><span class="bp">UIPageViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">pageViewController</span> <span class="nf">viewControllerAfterViewController:</span><span class="p">(</span><span class="bp">UIViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">viewController</span><span class="p">{</span>
+</span><span class='line'>    <span class="bp">NSUInteger</span> <span class="n">index</span> <span class="o">=</span> <span class="p">((</span><span class="n">PageContentViewController</span><span class="o">*</span><span class="p">)</span> <span class="n">viewController</span><span class="p">).</span><span class="n">pageIndex</span><span class="p">;</span>         
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">==</span> <span class="n">NSNotFound</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>              
+</span><span class='line'>    <span class="n">index</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="o">==</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">pageTitles</span> <span class="n">count</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">viewControllerAtIndex</span><span class="p">:</span><span class="n">index</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="bp">NSInteger</span><span class="p">)</span><span class="nf">presentationCountForPageViewController:</span><span class="p">(</span><span class="bp">UIPageViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">pageViewController</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">pageTitles</span> <span class="n">count</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">-(</span><span class="bp">NSInteger</span><span class="p">)</span><span class="nf">presentationIndexForPageViewController:</span><span class="p">(</span><span class="bp">UIPageViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">pageViewController</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>前面两个方法告诉PageViewController前一页或者后一页的显示内容；后两个方法告诉页面指示器（Page Indicator）的总页数和初始位置，当然只有在UIPageViewController的TransitionStyle为UIPageViewControllerTransitionStyleScroll的时候才有效。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="n">PageContentViewController</span> <span class="o">*</span><span class="p">)</span><span class="nf">viewControllerAtIndex:</span><span class="p">(</span><span class="bp">NSUInteger</span><span class="p">)</span><span class="nv">index</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(([</span><span class="nb">self</span><span class="p">.</span><span class="n">pageTitles</span> <span class="n">count</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">pageTitles</span> <span class="n">count</span><span class="p">]))</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nb">nil</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="c1">// Create a new view controller and pass suitable data.</span>
+</span><span class='line'>    <span class="n">PageContentViewController</span> <span class="o">*</span><span class="n">pageContentViewController</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">storyboard</span> <span class="nl">instantiateViewControllerWithIdentifier</span><span class="p">:</span><span class="s">@&quot;PageContentViewController&quot;</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">pageContentViewController</span><span class="p">.</span><span class="n">imageFile</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">pageImages</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">pageContentViewController</span><span class="p">.</span><span class="n">titleText</span> <span class="o">=</span> <span class="nb">self</span><span class="p">.</span><span class="n">pageTitles</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">pageContentViewController</span><span class="p">.</span><span class="n">pageIndex</span> <span class="o">=</span> <span class="n">index</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">pageContentViewController</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>该方法根据位置信息返回内容页面。</p>
+
+<p>最后实现ViewDidLoad</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="p">-(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">_pageTitles</span> <span class="o">=</span> <span class="l">@[</span> <span class="s">@&quot;帆船&quot;</span><span class="p">,</span> <span class="s">@&quot;美女&quot;</span><span class="p">,</span> <span class="s">@&quot;豪车&quot;</span><span class="p">,</span>  <span class="s">@&quot;碧海蓝天&quot;</span><span class="l">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">_pageImages</span> <span class="o">=</span> <span class="l">@[</span><span class="s">@&quot;page1.jpg&quot;</span><span class="p">,</span> <span class="s">@&quot;page2.jpg&quot;</span><span class="p">,</span> <span class="s">@&quot;page3.jpg&quot;</span><span class="p">,</span> <span class="s">@&quot;page4.jpg&quot;</span><span class="l">]</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Create page view controller</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">pageViewController</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">storyboard</span> <span class="nl">instantiateViewControllerWithIdentifier</span><span class="p">:</span><span class="s">@&quot;PageViewController&quot;</span><span class="p">];</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">pageViewController</span><span class="p">.</span><span class="n">dataSource</span> <span class="o">=</span> <span class="nb">self</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">PageContentViewController</span> <span class="o">*</span><span class="n">startingViewController</span> <span class="o">=</span> <span class="p">[</span><span class="nb">self</span> <span class="nl">viewControllerAtIndex</span><span class="p">:</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>    <span class="bp">NSArray</span> <span class="o">*</span><span class="n">viewControllers</span> <span class="o">=</span> <span class="l">@[</span><span class="n">startingViewController</span><span class="l">]</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">pageViewController</span> <span class="nl">setViewControllers</span><span class="p">:</span><span class="n">viewControllers</span> <span class="nl">direction</span><span class="p">:</span><span class="n">UIPageViewControllerNavigationDirectionForward</span> <span class="nl">animated</span><span class="p">:</span><span class="nb">NO</span> <span class="nl">completion</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Change the size of page view controller</span>
+</span><span class='line'>    <span class="nb">self</span><span class="p">.</span><span class="n">pageViewController</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">width</span><span class="p">,</span> <span class="nb">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span><span class="p">.</span><span class="n">size</span><span class="p">.</span><span class="n">height</span><span class="o">-</span><span class="mi">30</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span> <span class="nl">addChildViewController</span><span class="p">:</span><span class="n">_pageViewController</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview</span><span class="p">:</span><span class="n">_pageViewController</span><span class="p">.</span><span class="n">view</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">pageViewController</span> <span class="nl">didMoveToParentViewController</span><span class="p">:</span><span class="nb">self</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>效果展示</h2>
+
+<p><img src="/images/xiaoguo1.png" alt="效果图1" /> <img src="/images/xiaoguo2.png" alt="效果图2" /></p>
+
+<h2>项目源码</h2>
+
+<p><a href="https://github.com/Loongwoo/PageViewDemo">PageViewDemo代码下载</a></p>
+
+<h2>参考链接</h2>
+
+<ol>
+<li><a href="http://www.cocoachina.com/ios/20141217/10669.html">http://www.cocoachina.com/ios/20141217/10669.html</a></li>
+<li><a href="http://www.kyleduo.com/?p=278">http://www.kyleduo.com/?p=278</a></li>
+</ol>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -290,6 +545,10 @@ retain：对其他NSObject和其子类（用同一块内存） &hellip;">
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/09/12/iosduo-ge-localizable-dot-strings/">IOS多个Localizable.strings</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/09/11/iosxian-zhi-uitextfieldchang-du/">IOS限制UITextField长度</a>
       </li>
     
@@ -303,10 +562,6 @@ retain：对其他NSObject和其子类（用同一块内存） &hellip;">
     
       <li class="post">
         <a href="/blog/2015/09/10/iosqiang-zhi-zhuan-ping/">IOS强制转屏</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/08/17/iosshe-ji-mo-shi/">IOS设计模式</a>
       </li>
     
   </ul>

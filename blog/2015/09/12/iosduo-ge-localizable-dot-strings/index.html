@@ -5,14 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Markdown添加优酷视频 - 许龙武的技术博客</title>
+  <title>IOS多个Localizable.strings - 许龙武的技术博客</title>
   <meta name="author" content="许龙武">
 
   
-  <meta name="description" content="代码如下： 1
-2
-海南骑行Style:
-&lt;iframe height=450 width=600 src=&quot;http://player.youku.com/embed/XNDYyODQ5MTI4&quot; frameborder=0 allowfullscreen&gt;&lt &hellip;">
+  <meta name="description" content="一般情况项目中只有一个Localizable.strings文件来管理多语言的本地化。这时候只要用NSLocalizedString(&lt;#key#&gt;, &lt;#comment#&gt;)就可以了。 1
+NSString *str = NSLocalizedString(@&quot; &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://loongwoo.github.io/blog/2015/09/10/markdowntian-jia-you-ku-shi-pin/">
+  <link rel="canonical" href="http://loongwoo.github.io/blog/2015/09/12/iosduo-ge-localizable-dot-strings/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="许龙武的技术博客" type="application/atom+xml">
@@ -70,7 +68,7 @@
   
   <header>
     
-      <h1 class="entry-title">Markdown添加优酷视频</h1>
+      <h1 class="entry-title">IOS多个Localizable.strings</h1>
     
     
       <p class="meta">
@@ -79,35 +77,34 @@
 
 
 
-<time class='entry-date' datetime='2015-09-10T23:52:16+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:52 pm</span></time>
+<time class='entry-date' datetime='2015-09-12T18:21:16+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:21 pm</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h2>代码如下：</h2>
+<div class="entry-content"><p>一般情况项目中只有一个Localizable.strings文件来管理多语言的本地化。这时候只要用<code>NSLocalizedString(&lt;#key#&gt;, &lt;#comment#&gt;)</code>就可以了。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="err">海南骑行</span><span class="nl">Style</span><span class="p">:</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">iframe</span> <span class="n">height</span><span class="o">=</span><span class="mi">450</span> <span class="n">width</span><span class="o">=</span><span class="mi">600</span> <span class="n">src</span><span class="o">=</span><span class="s">&quot;http://player.youku.com/embed/XNDYyODQ5MTI4&quot;</span> <span class="n">frameborder</span><span class="o">=</span><span class="mi">0</span> <span class="n">allowfullscreen</span><span class="o">&gt;&lt;/</span><span class="n">iframe</span><span class="o">&gt;</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">str</span> <span class="o">=</span> <span class="n">NSLocalizedString</span><span class="p">(</span><span class="s">@&quot;Settings&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<ol>
-<li>加个标题【海南骑行Style:  】后面加两个空字符表示换行；</li>
-<li>获取ID，找到要播放的视频，比如：<a href="http://v.youku.com/v_show/id_XNDYyODQ5MTI4.html">http://v.youku.com/v_show/id_XNDYyODQ5MTI4.html</a> ，可以得到ID为XNDYyODQ5MTI4；</li>
-<li>替换到src中结果为 <a href="http://player.youku.com/embed/XNDYyODQ5MTI4">http://player.youku.com/embed/XNDYyODQ5MTI4</a> 就成功了。</li>
-<li>视频框的长宽可以自己设置，而且还没有广告:)</li>
-</ol>
+<p>但如果需要多个Localizable.strings，比如还有一个KWLocalizable.strings的语言文件，这时候就可以用<code>NSLocalizedStringFromTable(key, tbl, comment)</code>来获取字符串了。可以定义一个宏：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="cp">#define XLocalizedString(key, comment) NSLocalizedStringFromTable((key), @&quot;KWLocalizable&quot;, (comment))</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<h2>效果展示</h2>
+<p>使用的时候如下：</p>
 
-<p>海南骑行Style:</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='objectivec'><span class='line'><span class="bp">NSString</span> <span class="o">*</span><span class="n">str</span> <span class="o">=</span> <span class="n">XLocalizedString</span><span class="p">(</span><span class="s">@&quot;Settings&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<iframe height=450 width=600 src="http://player.youku.com/embed/XNDYyODQ5MTI4" frameborder=0 allowfullscreen></iframe>
+
 
 </div>
 
@@ -124,11 +121,11 @@
 
 
 
-<time class='entry-date' datetime='2015-09-10T23:52:16+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>11:52 pm</span></time>
+<time class='entry-date' datetime='2015-09-12T18:21:16+08:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2015</span></span> <span class='time'>6:21 pm</span></time>
       
 
 
-      <br>原文链接：<a href="http://www.xulongwu.com/blog/2015/09/10/markdowntian-jia-you-ku-shi-pin/">http://www.xulongwu.com/blog/2015/09/10/markdowntian-jia-you-ku-shi-pin/</a>
+      <br>原文链接：<a href="http://www.xulongwu.com/blog/2015/09/12/iosduo-ge-localizable-dot-strings/">http://www.xulongwu.com/blog/2015/09/12/iosduo-ge-localizable-dot-strings/</a>
  <!-- 添加这一行代码 -->
     </p>
     
@@ -162,10 +159,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2015/09/10/iosqiang-zhi-zhuan-ping/" title="Previous Post: IOS强制转屏">&laquo; IOS强制转屏</a>
+        <a class="basic-alignment left" href="/blog/2015/09/11/iosxian-zhi-uitextfieldchang-du/" title="Previous Post: IOS限制UITextField长度">&laquo; IOS限制UITextField长度</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2015/09/11/ioszi-dong-bu-ju-constraintswithvisualformat/" title="Next Post: IOS自动布局constraintsWithVisualFormat">IOS自动布局constraintsWithVisualFormat &raquo;</a>
       
     </p>
   </footer>
