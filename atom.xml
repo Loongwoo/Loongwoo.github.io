@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-09-12T20:24:08+08:00</updated>
+  <updated>2015-11-18T12:07:48+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -22,11 +22,11 @@
 
 <h2>关于生成Bundle</h2>
 
-<ol>
+<blockquote><ul>
 <li>方法一：可以参考<a href="http://blog.sina.com.cn/s/blog_7b9d64af0101jmj2.html">iOS-生成Bundle包-引入bundle-使用bundle</a>。</li>
 <li>方法二：不用这么麻烦的就新建一个文件夹，把资源放进去后给文件夹加一个后缀‘.bundle’即可。</li>
-</ol>
-
+</ul>
+</blockquote>
 
 <h2>使用Bundle中的图片</h2>
 
