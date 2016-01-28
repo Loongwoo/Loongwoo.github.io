@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2015-11-30T19:03:32+08:00</updated>
+  <updated>2016-01-28T11:36:51+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -12,6 +12,42 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[StringManage -- a Xcode Plugin for Managing Your Strings]]></title>
+    <link href="http://loongwoo.github.io/blog/2016/01/28/stringmanage-a-xcode-plugin-for-managing-your-strings/"/>
+    <updated>2016-01-28T11:07:51+08:00</updated>
+    <id>http://loongwoo.github.io/blog/2016/01/28/stringmanage-a-xcode-plugin-for-managing-your-strings</id>
+    <content type="html"><![CDATA[<p>iOS开发中一直没找到方便的字符串管理工具，干脆自己写了这个插件。主要参考了一些之前一些很优秀的插件像<a href="https://github.com/trawor/XToDo">XTodo</a>和<a href="https://github.com/rickytan/RTImageAssets">RTImageAssets</a>等。第一次写插件，借机学习了一下Mac开发。这个插件支持Object-C和swift两种语言开发的项目，不过由于我还一直使用Object-C开发，所以swift的支持可能问题会更多一点，以后再进一步完善。</p>
+
+<h3>主界面介绍</h3>
+
+<p>主界面</p>
+
+<p><img src="http://loongwoo.github.io/images/StringManage1.png" alt="主界面" /></p>
+
+<p>使用<kbd>ctrl</kbd>+<kbd>shift</kbd>+<kbd>s</kbd>快捷组合键可以打开或关闭管理界面。</p>
+
+<ul>
+<li>show all the strings in Localizable.strings</li>
+<li>add/remove/search strings</li>
+<li>check every string is used or not and jump to the referenced line</li>
+</ul>
+
+
+<p>设置界面</p>
+
+<p><img src="http://loongwoo.github.io/images/StringManage2.png" alt="设置界面" /></p>
+
+<p>支持从<a href="http://alcatraz.io">Alcatraz</a>下载本插件，也可以直接下载源码，运行后重启Xcode即可。</p>
+
+<p><img src="http://loongwoo.github.io/images/StringManage3.png" alt="Alcatraz截图" /></p>
+
+<h3>项目源码</h3>
+
+<p><a href="https://github.com/Loongwoo/StringManage">StringManage代码位置</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS使用Bundle]]></title>
