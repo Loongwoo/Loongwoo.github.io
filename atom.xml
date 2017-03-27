@@ -4,7 +4,7 @@
   <title><![CDATA[许龙武的技术博客]]></title>
   <link href="http://loongwoo.github.io/atom.xml" rel="self"/>
   <link href="http://loongwoo.github.io/"/>
-  <updated>2017-03-27T18:41:24+08:00</updated>
+  <updated>2017-03-27T19:00:30+08:00</updated>
   <id>http://loongwoo.github.io/</id>
   <author>
     <name><![CDATA[许龙武]]></name>
@@ -743,7 +743,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>其中sizeWithFont是<a href="http://www.xulongwu.com/blog/2015/07/08/at-ios-nsstringchang-yong-category/">IOS NSString常用Category</a>用了的。cellHeight是构造不等高的cell所必须的。他是questionView和answerView的两个高度和。如果控件更多，计算就复杂一点，意思是一样的。</p>
+<p>其中sizeWithFont是<a href="http://loongwoo.github.io/blog/2015/07/08/at-ios-nsstringchang-yong-category/">IOS NSString常用Category</a>用了的。cellHeight是构造不等高的cell所必须的。他是questionView和answerView的两个高度和。如果控件更多，计算就复杂一点，意思是一样的。</p>
 
 <h2>Controller</h2>
 
